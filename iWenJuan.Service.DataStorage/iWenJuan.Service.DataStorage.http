@@ -1,0 +1,6 @@
+@iWenJuan.Service.DataStorage_HostAddress = http://localhost:5288
+
+GET {{iWenJuan.Service.DataStorage_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

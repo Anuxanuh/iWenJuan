@@ -1,0 +1,226 @@
+﻿@page "/survey-editor/{SurveyId?}"
+@inject AuthenticationService AuthenticationService
+@inject IDialogService DialogService
+@inject IHttpClientFactory httpClientFactory
+@inject ILogger<SurveyEditor> Logger
+@code {
+	[Parameter] public string? SurveyId { get; set; }
+	private HttpClient _httpClient = default!;
+	private static Dictionary<string, QuestionTypeEnum> questionTypes =
+					Enum.GetValues(typeof(QuestionTypeEnum))
+					.Cast<QuestionTypeEnum>()
+					.Select(value => new
+					{
+						Value = value,
+						DisplayName = value.GetDisplayName()
+					})
+					.Where(x => x.DisplayName != null)
+					.ToDictionary(x => x.DisplayName!, x => x.Value);
+
+	private SurveyDto survey = new SurveyDto
+		{
+			Title = "新问卷",
+			Questions = []
+		};
+
+	private List<ConditionDto> conditions = [];
+
+	protected override async Task OnInitializedAsync()
+	{
+		_httpClient = httpClientFactory.CreateClient("SurveyService");
+
+		if (SurveyId is not null)
+		{
+			survey = (await _httpClient.GetFromJsonAsync<SurveyDto>($"api/surveys/{SurveyId}"))!;
+			conditions = survey.Questions?.SelectMany(q => q.Conditions ?? []).ToList() ?? [];
+		}
+	}
+}
+
+<PageTitle>问卷编辑</PageTitle>
+
+<FluentStack Orientation="Orientation.Horizontal"
+			 HorizontalAlignment="HorizontalAlignment.SpaceBetween">
+	<FluentStack Orientation=Orientation.Vertical
+				 Width="20%">
+		<FluentLabel Typo="Typography.H4">问卷信息</FluentLabel>
+		<FluentCard>
+			<FluentTextField @bind-Value="SurveyId" Label="问卷ID" ReadOnly="true" Placeholder="未创建问卷" Style="width: 100%;"></FluentTextField>
+			<FluentTextField @bind-Value="survey.Title" Label="问卷标题" Style="width: 100%;"></FluentTextField>
+			<FluentTextArea @bind-Value="survey.Description" Label="问卷简述" Style="width: 100%;"></FluentTextArea>
+			<FluentButton @onclick="SaveSurvey"
+						  Appearance="Appearance.Accent">@(survey.SurveyId == default ? "创建问卷" : "保存问卷")</FluentButton>
+		</FluentCard>
+
+		<FluentDivider Style="width: 100%;" Role="DividerRole.Presentation"></FluentDivider>
+
+		<FluentLabel Typo="Typography.H4">题目列表</FluentLabel>
+		<FluentCard>
+			<FluentStack Wrap="true">
+				@foreach (var questionType in questionTypes)
+				{
+					<FluentButton @onclick="() => AddQuestion(questionType.Value)">@questionType.Key</FluentButton>
+				}
+			</FluentStack>
+		</FluentCard>
+	</FluentStack>
+
+	<FluentDivider Role="DividerRole.Presentation" Orientation="Orientation.Vertical"></FluentDivider>
+
+	<FluentStack Orientation=Orientation.Vertical
+				 Width="40%">
+		<FluentLabel Typo="Typography.H4">问卷编辑</FluentLabel>
+
+		@if (survey.Questions is not null)
+			@foreach (var question in survey.Questions)
+			{
+				<QuestionEditor @key="question" Question="question" OnRemove="() => RemoveQuestion(question)" />
+			}
+	</FluentStack>
+
+	<FluentDivider Role="DividerRole.Presentation" Orientation="Orientation.Vertical"></FluentDivider>
+
+	<FluentStack Orientation=Orientation.Vertical
+				 Width="20%">
+		<FluentLabel Typo="Typography.H4">逻辑条件</FluentLabel>
+
+		@foreach (var condition in conditions)
+		{
+			<ConditonEditor @key="condition"
+							Condition="condition"
+							OnEdit="() => EditConditon(condition)"
+							OnRemove="() => RemoveConditon(condition)" />
+		}
+		<FluentButton IconStart="@(new Icons.Regular.Size16.Add())"
+					  Appearance="Appearance.Accent"
+					  @onclick="AddCondition">添加条件</FluentButton>
+	</FluentStack>
+
+</FluentStack>
+
+@code {
+	private void AddQuestion(QuestionTypeEnum questionType)
+	{
+		survey.Questions ??= [];
+
+		var newQuestion = new QuestionDto
+			{
+				SurveyId = survey.SurveyId,
+				QuestionType = questionType,
+				QuestionText = "题目内容",
+			};
+
+		switch (questionType)
+		{
+			case QuestionTypeEnum.SingleChoice:
+			case QuestionTypeEnum.MultipleChoice:
+				newQuestion.Options = new List<OptionDto>();
+				break;
+
+			case QuestionTypeEnum.Nps:
+				newQuestion.Options = [new OptionDto { OptionText = "5" }];
+				break;
+		}
+		survey.Questions.Add(newQuestion);
+	}
+
+	private async Task RemoveQuestion(QuestionDto question)
+	{
+		if (question.QuestionId != default)
+			await _httpClient.DeleteAsync($"api/questions/{survey.SurveyId}/{question.QuestionId}");
+		survey.Questions?.Remove(question);
+	}
+
+	private async Task EditConditon(ConditionDto condition)
+	{
+		var dialog = await DialogService.ShowDialogAsync<ConditionEditorDialog>(condition,
+		new DialogParameters()
+			{
+				Title = $"编辑条件",
+			}
+		);
+		var result = await dialog.Result;
+		if (!result.Cancelled && result.Data != null)
+		{
+			var newCondition = result.Data as ConditionDto;
+			if (newCondition is null)
+				return;
+			condition = newCondition;
+		}
+	}
+
+	private async Task RemoveConditon(ConditionDto condition)
+	{
+		if (condition.ConditionId != default)
+			await _httpClient.DeleteAsync($"api/conditions/{condition.ConditionId}");
+		conditions.Remove(condition);
+	}
+
+	private async Task AddCondition()
+	{
+		var dialog = await DialogService.ShowDialogAsync<ConditionEditorDialog>(new ConditionDto(),
+				new DialogParameters()
+					{
+						Title = $"创建新条件",
+					}
+				);
+		var result = await dialog.Result;
+		if (!result.Cancelled && result.Data != null)
+		{
+			var condition = result.Data as ConditionDto;
+			if (condition is null)
+				return;
+			conditions.Add(condition);
+		}
+	}
+}
+
+@code {
+	private async Task SaveSurvey()
+	{
+		UpdateConditions();
+
+		if (survey.SurveyId == default)
+		{
+			var userId = Guid.Parse(AuthenticationService.CurrentUser.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+			survey.CreatedBy = userId;
+			var response = await _httpClient.PostAsJsonAsync("api/surveys", survey);
+			response.EnsureSuccessStatusCode();
+			var uri = response.Headers.Location;
+			survey = (await _httpClient.GetFromJsonAsync<SurveyDto>(uri)) ?? survey;
+		}
+		else
+		{
+			Logger.LogInformation("Update survey {SurveyId}", survey.SurveyId);
+			await _httpClient.PutAsJsonAsync($"api/surveys/{survey.SurveyId}", survey);
+			survey = (await _httpClient.GetFromJsonAsync<SurveyDto>($"api/surveys/{survey.SurveyId}")) ?? survey;
+		}
+		SurveyId = survey.SurveyId.ToString();
+		conditions = survey.Questions?.SelectMany(q => q.Conditions ?? []).ToList() ?? [];
+	}
+
+	private void UpdateConditions()
+	{
+		survey.Questions ??= [];
+		foreach (var condition in conditions)
+		{
+			if (condition.QuestionId == default)
+				continue;
+
+			var question = survey.Questions.FirstOrDefault(q => q.QuestionId == condition.QuestionId);
+			if (question is null)
+				continue;
+			question.Conditions ??= [];
+			if (condition.ConditionId == default)
+				question.Conditions.Add(condition);
+			else
+			{
+				var oldCondition = question.Conditions.FirstOrDefault(c => c.ConditionId == condition.ConditionId);
+				if (oldCondition is null)
+					question.Conditions.Add(condition);
+				else
+					oldCondition = condition;
+			}
+		}
+	}
+}

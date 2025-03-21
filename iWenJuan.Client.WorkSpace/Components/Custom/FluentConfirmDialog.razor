@@ -1,0 +1,40 @@
+﻿@implements IDialogContentComponent<string>
+
+@* Header *@
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size24.Warning())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Dialog.Instance.Parameters.Title
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+@* Body *@
+<FluentDialogBody>
+    <FluentLabel Typo="Typography.PaneHeader">Content</FluentLabel>
+</FluentDialogBody>
+
+@* Footer *@
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">取消</FluentButton>
+    <FluentButton Appearance="Appearance.Accent" OnClick="@ConfirmAsync">确认</FluentButton>
+</FluentDialogFooter>
+
+@code {
+    [Parameter]
+    public string Content { get; set; } = default!;
+
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; } = default!;
+
+    private async Task CancelAsync()
+    {
+        await Dialog.CloseAsync(false);
+    }
+
+	private async Task ConfirmAsync()
+	{
+        await Dialog.CloseAsync(true);
+	}
+}

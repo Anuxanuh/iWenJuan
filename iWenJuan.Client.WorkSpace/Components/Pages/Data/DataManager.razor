@@ -1,0 +1,60 @@
+﻿@page "/data-manager"
+@inject AuthenticationService AuthenticationService
+@inject NavigationManager Navigation
+@inject IHttpClientFactory httpClientFactory
+@code {
+	private HttpClient _DataStorage;
+
+	private IQueryable<StoredFileInfoDto> storedFileInfos = Enumerable.Empty<StoredFileInfoDto>().AsQueryable();
+
+	protected override async Task OnInitializedAsync()
+	{
+		_DataStorage = httpClientFactory.CreateClient("DataStoreService");
+
+		var userId = AuthenticationService.CurrentUser.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+		var fileInfoList = await _DataStorage.GetFromJsonAsync<IEnumerable<StoredFileInfoDto>>($"api/FileStorage/file/{userId}/list");
+		storedFileInfos = fileInfoList?.AsQueryable() ?? Enumerable.Empty<StoredFileInfoDto>().AsQueryable();
+
+		await base.OnInitializedAsync();
+	}
+}
+
+<PageTitle>数据管理</PageTitle>
+
+<FluentLabel Typo="Typography.H1">数据管理</FluentLabel>
+
+<FluentDataGrid Items="storedFileInfos" AutoFit="true" RowSize="@DataGridRowSize.Medium">
+	<PropertyColumn Property="@(s => s.Id)" Title="ID" Sortable="true" />
+	<PropertyColumn Property="@(s => s.FileName)" Title="名称" Sortable="true" IsDefaultSortColumn=true />
+	<PropertyColumn Property="@(s => s.ContentType)" Title="类型" />
+	<PropertyColumn Property="@(s => s.CreatedAt)" Title="创建时间" Sortable="true" />
+	<TemplateColumn Title="操作">
+		<FluentButton @onclick="@(()=>PreviewData(context))"
+					  IconStart="@(new Icons.Regular.Size16.CalendarDataBar())">预览数据</FluentButton>
+		<FluentButton @onclick="@(()=>VisualizeData(context))"
+					  IconStart="@(new Icons.Regular.Size16.DataTrending())">数据可视化</FluentButton>
+		<FluentButton @onclick="@(()=>ProcessData(context))"
+					  IconStart="@(new Icons.Regular.Size16.DataTrending())">数据处理</FluentButton>
+		<FluentButton @onclick="@(()=>ProcessData(context))"
+					  IconStart="@(new Icons.Regular.Size16.DataTrending())">下载数据</FluentButton>
+		<FluentButton @onclick="@(()=>ProcessData(context))"
+					  IconStart="@(new Icons.Regular.Size16.DataTrending())">删除数据</FluentButton>
+	</TemplateColumn>
+</FluentDataGrid>
+
+@code {
+	private void PreviewData(StoredFileInfoDto fileInfo)
+	{
+		Navigation.NavigateTo($"/data-previewer/{fileInfo.Id}");
+	}
+
+	private void VisualizeData(StoredFileInfoDto fileInfo)
+	{
+		Navigation.NavigateTo($"/data-visualizer/{fileInfo.Id}");
+	}
+
+	private void ProcessData(StoredFileInfoDto fileInfo)
+	{
+		Navigation.NavigateTo($"/data-processer/{fileInfo.Id}");
+	}
+}

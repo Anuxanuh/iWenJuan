@@ -1,0 +1,6 @@
+@iWenJuan.EmailService_HostAddress = http://localhost:5283
+
+GET {{iWenJuan.EmailService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

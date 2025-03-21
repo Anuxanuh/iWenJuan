@@ -1,0 +1,27 @@
+﻿@code {
+	[Required]
+	[Parameter]
+	public ConditionDto Condition { get; set; }
+
+	[Parameter]
+	public EventCallback OnEdit { get; set; }
+	[Parameter]
+	public EventCallback OnRemove { get; set; }
+}
+
+<FluentCard>
+	<FluentStack Orientation="Orientation.Vertical">
+		<FluentLabel Typo="Typography.H5">条件ID: @(Condition.ConditionId == default ? "未保存条件" : Condition.ConditionId)</FluentLabel>
+
+		<FluentLabel Typo="Typography.H6">条件问题: @Condition.QuestionId</FluentLabel>
+		<FluentLabel Typo="Typography.H6">运算符: @Condition.Operator.GetDisplayName()</FluentLabel>
+		<FluentLabel Typo="Typography.H6">条件值: @Condition.Value</FluentLabel>
+		<FluentLabel Typo="Typography.H6">作用问题: @(Condition.NextQuestionId == default ? "未指定作用问题" : Condition.NextQuestionId)</FluentLabel>
+		<FluentLabel Typo="Typography.H6">作用: @Condition.Effect.GetDisplayName()</FluentLabel>
+
+		<FluentStack Orientation="Orientation.Horizontal">
+			<FluentButton @onclick="OnEdit" Appearance="Appearance.Accent">编辑</FluentButton>
+			<FluentButton @onclick="OnRemove">删除</FluentButton>
+		</FluentStack>
+	</FluentStack>
+</FluentCard>

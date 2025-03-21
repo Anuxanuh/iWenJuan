@@ -1,0 +1,139 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+@inject AuthenticationService AuthenticationService
+@inject HttpOnlyCookieService HttpOnlyCookieService
+@inject IDialogService DialogService
+@inject IHttpClientFactory httpClientFactory
+@inject ILogger<MainLayout> Logger
+@inject IJSRuntime JS
+
+<FluentLayout>
+	<FluentDialogProvider />
+	<FluentMessageBarProvider />
+	<FluentToastProvider />
+	<FluentTooltipProvider />
+
+	<FluentHeader>
+		@* iWenJuan.Client.WorkSpace *@
+		基于.NET Aspire和Blazor的问卷系统的设计与实现
+	</FluentHeader>
+	<FluentStack Class="main" Orientation="Orientation.Horizontal" Width="100%">
+		<NavMenu />
+		<FluentBodyContent Class="body-content">
+			<AuthorizeView>
+				<Authorized>
+					<div class="content">
+						@Body
+					</div>
+				</Authorized>
+				<NotAuthorized>
+					<FluentStack HorizontalAlignment="HorizontalAlignment.Center"
+								 VerticalAlignment="VerticalAlignment.Center"
+								 Style="padding-top:20px">
+						<FluentCard Width="30%">
+							<FluentStack Orientation="Orientation.Vertical">
+								<FluentStack VerticalAlignment="VerticalAlignment.Center">
+									<FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size32.Warning())" />
+									<FluentLabel Typo="Typography.H1">请登录!</FluentLabel>
+								</FluentStack>
+								<FluentStack Style="padding:3px">
+									<FluentLabel Typo="Typography.H3">尚未登录的用户无法访问此页面</FluentLabel>
+								</FluentStack>
+								<FluentStack HorizontalAlignment="HorizontalAlignment.Right">
+									<FluentButton @onclick=GoToLogin>前往登录</FluentButton>
+								</FluentStack>
+							</FluentStack>
+						</FluentCard>
+					</FluentStack>
+				</NotAuthorized>
+			</AuthorizeView>
+		</FluentBodyContent>
+	</FluentStack>
+	<FluentFooter>
+		@* <a href="https://www.fluentui-blazor.net" target="_blank">Documentation and demos</a> *@
+		欢迎来到iWenJuan--黄信桦
+		<FluentSpacer />
+		@* <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor" target="_blank">About Blazor</a> *@
+		基于.NET Aspire和Blazor的问卷系统的设计与实现
+	</FluentFooter>
+</FluentLayout>
+
+<div id="blazor-error-ui" data-nosnippet>
+	一个未处理的异常发生了.
+	<a href="." class="reload">重新载入</a>
+	<span class="dismiss">🗙</span>
+</div>
+
+@code {
+	private HttpClient _httpClient = default!;
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+
+		_httpClient = httpClientFactory.CreateClient("AuthService");
+	}
+
+	/// <summary>
+	/// 该方法保证用户在未登录的情况下无法访问页面
+	/// </summary>
+	/// <param name="firstRender">是否第一次呈现该组件</param>
+	/// <returns></returns>
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await CheckLogin();
+		}
+
+		var currentUser = AuthenticationService.CurrentUser;
+		if (currentUser.Identity is null || !currentUser.Identity.IsAuthenticated)
+		{
+			GoToLogin();
+		}
+
+		await base.OnAfterRenderAsync(firstRender);
+	}
+
+	/// <summary>
+	/// 检查登录状态, 并使用Refresh Token自动登录
+	/// </summary>
+	/// <returns></returns>
+	private async Task CheckLogin()
+	{
+		// 获取HttpOnly cookie
+		// var token = HttpOnlyCookieService.GetCookie("Auth");
+		var token = await JS.InvokeAsync<string>("getCookie", "Auth");
+		// 没有HttpOnly cookie
+		if (token is null)
+			return;
+		// 验证token
+		var validateTokenResponse = await _httpClient.PostAsJsonAsync("/api/auth/validate-token", token);
+		// 验证失败
+		if (!validateTokenResponse.IsSuccessStatusCode)
+		{
+			var responseText = await validateTokenResponse.Content.ReadAsStringAsync();
+			await DialogService.ShowErrorAsync(responseText);
+			return;
+		}
+		// 获取用户信息
+		var userId = await validateTokenResponse.Content.ReadAsStringAsync();
+		var user = await _httpClient.GetFromJsonAsync<UserDto>($"/api/user/{userId}");
+		// 给用户授权
+		var currentUser = AuthenticationService.CurrentUser;
+		var identity = new ClaimsIdentity([
+				new Claim(ClaimTypes.Authentication, token),
+				new Claim(ClaimTypes.NameIdentifier, user!.Id.ToString()),
+				new Claim(ClaimTypes.Name, user.UserName),
+				new Claim(ClaimTypes.Email, user.Email)],
+			"Access Token");
+		var newUser = new ClaimsPrincipal(identity);
+		AuthenticationService.CurrentUser = newUser;
+	}
+
+
+	private void GoToLogin()
+	{
+		Navigation.NavigateTo("/login");
+	}
+}

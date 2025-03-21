@@ -1,0 +1,6 @@
+@iWenJuan.AuthService_HostAddress = http://localhost:5141
+
+GET {{iWenJuan.AuthService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

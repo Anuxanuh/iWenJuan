@@ -1,0 +1,63 @@
+﻿@inject IHttpClientFactory httpClientFactory
+
+@code {
+	private HttpClient _httpClient = default!;
+
+	protected override void OnInitialized()
+	{
+		_httpClient = httpClientFactory.CreateClient("SurveyService");
+	}
+}
+
+@code {
+	[Parameter]
+	public QuestionDto Question { get; set; }
+
+	[Parameter]
+	public EventCallback OnRemove { get; set; }
+
+	private void AddOption()
+	{
+		Question.Options?.Add(new OptionDto { OptionText = "新选项" });
+	}
+
+	private async Task RemoveOption(OptionDto option)
+	{
+		if (Question.QuestionId != default)
+			await _httpClient.DeleteAsync($"api/options/{Question.QuestionId}/{option.OptionId}");
+		Question.Options?.Remove(option);
+	}
+}
+
+<FluentCard Style="padding-top: 10px">
+	<FluentStack Orientation="Orientation.Vertical">
+		<FluentStack>
+			<FluentLabel Typo="Typography.H4">@Question.QuestionType.GetDisplayName()</FluentLabel>
+			<FluentLabel Typo="Typography.H4">@(Question.QuestionId == default ? "未创建题目" : Question.QuestionId)</FluentLabel>
+			<FluentButton @onclick="OnRemove">删除</FluentButton>
+		</FluentStack>
+
+		<FluentTextArea @bind-Value="Question.QuestionText" Label="题目" Style="width: 60%"></FluentTextArea>
+
+		@if (Question.QuestionType != QuestionTypeEnum.Nps)
+		{
+			@if (Question.Options is not null)
+			{
+				<FluentLabel Typo="Typography.H6">选项</FluentLabel>
+
+				@foreach (var option in Question.Options)
+				{
+					<OptionEditor @key="option" Option="option" OnRemove="() => RemoveOption(option)" />
+				}
+
+				<FluentButton @onclick="AddOption" IconStart="@(new Icons.Regular.Size16.Add())">添加选项</FluentButton>
+			}
+		}
+		else
+		{
+			<FluentTextField @bind-Value=Question.Options!.First().OptionText TextFieldType="TextFieldType.Number" Label="NPS最大值" />
+		}
+	</FluentStack>
+</FluentCard>
+
+<FluentDivider Style="width: 100%;" Role="DividerRole.Presentation"></FluentDivider>

@@ -1,0 +1,99 @@
+﻿@page "/verify-register/{Email}"
+@layout AuthLayout
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
+@inject IHttpClientFactory httpClientFactory
+@code {
+	[Parameter] public string Email { get; set; }
+	private HttpClient _httpClient;
+	private ViewModel viewModel = new();
+	private VerifyRegisterDto verifyRegisterModel = new();
+
+	internal class ViewModel
+	{
+		public bool ProgressRingVisible { get; set; } = false;
+	}
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+
+		_httpClient = httpClientFactory.CreateClient("AuthService");
+		verifyRegisterModel.UserEmail = Email;
+	}
+}
+
+<PageTitle>注册</PageTitle>
+
+<FluentCard Style="padding:60px">
+	<FluentLabel Typo="Typography.H1" Style="padding-bottom:10px">注册</FluentLabel>
+
+	<FluentEditForm Model="verifyRegisterModel" OnValidSubmit="HandleVerifyRegister">
+		<DataAnnotationsValidator />
+		<FluentStack Orientation="Orientation.Vertical">
+			<div>
+				<FluentTextField @bind-Value="verifyRegisterModel.UserEmail" Label="邮箱" Disabled=true></FluentTextField>
+			</div>
+			<div>
+				<FluentTextField @bind-Value="verifyRegisterModel.UserName" Label="用户名"></FluentTextField>
+				<FluentValidationMessage For="() => verifyRegisterModel.UserName"></FluentValidationMessage>
+			</div>
+			<div>
+				<FluentTextField @bind-Value="verifyRegisterModel.UserPassword" Label="密码" TextFieldType="TextFieldType.Password"></FluentTextField>
+				<FluentValidationMessage For="() => verifyRegisterModel.UserPassword" />
+			</div>
+			<div>
+				<FluentTextField @bind-Value="verifyRegisterModel.VerificationCode" Label="验证码"></FluentTextField>
+				<FluentValidationMessage For="() => verifyRegisterModel.VerificationCode" />
+			</div>
+			<FluentStack Orientation="Orientation.Horizontal" Style="padding-top:10px">
+				<FluentButton Type="ButtonType.Button" Appearance="Appearance.Outline" @onclick="GoBackRegister">返回</FluentButton>
+				<FluentSpacer></FluentSpacer>
+				<FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent">注册</FluentButton>
+			</FluentStack>
+		</FluentStack>
+	</FluentEditForm>
+</FluentCard>
+
+<FluentOverlay @bind-Visible=viewModel.ProgressRingVisible
+			   Dismissable="false"
+			   FullScreen="true"
+			   Opacity="0.4">
+	<FluentProgressRing Width="128px" />
+</FluentOverlay>
+
+@code {
+	private void GoBackRegister()
+	{
+		Navigation.NavigateTo($"/register/{verifyRegisterModel.UserEmail}");
+	}
+
+	private async Task HandleVerifyRegister()
+	{
+		// 显示加载动画
+		viewModel.ProgressRingVisible = true;
+
+		// 发送注册请求
+		var response = await _httpClient.PostAsJsonAsync("/api/auth/verify-register", verifyRegisterModel);
+
+		// 获取响应内容
+		var responseText = await response.Content.ReadAsStringAsync();
+
+		// 关闭加载动画
+		viewModel.ProgressRingVisible = false;
+		StateHasChanged();
+
+		if (response.IsSuccessStatusCode)
+		{
+			// 注册成功
+			var dialog = await DialogService.ShowSuccessAsync(responseText);
+			await dialog.Result;
+			Navigation.NavigateTo("/login");
+		}
+		else
+		{
+			// 注册失败
+			await DialogService.ShowErrorAsync(responseText);
+		}
+	}
+}

@@ -1,0 +1,50 @@
+﻿@page "/personal-space"
+@inject AuthenticationService AuthenticationService
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<FluentStack>
+	<FluentCard>
+		<FluentStack Orientation="Orientation.Vertical">
+			<FluentPersona Name="@_name"
+						   ImageSize="50px">
+			</FluentPersona>
+			<FluentStack Orientation="Orientation.Vertical">
+				<FluentLabel Typo="Typography.H5">姓名: @_name</FluentLabel>
+				<FluentLabel Typo="Typography.H5">邮箱: @_email</FluentLabel>
+			</FluentStack>
+			<FluentStack>
+				<FluentButton @onclick="GoToChangePassword">更改密码</FluentButton>
+				<FluentButton @onclick="Logout" Appearance="Appearance.Accent">退出登录</FluentButton>
+			</FluentStack>
+		</FluentStack>
+	</FluentCard>
+</FluentStack>
+
+@code {
+	private string _name = "";
+	private string _email = "";
+
+	protected override void OnInitialized()
+	{
+		var claims = AuthenticationService.CurrentUser.Claims;
+
+		_name = AuthenticationService.CurrentUser.FindFirst(ClaimTypes.Name)!.Value;
+		_email = AuthenticationService.CurrentUser.FindFirst(ClaimTypes.Email)!.Value;
+	}
+
+	private void GoToChangePassword()
+	{
+		Navigation.NavigateTo($"/change-password/{_email}");
+	}
+
+	private async Task Logout()
+	{
+		// 清除长Token
+		await JS.InvokeVoidAsync("eraseCookie", "Auth");
+		// 清除短Token
+		AuthenticationService.CurrentUser = new();
+		// 跳转到登录页面
+		Navigation.NavigateTo("/login");
+	}
+}

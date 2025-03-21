@@ -1,0 +1,130 @@
+﻿@page "/survey-manager"
+@using iWenJuan.Client.WorkSpace.Components.Custom
+@inject AuthenticationService AuthenticationService
+@inject NavigationManager Navigation
+@inject IHttpClientFactory httpClientFactory
+@inject IDialogService DialogService
+@code {
+	private IQueryable<SurveyDto> surveys = Enumerable.Empty<SurveyDto>().AsQueryable();
+
+	private HttpClient _SurveyService = default!;
+	private HttpClient _DataStorage = default!;
+
+	protected override async Task OnInitializedAsync()
+	{
+		_SurveyService = httpClientFactory.CreateClient("SurveyService");
+		_DataStorage = httpClientFactory.CreateClient("DataStoreService");
+
+		var userId = AuthenticationService.CurrentUser.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+		var surveyList = await _SurveyService.GetFromJsonAsync<List<SurveyDto>>($"api/surveys/{userId}/all-surveys");
+		surveys = surveyList?.AsQueryable() ?? Enumerable.Empty<SurveyDto>().AsQueryable();
+	}
+}
+<PageTitle>问卷管理</PageTitle>
+
+<FluentLabel Typo="Typography.H1">问卷管理</FluentLabel>
+
+<FluentDataGrid Items="surveys" AutoFit="true" RowSize="@DataGridRowSize.Medium">
+	<PropertyColumn Property="@(s => s.SurveyId)" Title="ID" Sortable="true" IsDefaultSortColumn=true />
+	<PropertyColumn Property="@(s => s.Title)" Title="标题" Sortable="true" />
+	<PropertyColumn Property="@(s => s.Description)" Title="简述" />
+	<PropertyColumn Property="@(s => s.CreatedAt)" Title="创建时间" Sortable="true" />
+	<TemplateColumn Title="操作">
+		<FluentButton @onclick="@(()=>ToggleSurvey(context))"
+					  IconStart="@(context.IsPublished ? new Icons.Regular.Size16.OpenOff() : new Icons.Regular.Size16.Open())"
+					  Appearance="Appearance.Accent">
+			@(context.IsPublished ? "关闭问卷作答" : "开放问卷作答")
+		</FluentButton>
+		<FluentButton @onclick="@(()=>ExportSurvey(context))"
+					  IconStart="@(new Icons.Regular.Size16.ArrowExportUp())">导出数据</FluentButton>
+		@if (context.IsPublished)
+		{
+			<FluentButton @onclick="@(()=>ShowAnswerLink(context))"
+						  IconStart="@(new Icons.Regular.Size16.Link())">答题链接</FluentButton>
+		}
+		else
+		{
+			<FluentButton @onclick="@(()=>EditSurvey(context))"
+						  IconStart="@(new Icons.Regular.Size16.Edit())">编辑</FluentButton>
+			<FluentButton @onclick="@(()=>EditSurvey(context))"
+						  IconStart="@(new Icons.Regular.Size16.Delete())">删除</FluentButton>
+		}
+	</TemplateColumn>
+</FluentDataGrid>
+
+
+@code {
+	/// <summary>
+	/// 开发或关闭问卷作答
+	/// </summary>
+	/// <param name="survey"></param>
+	/// <returns></returns>
+	private async Task ToggleSurvey(SurveyDto survey)
+	{
+		survey.IsPublished = !survey.IsPublished;
+		await _SurveyService.PutAsJsonAsync($"api/surveys/{survey.SurveyId}", survey);
+	}
+
+	/// <summary>
+	/// 导出问卷答题数据到数据管理服务
+	/// </summary>
+	/// <param name="survey"></param>
+	/// <returns></returns>
+	private async Task ExportSurvey(SurveyDto survey)
+	{
+		var result = await _DataStorage.PostAsJsonAsync("api/FileStorage/exportSurveyResult", new ExportSurveyResultDto
+		{
+			Owner = survey.CreatedBy,
+			SurveyId = survey.SurveyId
+		});
+		if (result.IsSuccessStatusCode)
+			await DialogService.ShowSuccessAsync("导出成功", "问卷数据已导出");
+		else
+			await DialogService.ShowErrorAsync("导出失败", "问卷数据导出失败");
+	}
+
+	/// <summary>
+	/// 展示答题链接
+	/// </summary>
+	/// <param name="survey"></param>
+	/// <returns></returns>
+	private async Task ShowAnswerLink(SurveyDto survey)
+	{
+		var dialog = await DialogService.ShowDialogAsync<FluentAnswerLinkDialog>($"/answer/{survey.SurveyId}",
+			new DialogParameters()
+				{
+					Title = $"问卷链接",
+				}
+			);
+		var _ = await dialog.Result;
+	}
+
+	/// <summary>
+	/// 跳转到问卷编辑页面
+	/// </summary>
+	/// <param name="survey"></param>
+	private void EditSurvey(SurveyDto survey)
+	{
+		Navigation.NavigateTo($"/survey-editor/{survey.SurveyId}");
+	}
+
+	/// <summary>
+	/// 删除问卷
+	/// </summary>
+	/// <param name="survey"></param>
+	/// <returns></returns>
+	private async Task DeleteSurvey(SurveyDto survey)
+	{
+		var dialog = await DialogService.ShowDialogAsync<FluentConfirmDialog>($"确定要删除问卷 {survey.Title} 吗？",
+			new DialogParameters()
+				{
+					Title = $"警告",
+				}
+		);
+		var result = await dialog.Result;
+		if (!result.Cancelled && result.Data != null && (bool) result.Data == true)
+		{
+			await _SurveyService.DeleteAsync($"api/surveys/{survey.SurveyId}");
+		}
+	}
+}

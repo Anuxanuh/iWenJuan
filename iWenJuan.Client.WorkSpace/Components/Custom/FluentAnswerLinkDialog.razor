@@ -1,0 +1,60 @@
+﻿@implements IDialogContentComponent<string>
+@using QRCoder
+@inject IJSRuntime JS
+
+@* Header *@
+<FluentDialogHeader ShowDismiss="true">
+	<FluentStack VerticalAlignment="VerticalAlignment.Center">
+		<FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size24.ClipboardLink())" />
+		<FluentLabel Typo="Typography.PaneHeader">
+			@Dialog.Instance.Parameters.Title
+		</FluentLabel>
+	</FluentStack>
+</FluentDialogHeader>
+
+@* Body *@
+<FluentDialogBody>
+	<FluentStack VerticalAlignment="VerticalAlignment.Center">
+		<img src="@qrCodeImageData" alt="QR Code" />
+		<FluentLabel Typo="Typography.PaneHeader">@Content</FluentLabel>
+	</FluentStack>
+</FluentDialogBody>
+
+@* Footer *@
+<FluentDialogFooter>
+	<FluentButton Appearance="Appearance.Neutral" OnClick="@CopyLinkToClipboardAsync">复制链接</FluentButton>
+	<FluentButton Appearance="Appearance.Accent" OnClick="@CloseAsync">关闭</FluentButton>
+</FluentDialogFooter>
+
+@code {
+	[Parameter]
+	public string Content { get; set; } = default!;
+
+	[CascadingParameter]
+	public FluentDialog Dialog { get; set; } = default!;
+
+	private string qrCodeImageData = default!;
+
+	protected override void OnParametersSet()
+	{
+		if (qrCodeImageData == default && Content != default)
+		{
+			using (var qrGenerator = new QRCodeGenerator())
+			using (var qrCodeData = qrGenerator.CreateQrCode(Content, QRCodeGenerator.ECCLevel.Q))
+			using (var qrCode = new Base64QRCode(qrCodeData))
+			{
+				qrCodeImageData = "data:image/png;base64," + qrCode.GetGraphic(5);
+			}
+		}
+	}
+
+	private async Task CopyLinkToClipboardAsync()
+	{
+		await JS.InvokeVoidAsync("copyToClipboard", Content);
+	}
+
+	private async Task CloseAsync()
+	{
+		await Dialog.CloseAsync();
+	}
+}

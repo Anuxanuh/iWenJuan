@@ -1,0 +1,6 @@
+services:
+  iwenjuan.service.email:
+    image: ${DOCKER_REGISTRY-}iwenjuanserviceemail
+    build:
+      context: .
+      dockerfile: iWenJuan.Service.Email/Dockerfile

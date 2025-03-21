@@ -1,0 +1,202 @@
+﻿@using MudBlazor
+@using System.Text
+@using iWenJuan.Client.WorkSpace.Components.Custom
+@using System.Globalization
+@using System.Dynamic
+
+@page "/data-visualizer/{FileId}"
+
+@inject NavigationManager Navigation
+@inject IHttpClientFactory httpClientFactory
+@inject ILogger<DataVisualizer> _logger
+
+@code {
+	[Parameter]
+	public string FileId { get; set; }
+
+	private HttpClient _DataStorage = default!;
+	private List<string> headers = [];
+	private List<Dictionary<string, string>> fileData = [];
+
+	private MainViewModel mainViewModel = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		_DataStorage = httpClientFactory.CreateClient("DataStoreService");
+		await LoadData();
+	}
+}
+
+
+<PageTitle>数据可视化</PageTitle>
+
+<FluentLabel Typo=" Microsoft.FluentUI.AspNetCore.Components.Typography.H1">数据可视化</FluentLabel>
+
+<FluentStack Orientation=Microsoft.FluentUI.AspNetCore.Components.Orientation.Vertical>
+	<FluentSwitch Label="分析模式"
+				  @bind-Value=mainViewModel.IsDirectAnalysisMode
+				  @onchange=UpdateChart>
+		<span slot="checked-message">直接分析模式</span>
+		<span slot="unchecked-message">聚类分析模式</span>
+	</FluentSwitch>
+
+	<FluentStack>
+		<FluentSelectEnum Label="图表类型:"
+						  TEnum=@ChartType
+						  @key=@mainViewModel.SelectedChartType
+						  EnumSelectedValue=@mainViewModel.SelectedChartType
+						  @onchange=UpdateChart />
+
+		<FluentSelect Label="X轴标签"
+					  TOption="string"
+					  Items=headers
+					  @bind-Value=mainViewModel.SelectedXAxisLabel
+					  @onchange=UpdateChart />
+
+		@if (mainViewModel.IsDirectAnalysisMode)
+		{
+			<FluentSelect Label="Y轴标签"
+						  TOption="string"
+						  Items=headers
+						  @bind-Value=mainViewModel.SelectedYAxisLabel
+						  @onchange=UpdateChart />
+		}
+	</FluentStack>
+
+	<FluentDivider Style="width: 100%;" Role="DividerRole.Presentation"></FluentDivider>
+
+	<FluentStack>
+		@if (mainViewModel.SelectedChartType == ChartType.Donut)
+		{
+			<MudChart ChartType="ChartType.Donut"
+					  InputData="@mainViewModel.Data"
+					  InputLabels="@mainViewModel.Labels"
+					  Height="300px" />
+		}
+		else if (mainViewModel.SelectedChartType == ChartType.Bar)
+		{
+			<MudChart ChartType="ChartType.Bar"
+					  ChartSeries="@mainViewModel.ChartSeries"
+					  XAxisLabels="@mainViewModel.Labels"
+					  Height="300px" />
+		}
+	</FluentStack>
+</FluentStack>
+
+<FluentOverlay @bind-Visible=mainViewModel.ProgressRingVisible
+			   Dismissable="false"
+			   FullScreen="true"
+			   Opacity="0.4">
+	<FluentProgressRing Width="128px" />
+</FluentOverlay>
+
+@code {
+	private async Task LoadData()
+	{
+		// 获取文件数据
+		var fileBytes = await _DataStorage.GetByteArrayAsync($"api/FileStorage/file/{FileId}/data");
+
+		// 解析CSV文件
+		using var reader = new StreamReader(new MemoryStream(fileBytes), Encoding.UTF8);
+		using var csv = new CsvHelper.CsvReader(reader, CultureInfo.InvariantCulture);
+
+		// 读取表头
+		if (csv.Read() && csv.ReadHeader())
+		{
+			headers = csv.HeaderRecord!.ToList();
+		}
+		// 读取数据
+		while (csv.Read())
+		{
+			var record = csv.GetRecord<dynamic>() as IDictionary<string, object>;
+			var dict = new Dictionary<string, string>();
+			foreach (var header in headers)
+			{
+				dict[header] = record[header]?.ToString() ?? string.Empty;
+			}
+			fileData.Add(dict);
+		}
+	}
+
+	private void UpdateChart()
+	{
+		mainViewModel.ProgressRingVisible = true;
+
+		if (mainViewModel.IsDirectAnalysisMode)
+		{
+			// 直接分析模式
+
+			// 如果X轴或Y轴标签未选择，则不进行分析
+			if (mainViewModel.SelectedXAxisLabel is null || mainViewModel.SelectedYAxisLabel is null)
+			{
+				mainViewModel.ProgressRingVisible = false;
+				StateHasChanged();
+				return;
+			}
+			// 加载数据到视图模型
+			var oData = fileData.Where(d => d.CanConvertToDouble(mainViewModel.SelectedYAxisLabel!));
+			mainViewModel.Labels = oData.Select(d => d[mainViewModel.SelectedXAxisLabel]).ToArray();
+			mainViewModel.Data = oData.Select(d => double.Parse(d[mainViewModel.SelectedYAxisLabel])).ToArray();
+		}
+		else
+		{
+			// 聚类分析模式
+
+			// 如果X轴标签未选择，则不进行分析
+			if (mainViewModel.SelectedXAxisLabel is null)
+			{
+				mainViewModel.ProgressRingVisible = false;
+				StateHasChanged();
+				return;
+			}
+			// 加载数据到视图模型
+			var oData = fileData
+				.GroupBy(d => d[mainViewModel.SelectedXAxisLabel])
+				.Select(group => new
+				{
+					Key = group.Key!.ToString()!,
+					Value = group.Count()
+				});
+			mainViewModel.Labels = oData.Select(d => d.Key).ToArray();
+			mainViewModel.Data = oData.Select(d => (double) d.Value).ToArray();
+		}
+
+		mainViewModel.ProgressRingVisible = false;
+		StateHasChanged();
+	}
+}
+@code {
+	internal class MainViewModel
+	{
+		public bool ProgressRingVisible { get; set; } = false;
+
+
+		/// <summary>
+		/// 分析模式
+		/// true:	直接分析模式
+		/// false:	聚类分析模式
+		/// </summary>
+		public bool IsDirectAnalysisMode { get; set; }
+		/// <summary>
+		/// 图表类型
+		/// </summary>
+		public ChartType SelectedChartType { get; set; }
+		/// <summary>
+		/// X轴
+		/// </summary>
+		public string SelectedXAxisLabel { get; set; }
+		/// <summary>
+		/// Y轴
+		/// </summary>
+		public string SelectedYAxisLabel { get; set; }
+
+		public string[] Labels { get; set; } = [];
+
+		public double[] Data { get; set; } = [];
+
+		public List<ChartSeries> ChartSeries => new List<ChartSeries>()
+			{
+				new ChartSeries() { Name = "", Data = Data },
+			};
+	}
+}

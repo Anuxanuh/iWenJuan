@@ -1,0 +1,46 @@
+﻿@using iWenJuan.Client.WorkSpace.Components.Custom
+@implements IDialogContentComponent<ConditionDto>
+
+@* Header *@
+<FluentDialogHeader ShowDismiss="true">
+	<FluentStack VerticalAlignment="VerticalAlignment.Center">
+		<FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size24.LinkMultiple())" />
+		<FluentLabel Typo="Typography.PaneHeader">
+			@Dialog.Instance.Parameters.Title
+		</FluentLabel>
+	</FluentStack>
+</FluentDialogHeader>
+
+@* Body *@
+<FluentDialogBody>
+	<FluentNumberField @bind-Value="Content.QuestionId" Label="条件问题ID" />
+	<FluentSelectEnum EnumSelectedValue="Content.Operator" TEnum="Operator" Label="运算符" />
+	<FluentTextField @bind-Value="Content.Value" Label="条件值" />
+	<FluentNumberField @bind-Value="Content.NextQuestionId" Label="作用问题ID" />
+	<FluentSelectEnum EnumSelectedValue="Content.Effect" TEnum="Effect" Label="作用" />
+</FluentDialogBody>
+
+@* Footer *@
+<FluentDialogFooter>
+	<FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">取消</FluentButton>
+	<FluentButton Appearance="Appearance.Accent" OnClick="@ConfirmAsync">确认</FluentButton>
+</FluentDialogFooter>
+
+@code {
+	[Parameter]
+	public ConditionDto Content { get; set; } = default!;
+
+	[CascadingParameter]
+	public FluentDialog Dialog { get; set; } = default!;
+
+	private async Task CancelAsync()
+	{
+		await Dialog.CancelAsync();
+	}
+
+	private async Task ConfirmAsync()
+	{
+		await Dialog.CloseAsync(Content);
+	}
+}
+

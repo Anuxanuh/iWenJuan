@@ -1,0 +1,17 @@
+﻿@inherits LayoutComponentBase
+
+<FluentLayout Style="height:70dvh">
+	<FluentDialogProvider />
+	<FluentMessageBarProvider />
+	<FluentToastProvider />
+	<FluentTooltipProvider />
+	<FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center" HorizontalAlignment="HorizontalAlignment.Center" Width="100%" Style="height:100%">
+		<div>
+			@Body
+		</div>
+	</FluentStack>
+</FluentLayout>
+
+@code {
+
+}

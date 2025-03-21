@@ -1,0 +1,138 @@
+﻿@page "/login"
+@layout AuthLayout
+@inject NavigationManager Navigation
+@inject AuthenticationService AuthenticationService
+@inject HttpOnlyCookieService HttpOnlyCookieService
+@inject IDialogService DialogService
+@inject IHttpClientFactory httpClientFactory
+@inject ILogger<Login> _logger
+@inject IJSRuntime JS
+@code {
+	internal class ViewModel
+	{
+		public bool ProgressRingVisible { get; set; } = false;
+	}
+}
+
+<PageTitle>登录</PageTitle>
+
+<FluentCard Style="padding:60px">
+	<FluentLabel Typo="Typography.H1" Style="padding-bottom:10px">登录</FluentLabel>
+
+	<FluentEditForm Model="loginModel" OnValidSubmit="HandleLogin">
+		<DataAnnotationsValidator />
+		<FluentStack Orientation="Orientation.Vertical">
+			<div>
+				<FluentTextField @bind-Value="loginModel.UserEmail" Label="邮箱"></FluentTextField>
+				<FluentValidationMessage For="() => loginModel.UserEmail"></FluentValidationMessage>
+			</div>
+			<div>
+				<FluentTextField @bind-Value="loginModel.UserPassword" Label="密码" TextFieldType="TextFieldType.Password"></FluentTextField>
+				<FluentValidationMessage For="() => loginModel.UserPassword" />
+			</div>
+			<FluentButton Type="ButtonType.Button" Appearance="Appearance.Stealth" @onclick="GoToChangePassword">忘记密码?</FluentButton>
+			<FluentStack Orientation="Orientation.Horizontal" Style="padding-top:10px">
+				<FluentButton Type="ButtonType.Button" Appearance="Appearance.Outline" @onclick="GoToRegis">前往注册</FluentButton>
+				<FluentSpacer></FluentSpacer>
+				<FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent">登录</FluentButton>
+			</FluentStack>
+		</FluentStack>
+	</FluentEditForm>
+</FluentCard>
+
+<FluentOverlay @bind-Visible=viewModel.ProgressRingVisible
+			   Dismissable="false"
+			   FullScreen="true"
+			   Opacity="0.4">
+	<FluentProgressRing Width="128px" />
+</FluentOverlay>
+
+@code {
+	private HttpClient _httpClient = default!;
+
+	protected override void OnInitialized()
+	{
+		_httpClient = httpClientFactory.CreateClient("AuthService");
+
+		base.OnInitialized();
+	}
+
+	private ViewModel viewModel = new();
+	private LoginDto loginModel = new();
+
+	private void GoToChangePassword()
+	{
+		Navigation.NavigateTo("/change-password");
+	}
+
+	private void GoToRegis()
+	{
+		Navigation.NavigateTo("/register");
+	}
+
+	private async Task HandleLogin()
+	{
+		// 显示加载动画
+		viewModel.ProgressRingVisible = true;
+		// 发送登录请求
+		var loginResponse = await _httpClient.PostAsJsonAsync("/api/auth/login", loginModel);
+		// 登录失败
+		if (!loginResponse.IsSuccessStatusCode)
+		{
+			// 关闭加载动画
+			viewModel.ProgressRingVisible = false;
+			StateHasChanged();
+			// 显示错误消息
+			var loginResponseText = await loginResponse.Content.ReadAsStringAsync();
+			await DialogService.ShowErrorAsync(loginResponseText);
+			return;
+		}
+		// 登录成功并获取返回的数据
+		var loginResponseContent = await loginResponse.Content.ReadFromJsonAsync<LoginResponseDto>();
+		if (loginResponseContent is null)
+		{
+			// 关闭加载动画
+			viewModel.ProgressRingVisible = false;
+			StateHasChanged();
+			// 显示错误消息
+			await DialogService.ShowErrorAsync("登录接口返回数据异常");
+			return;
+		}
+		// 验证token
+		var validateTokenResponse = await _httpClient.PostAsJsonAsync("/api/auth/validate-token", loginResponseContent.Token);
+		// 验证失败: 一般不可能
+		if (!validateTokenResponse.IsSuccessStatusCode)
+		{
+			// 关闭加载动画
+			viewModel.ProgressRingVisible = false;
+			StateHasChanged();
+			// 显示错误消息
+			var responseText = await validateTokenResponse.Content.ReadAsStringAsync();
+			await DialogService.ShowErrorAsync(responseText);
+			return;
+		}
+		// 设置HttpOnly cookie
+		// HttpOnlyCookieService.SetCookie("Auth", loginResponse.Token);
+		await JS.InvokeVoidAsync("setCookie", "Auth", loginResponseContent.Token, 7);
+		// 获取用户信息
+		var userId = await validateTokenResponse.Content.ReadAsStringAsync();
+		var user = await _httpClient.GetFromJsonAsync<UserDto>($"/api/user/{userId}");
+		// 给用户授权
+		var currentUser = AuthenticationService.CurrentUser;
+		var identity = new ClaimsIdentity([
+				new Claim(ClaimTypes.Authentication, loginResponseContent.Token),
+				new Claim(ClaimTypes.NameIdentifier, user!.Id.ToString()),
+				new Claim(ClaimTypes.Name, user.UserName),
+				new Claim(ClaimTypes.Email, user.Email)],
+			"Access Token");
+		var newUser = new ClaimsPrincipal(identity);
+		AuthenticationService.CurrentUser = newUser;
+		// 关闭加载动画
+		viewModel.ProgressRingVisible = false;
+		StateHasChanged();
+		// 显示消息并跳转到首页
+		var dialog = await DialogService.ShowSuccessAsync(loginResponseContent.Message);
+		await dialog.Result;
+		Navigation.NavigateTo("/");
+	}
+}

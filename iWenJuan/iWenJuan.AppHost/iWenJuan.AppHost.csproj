@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.0.0" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsAspireHost>true</IsAspireHost>
+    <UserSecretsId>7aa9815d-c516-465a-95dd-234fbaf5b33a</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.1.0" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.1.0" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.1.0" />
+    <PackageReference Include="Aspire.Hosting.Redis" Version="9.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\iWenJuan.Client.WorkSpace\iWenJuan.Client.WorkSpace.csproj" />
+    <ProjectReference Include="..\..\iWenJuan.Service.Auth\iWenJuan.Service.Auth.csproj" />
+    <ProjectReference Include="..\..\iWenJuan.Service.DataProcessing\iWenJuan.Service.DataProcessing.csproj" />
+    <ProjectReference Include="..\..\iWenJuan.Service.DataStorage\iWenJuan.Service.DataStorage.csproj" />
+    <ProjectReference Include="..\..\iWenJuan.Service.Email\iWenJuan.Service.Email.csproj" />
+    <ProjectReference Include="..\..\iWenJuan.Service.Survey\iWenJuan.Service.Survey.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </ApplicationDefinition>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

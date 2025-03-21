@@ -1,0 +1,12 @@
+﻿@code {
+    [Parameter]
+    public OptionDto Option { get; set; }
+
+    [Parameter]
+    public EventCallback OnRemove { get; set; }
+}
+
+<FluentStack>
+    <FluentTextField @bind-Value="Option.OptionText" AriaLabel="选项" Style="width: 60%" />
+    <FluentButton @onclick="OnRemove">删除</FluentButton>
+</FluentStack>
