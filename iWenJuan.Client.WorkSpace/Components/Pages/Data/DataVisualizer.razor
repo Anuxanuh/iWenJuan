@@ -30,28 +30,30 @@
 
 <PageTitle>数据可视化</PageTitle>
 
-<FluentLabel Typo=" Microsoft.FluentUI.AspNetCore.Components.Typography.H1">数据可视化</FluentLabel>
+<FluentStack Orientation=Microsoft.FluentUI.AspNetCore.Components.Orientation.Vertical
+			 Style="height:100%">
+	<FluentLabel Typo=" Microsoft.FluentUI.AspNetCore.Components.Typography.H1">数据可视化</FluentLabel>
 
-<FluentStack Orientation=Microsoft.FluentUI.AspNetCore.Components.Orientation.Vertical>
 	<FluentSwitch Label="分析模式"
 				  @bind-Value=mainViewModel.IsDirectAnalysisMode
-				  @onchange=UpdateChart>
+				  @bind-Value:after=UpdateChart>
 		<span slot="checked-message">直接分析模式</span>
 		<span slot="unchecked-message">聚类分析模式</span>
 	</FluentSwitch>
 
 	<FluentStack>
-		<FluentSelectEnum Label="图表类型:"
-						  TEnum=@ChartType
-						  @key=@mainViewModel.SelectedChartType
-						  EnumSelectedValue=@mainViewModel.SelectedChartType
-						  @onchange=UpdateChart />
+		<FluentSelect ValueChanged="@SelectedChartTypeChanged" TOption="string">
+			@foreach (var chartType in Enum.GetNames(typeof(ChartType)))
+			{
+				<FluentOption Value="@chartType">@chartType</FluentOption>
+			}
+		</FluentSelect>
 
 		<FluentSelect Label="X轴标签"
 					  TOption="string"
 					  Items=headers
 					  @bind-Value=mainViewModel.SelectedXAxisLabel
-					  @onchange=UpdateChart />
+					  @bind-Value:after=UpdateChart />
 
 		@if (mainViewModel.IsDirectAnalysisMode)
 		{
@@ -59,27 +61,47 @@
 						  TOption="string"
 						  Items=headers
 						  @bind-Value=mainViewModel.SelectedYAxisLabel
-						  @onchange=UpdateChart />
+						  @bind-Value:after=UpdateChart />
 		}
 	</FluentStack>
 
 	<FluentDivider Style="width: 100%;" Role="DividerRole.Presentation"></FluentDivider>
 
-	<FluentStack>
-		@if (mainViewModel.SelectedChartType == ChartType.Donut)
-		{
-			<MudChart ChartType="ChartType.Donut"
-					  InputData="@mainViewModel.Data"
-					  InputLabels="@mainViewModel.Labels"
-					  Height="300px" />
-		}
-		else if (mainViewModel.SelectedChartType == ChartType.Bar)
-		{
-			<MudChart ChartType="ChartType.Bar"
-					  ChartSeries="@mainViewModel.ChartSeries"
-					  XAxisLabels="@mainViewModel.Labels"
-					  Height="300px" />
-		}
+	<FluentStack Style="height:100%">
+		<FluentCard Width="60%">
+			<FluentStack HorizontalAlignment="Microsoft.FluentUI.AspNetCore.Components.HorizontalAlignment.Center"
+						 VerticalAlignment="Microsoft.FluentUI.AspNetCore.Components.VerticalAlignment.Center"
+						 Style="height:100%">
+				<MudChart ChartType="@mainViewModel.SelectedChartType"
+						  InputData="@mainViewModel.Data"
+						  InputLabels="@mainViewModel.Labels"
+						  ChartSeries="@mainViewModel.ChartSeries"
+						  XAxisLabels="@mainViewModel.Labels"
+						  ChartOptions="@mainViewModel.Options"
+						  AxisChartOptions="@mainViewModel.AxisChartOptions" />
+			</FluentStack>
+		</FluentCard>
+
+		<FluentCard Width="40%">
+			<FluentStack Orientation=Microsoft.FluentUI.AspNetCore.Components.Orientation.Vertical>
+
+				<FluentSwitch ValueChanged="(v)=> mainViewModel.ShowDataMarkers = v" Label="数据标记"></FluentSwitch>
+
+				<FluentDivider Style="width: 100%;" Role="DividerRole.Presentation"></FluentDivider>
+
+				<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">标签倾斜度</FluentLabel>
+				<FluentSlider @bind-Value="mainViewModel.AxisChartOptions.LabelRotation" Min="0" Max="90" Step="15"></FluentSlider>
+
+				<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">线粗细度: @mainViewModel.Options.LineStrokeWidth.ToString()</FluentLabel>
+				<FluentSlider @bind-Value="mainViewModel.Options.LineStrokeWidth" Min="1" Max="10" Step="0.1" />
+
+				<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">Y轴最大值: @mainViewModel.Options.YAxisTicks.ToString()</FluentLabel>
+				<FluentSlider @bind-Value="mainViewModel.Options.YAxisTicks" Min="1" Max="400" Step="1"></FluentSlider>
+
+				<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">柱状图条宽</FluentLabel>
+				<FluentSlider @bind-Value="mainViewModel.AxisChartOptions.StackedBarWidthRatio" Min="0.1" Max="2" Step="0.1"></FluentSlider>
+			</FluentStack>
+		</FluentCard>
 	</FluentStack>
 </FluentStack>
 
@@ -91,6 +113,12 @@
 </FluentOverlay>
 
 @code {
+	private void SelectedChartTypeChanged(string chartType)
+	{
+		mainViewModel.SelectedChartType = (ChartType) Enum.Parse(typeof(ChartType), chartType);
+		UpdateChart();
+	}
+
 	private async Task LoadData()
 	{
 		// 获取文件数据
@@ -134,7 +162,8 @@
 				return;
 			}
 			// 加载数据到视图模型
-			var oData = fileData.Where(d => d.CanConvertToDouble(mainViewModel.SelectedYAxisLabel!));
+			var oData = fileData.Where(d => d.CanConvertToDouble(mainViewModel.SelectedYAxisLabel!))
+								.OrderBy(d => d[mainViewModel.SelectedXAxisLabel]);
 			mainViewModel.Labels = oData.Select(d => d[mainViewModel.SelectedXAxisLabel]).ToArray();
 			mainViewModel.Data = oData.Select(d => double.Parse(d[mainViewModel.SelectedYAxisLabel])).ToArray();
 		}
@@ -151,12 +180,14 @@
 			}
 			// 加载数据到视图模型
 			var oData = fileData
+				.Where(d => !string.IsNullOrEmpty(d[mainViewModel.SelectedXAxisLabel]))
 				.GroupBy(d => d[mainViewModel.SelectedXAxisLabel])
 				.Select(group => new
 				{
 					Key = group.Key!.ToString()!,
 					Value = group.Count()
-				});
+				})
+				.OrderBy(item => item.Key);
 			mainViewModel.Labels = oData.Select(d => d.Key).ToArray();
 			mainViewModel.Data = oData.Select(d => (double) d.Value).ToArray();
 		}
@@ -190,13 +221,18 @@
 		/// </summary>
 		public string SelectedYAxisLabel { get; set; }
 
+		public bool ShowDataMarkers { get; set; }
+
 		public string[] Labels { get; set; } = [];
 
 		public double[] Data { get; set; } = [];
 
 		public List<ChartSeries> ChartSeries => new List<ChartSeries>()
 			{
-				new ChartSeries() { Name = "", Data = Data },
+				new ChartSeries() { Name = SelectedXAxisLabel, Data = Data , ShowDataMarkers = ShowDataMarkers},
 			};
+
+		public ChartOptions Options = new ChartOptions();
+		public AxisChartOptions AxisChartOptions = new AxisChartOptions();
 	}
 }
