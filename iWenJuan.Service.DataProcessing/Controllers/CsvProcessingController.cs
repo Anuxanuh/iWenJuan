@@ -29,7 +29,7 @@ public class CsvProcessingController : ControllerBase
 
 		var processedCsv = await _csvProcessingService.ProcessCsvAsync(file, operations);
 
-		var httpContent = new StreamContent(processedCsv);
+		var httpContent = new ByteArrayContent(processedCsv);
 
 		var response = await _httpClient.PostAsync($"api/save/{fileId}", httpContent);
 

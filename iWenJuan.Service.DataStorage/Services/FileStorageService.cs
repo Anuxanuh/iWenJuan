@@ -1,6 +1,9 @@
 ﻿using iWenJuan.Service.DataStorage.Data;
 using iWenJuan.Service.DataStorage.Interface;
 using iWenJuan.Service.DataStorage.Models;
+using iWenJuan.Shared.Dtos;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace iWenJuan.Service.DataStorage.Services;
 
@@ -25,17 +28,8 @@ public class FileStorageService : IFileStorageService
 	/// <param name="contentType">文件的MIME类型</param>
 	/// <param name="data">文件的字节数据</param>
 	/// <returns>保存的文件的唯一标识符</returns>
-	public async Task<int> SaveFileAsync(Guid owner, string fileName, string contentType, byte[] data)
+	public async Task<int> SaveFileAsync(StoredFile storedFile)
 	{
-		// 创建一个新的存储文件实例
-		var storedFile = new StoredFile
-		{
-			Owner = owner,
-			FileName = fileName,
-			ContentType = contentType,
-			Data = data
-		};
-
 		// 将文件添加到数据库上下文
 		_context.StoredFiles.Add(storedFile);
 		// 异步保存更改到数据库
@@ -46,9 +40,44 @@ public class FileStorageService : IFileStorageService
 	}
 
 	/// <summary>
+	/// 异步获取指定所有者的文件列表
+	/// </summary>
+	/// <param name="ownerId"></param>
+	/// <returns></returns>
+	public Task<IEnumerable<StoredFileInfoDto>> GetFileInfosByOwnerIdAsync(Guid ownerId)
+	{
+		return Task.FromResult<IEnumerable<StoredFileInfoDto>>(_context
+			.StoredFiles
+			.Where(f => f.Owner == ownerId)
+			.Select(f => new StoredFileInfoDto
+			{
+				Id = f.Id,
+				FileName = f.FileName,
+				Owner = f.Owner,
+				ContentType = f.ContentType,
+				CreatedAt = f.CreatedAt
+			}));
+	}
+
+	/// <summary>
 	/// 根据文件ID异步获取文件
 	/// </summary>
 	/// <param name="id">文件的唯一标识符</param>
 	/// <returns>存储的文件，如果未找到则返回null</returns>
 	public async Task<StoredFile?> GetFileByIdAsync(int id) => await _context.StoredFiles.FindAsync(id);
+
+	/// <summary>
+	/// 异步删除文件
+	/// </summary>
+	/// <param name="id"></param>
+	/// <returns></returns>
+	public async Task DeleteFileAsync(int id)
+	{
+		var storedFile = await _context.StoredFiles.FindAsync(id);
+		if (storedFile != null)
+		{
+			_context.StoredFiles.Remove(storedFile);
+			await _context.SaveChangesAsync();
+		}
+	}
 }

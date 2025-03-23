@@ -19,5 +19,9 @@ public enum Operator
 	[Display(Name = ">")]
 	GreaterThan,
 	[Display(Name = "<")]
-	LessThan
+	LessThan,
+	[Display(Name = ">=")]
+	GreaterThanOrEquals,
+	[Display(Name = "<=")]
+	LessThanOrEquals,
 }

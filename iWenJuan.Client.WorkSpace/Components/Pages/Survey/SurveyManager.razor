@@ -15,6 +15,11 @@
 		_SurveyService = httpClientFactory.CreateClient("SurveyService");
 		_DataStorage = httpClientFactory.CreateClient("DataStoreService");
 
+		await LoadData();
+	}
+
+	private async Task LoadData()
+	{
 		var userId = AuthenticationService.CurrentUser.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 		var surveyList = await _SurveyService.GetFromJsonAsync<List<SurveyDto>>($"api/surveys/{userId}/all-surveys");
 		surveys = surveyList?.AsQueryable() ?? Enumerable.Empty<SurveyDto>().AsQueryable();
@@ -46,7 +51,7 @@
 		{
 			<FluentButton @onclick="@(()=>EditSurvey(context))"
 						  IconStart="@(new Icons.Regular.Size16.Edit())">编辑</FluentButton>
-			<FluentButton @onclick="@(()=>EditSurvey(context))"
+			<FluentButton @onclick="@(()=>DeleteSurvey(context))"
 						  IconStart="@(new Icons.Regular.Size16.Delete())">删除</FluentButton>
 		}
 	</TemplateColumn>
@@ -125,6 +130,7 @@
 		if (!result.Cancelled && result.Data != null && (bool) result.Data == true)
 		{
 			await _SurveyService.DeleteAsync($"api/surveys/{survey.SurveyId}");
+			await LoadData();
 		}
 	}
 }

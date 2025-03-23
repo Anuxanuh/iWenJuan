@@ -1,10 +1,15 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using iWenJuan.Service.DataProcessing.Interface;
+using iWenJuan.Service.DataProcessing.Utils;
 using iWenJuan.Shared.Dtos;
 using iWenJuan.Shared.Enums;
+using iWenJuan.Shared.Extension;
+using System;
 using System.Dynamic;
 using System.Globalization;
+using System.Reflection.PortableExecutable;
+using System.Text;
 
 namespace iWenJuan.Service.DataProcessing.Services;
 
@@ -19,40 +24,47 @@ public class CsvProcessingService : ICsvProcessingService
 	/// <param name="csvStream">CSV文件流</param>
 	/// <param name="operations">操作列表</param>
 	/// <returns>处理后的CSV内容的内存流</returns>
-	public async Task<MemoryStream> ProcessCsvAsync(Stream csvStream, List<CsvOperation> operations)
+	public async Task<byte[]> ProcessCsvAsync(Stream csvStream, List<CsvOperation> operations)
 	{
-		// 配置CSV读取器，设置标题匹配时忽略大小写
-		var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
+		// 文件数据
+		List<string> headers = [];
+		List<Dictionary<string, string>> fileData = [];
+
+		// 解析CSV文件
+		using var reader = new StreamReader(csvStream, Encoding.UTF8);
+		using var csv = new CsvHelper.CsvReader(reader, CultureInfo.InvariantCulture);
+
+		// 读取表头
+		if (csv.Read() && csv.ReadHeader())
 		{
-			PrepareHeaderForMatch = args => args.Header.ToLower()
-		};
-
-		// 使用StreamReader读取CSV文件流
-		using (var reader = new StreamReader(csvStream))
-		// 使用CsvReader解析CSV内容
-		using (var csv = new CsvReader(reader, configuration))
-		{
-			// 获取CSV记录并转换为动态对象列表
-			var records = csv.GetRecords<dynamic>().ToList();
-
-			// 对每个操作进行处理
-			foreach (var operation in operations)
-			{
-				records = ApplyOperation(records, operation);
-			}
-
-			// 创建内存流用于存储处理后的CSV内容
-			var memoryStream = new MemoryStream();
-			using (var writer = new StreamWriter(memoryStream))
-			using (var csvWriter = new CsvWriter(writer, configuration))
-			{
-				// 异步写入处理后的记录到内存流
-				await csvWriter.WriteRecordsAsync(records);
-				await writer.FlushAsync();
-				memoryStream.Position = 0; // 重置内存流位置
-				return memoryStream; // 返回内存流
-			}
+			headers = [.. csv.HeaderRecord!];
 		}
+		// 读取数据
+		while (csv.Read())
+		{
+			var record = csv.GetRecord<dynamic>() as IDictionary<string, object>;
+			var dict = new Dictionary<string, string>();
+			foreach (var header in headers)
+			{
+				dict[header] = record[header]?.ToString() ?? string.Empty;
+			}
+			fileData.Add(dict);
+		}
+
+		// 对每个操作进行处理
+		foreach (var operation in operations)
+		{
+			fileData = ApplyOperation(fileData, operation);
+		}
+
+		// 创建内存流用于存储处理后的CSV内容
+		var memoryStream = new MemoryStream();
+		using var writer = new StreamWriter(memoryStream);
+		using var csvWriter = new CsvWriter(writer, new CsvConfiguration(System.Globalization.CultureInfo.InvariantCulture));
+		// 异步写入处理后的记录到内存流
+		await csvWriter.WriteRecordsAsync(fileData);
+		await writer.FlushAsync();
+		return memoryStream.ToArray(); // 返回
 	}
 
 	/// <summary>
@@ -61,28 +73,20 @@ public class CsvProcessingService : ICsvProcessingService
 	/// <param name="records">CSV记录列表</param>
 	/// <param name="operation">操作</param>
 	/// <returns>处理后的CSV记录列表</returns>
-	private List<dynamic> ApplyOperation(List<dynamic> records, CsvOperation operation)
+	private List<Dictionary<string, string>> ApplyOperation(List<Dictionary<string, string>> records, CsvOperation operation)
 	{
 		switch (operation.OperationType)
 		{
 			case CsvOperationType.Select:
-				return records.Select(r => SelectColumns(r, operation.Column)).ToList();
+				return [.. records.Select(r => SelectColumns(r, operation.Column!))];
 			case CsvOperationType.Filter:
-				return records.Where(r => FilterRecords(r, operation.Column, operation.Condition, operation.Value)).ToList();
-			case CsvOperationType.GroupBy:
-				return GroupByColumn(records, operation.Column);
+				return [.. records.Where(r => FilterRecords(r, operation.Column!, operation.Condition!.Value, operation.Value!))];
 			case CsvOperationType.OrderBy:
-				return OrderByColumn(records, operation.Column);
-			case CsvOperationType.Count:
-				return AggregateColumn(records, operation.Column, "count");
-			case CsvOperationType.Sum:
-				return AggregateColumn(records, operation.Column, "sum");
-			case CsvOperationType.Average:
-				return AggregateColumn(records, operation.Column, "average");
-			case CsvOperationType.Min:
-				return AggregateColumn(records, operation.Column, "min");
-			case CsvOperationType.Max:
-				return AggregateColumn(records, operation.Column, "max");
+				return OrderByColumn(records, operation.Column!);
+			case CsvOperationType.GroupBy:
+				return GroupByColumn(records, operation.Column!, operation.AggregateOperations!);
+			case CsvOperationType.Aggregate:
+				return AggregateColumn(records, operation.Column!, operation.AggregateOperations!);
 			default:
 				return records;
 		}
@@ -94,16 +98,17 @@ public class CsvProcessingService : ICsvProcessingService
 	/// <param name="record">CSV记录</param>
 	/// <param name="columns">列名，逗号分隔</param>
 	/// <returns>包含指定列的新记录</returns>
-	private dynamic SelectColumns(dynamic record, string columns)
+	private Dictionary<string, string> SelectColumns(Dictionary<string, string> record, string columns)
 	{
 		var selectedColumns = columns.Split(',');
-		var newRecord = new ExpandoObject() as IDictionary<string, Object>;
+
+		var newRecord = new Dictionary<string, string>();
 
 		foreach (var column in selectedColumns)
 		{
-			if (((IDictionary<string, object>) record).ContainsKey(column))
+			if (record.ContainsKey(column))
 			{
-				newRecord[column] = ((IDictionary<string, object>) record)[column];
+				newRecord[column] = record[column];
 			}
 		}
 
@@ -118,45 +123,31 @@ public class CsvProcessingService : ICsvProcessingService
 	/// <param name="condition">条件</param>
 	/// <param name="value">值</param>
 	/// <returns>是否满足条件</returns>
-	private bool FilterRecords(dynamic record, string column, string condition, string value)
+	private bool FilterRecords(Dictionary<string, string> record, string column, Operator condition, string value)
 	{
-		if (!((IDictionary<string, object>) record).ContainsKey(column))
+		if (!record.ContainsKey(column))
 		{
 			return false;
 		}
 
-		var recordValue = ((IDictionary<string, object>) record)[column].ToString();
+		var recordValue = record[column];
 
-		switch (condition)
+		if (recordValue == null)
 		{
-			case "==":
-				return recordValue == value;
-			case "!=":
-				return recordValue != value;
-			case ">":
-				return double.Parse(recordValue) > double.Parse(value);
-			case "<":
-				return double.Parse(recordValue) < double.Parse(value);
-			case ">=":
-				return double.Parse(recordValue) >= double.Parse(value);
-			case "<=":
-				return double.Parse(recordValue) <= double.Parse(value);
-			default:
-				return false;
+			return false;
 		}
-	}
 
-	/// <summary>
-	/// 根据指定列进行分组
-	/// </summary>
-	/// <param name="records">CSV记录列表</param>
-	/// <param name="column">列名</param>
-	/// <returns>分组后的记录列表</returns>
-	private List<dynamic> GroupByColumn(List<dynamic> records, string column)
-	{
-		return records.GroupBy(r => ((IDictionary<string, object>) r)[column])
-					  .Select(g => new { Key = g.Key, Count = g.Count() })
-					  .ToList<dynamic>();
+		return condition switch
+		{
+			Operator.Equals => recordValue == value,
+			Operator.NotEquals => recordValue != value,
+			Operator.Contains => recordValue.Contains(value),
+			Operator.GreaterThan => StringOrNumericComparer.Compare(recordValue, value) > 0,
+			Operator.LessThan => StringOrNumericComparer.Compare(recordValue, value) < 0,
+			Operator.GreaterThanOrEquals => StringOrNumericComparer.Compare(recordValue, value) >= 0,
+			Operator.LessThanOrEquals => StringOrNumericComparer.Compare(recordValue, value) <= 0,
+			_ => false,
+		};
 	}
 
 	/// <summary>
@@ -165,36 +156,69 @@ public class CsvProcessingService : ICsvProcessingService
 	/// <param name="records">CSV记录列表</param>
 	/// <param name="column">列名</param>
 	/// <returns>排序后的记录列表</returns>
-	private List<dynamic> OrderByColumn(List<dynamic> records, string column)
+	private List<Dictionary<string, string>> OrderByColumn(List<Dictionary<string, string>> records, string column)
 	{
 		return records.OrderBy(r => ((IDictionary<string, object>) r)[column]).ToList();
 	}
 
-	/// <summary>
-	/// 对指定列进行聚合操作
-	/// </summary>
-	/// <param name="records">CSV记录列表</param>
-	/// <param name="column">列名</param>
-	/// <param name="operation">聚合操作类型</param>
-	/// <returns>聚合结果</returns>
-	private List<dynamic> AggregateColumn(List<dynamic> records, string column, string operation)
+	private List<Dictionary<string, string>> GroupByColumn(List<Dictionary<string, string>> records, string column, Dictionary<AggregateOperationType, string> aggregateOperations)
 	{
-		var values = records.Select(r => double.Parse(((IDictionary<string, object>) r)[column].ToString())).ToList();
+		List<Dictionary<string, string>> newResult = [];
 
-		switch (operation)
+		var tmp = records.GroupBy(r => r[column]);
+
+		foreach (var group in tmp)
 		{
-			case "count":
-				return new List<dynamic> { new { Count = values.Count } };
-			case "sum":
-				return new List<dynamic> { new { Sum = values.Sum() } };
-			case "average":
-				return new List<dynamic> { new { Average = values.Average() } };
-			case "min":
-				return new List<dynamic> { new { Min = values.Min() } };
-			case "max":
-				return new List<dynamic> { new { Max = values.Max() } };
-			default:
-				return records;
+			var newRecord = new Dictionary<string, string>
+			{
+				[column] = group.Key
+			};
+			foreach (var (aggregateOperation, c) in aggregateOperations)
+			{
+				newRecord[$"{c}_{aggregateOperation.GetDisplayName()}"] = SubAggregateColumn(group, c, aggregateOperation);
+			}
+			newResult.Add(newRecord);
 		}
+
+		return newResult;
+	}
+
+	private List<Dictionary<string, string>> AggregateColumn(IEnumerable<IDictionary<string, string>> records, string column, Dictionary<AggregateOperationType, string> aggregateOperations)
+	{
+		Dictionary<string, string> newResult = [];
+
+		foreach (var (aggregateOperation, c) in aggregateOperations)
+		{
+			newResult[$"{c}_{aggregateOperation.GetDisplayName()}"] = SubAggregateColumn(records, c, aggregateOperation);
+		}
+
+		return [newResult];
+	}
+
+	private string SubAggregateColumn(IEnumerable<IDictionary<string, string>> records, string? column, AggregateOperationType aggregateOperation)
+	{
+		switch (aggregateOperation)
+		{
+			case AggregateOperationType.Count:
+				if (string.IsNullOrEmpty(column))
+				{
+					return records.Count().ToString();
+				}
+				else
+				{
+					return records.Where(r => string.IsNullOrWhiteSpace(r[column])).Count().ToString();
+				}
+			case AggregateOperationType.Sum:
+				return records.Where(r => r.CanConvertToDouble(column!)).Sum(r => double.Parse(r[column!])).ToString();
+			case AggregateOperationType.Average:
+				return records.Where(r => r.CanConvertToDouble(column!)).Average(r => double.Parse(r[column!])).ToString();
+			case AggregateOperationType.Min:
+				return records.Where(r => r.CanConvertToDouble(column!)).Min(r => double.Parse(r[column!])).ToString();
+			case AggregateOperationType.Max:
+				return records.Where(r => r.CanConvertToDouble(column!)).Max(r => double.Parse(r[column!])).ToString();
+			default:
+				break;
+		}
+		return "";
 	}
 }

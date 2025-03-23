@@ -1,11 +1,158 @@
-﻿@page "/data-processer/{FileId:int}"
+﻿@page "/data-processer/{FileId}"
+@using System.Text
+@using System.Globalization
 
 @inject NavigationManager Navigation
 @inject IHttpClientFactory httpClientFactory
 
+@code {
+	[Parameter]
+	public string FileId { get; set; }
 
-<h3>DataProcesser</h3>
+	private HttpClient _DataStorage = default!;
+	private HttpClient _DataProcessing = default!;
+	private List<string> headers = [];
+	private List<Dictionary<string, string>> fileData = [];
+
+	protected override async Task OnInitializedAsync()
+	{
+		_DataStorage = httpClientFactory.CreateClient("DataStoreService");
+		_DataProcessing = httpClientFactory.CreateClient("DataProcessingService");
+		await LoadData();
+	}
+
+	private async Task LoadData()
+	{
+		// 获取文件数据
+		var fileBytes = await _DataStorage.GetByteArrayAsync($"api/FileStorage/file/{FileId}/data");
+
+		// 解析CSV文件
+		using var reader = new StreamReader(new MemoryStream(fileBytes), Encoding.UTF8);
+		using var csv = new CsvHelper.CsvReader(reader, CultureInfo.InvariantCulture);
+
+		// 读取表头
+		if (csv.Read() && csv.ReadHeader())
+		{
+			headers = csv.HeaderRecord!.ToList();
+		}
+		// 读取数据
+		while (csv.Read())
+		{
+			var record = csv.GetRecord<dynamic>() as IDictionary<string, object>;
+			var dict = new Dictionary<string, string>();
+			foreach (var header in headers)
+			{
+				dict[header] = record[header]?.ToString() ?? string.Empty;
+			}
+			fileData.Add(dict);
+		}
+	}
+}
+
+<PageTitle>数据处理</PageTitle>
+
+<FluentCard>
+	<FluentLabel>选择操作类型:</FluentLabel>
+
+	<FluentSelect ValueChanged="@SelectedCsvOperationTypeChanged" TOption="string">
+		@foreach (var csvOperationType in (CsvOperationType[]) Enum.GetValues(typeof(CsvOperationType)))
+		{
+			<FluentOption Value="@csvOperationType.ToString()">@csvOperationType.GetDisplayName()</FluentOption>
+		}
+	</FluentSelect>
+
+	<FluentLabel>列:</FluentLabel>
+	<FluentTextField @bind-value="column" placeholder="请输入列名" />
+
+	<FluentLabel>条件:</FluentLabel>
+	<FluentTextField @bind-value="condition" placeholder="请输入条件" />
+
+	<FluentLabel>值:</FluentLabel>
+	<FluentTextField @bind-value="value" placeholder="请输入值" />
+
+	<FluentButton @onclick="AddOperation" Appearance="Appearance.Accent">
+		添加操作
+	</FluentButton>
+	<FluentButton @onclick="ProcessCsvFile" Appearance="Appearance.Accent">
+		处理 CSV 文件
+	</FluentButton>
+</FluentCard>
+
+@if (operations.Any())
+{
+	<FluentCard>
+		<h4>已添加的操作</h4>
+		<ul>
+			@foreach (var operation in operations)
+			{
+				<li>
+					操作类型: @operation.OperationType, 列: @operation.Column, 条件: @operation.Condition, 值: @operation.Value
+				</li>
+			}
+		</ul>
+	</FluentCard>
+}
+
+@if (message != null)
+{
+	<FluentCard appearance="neutral" style="margin-top: 20px;">
+		<div>@message</div>
+	</FluentCard>
+}
 
 @code {
+	private List<CsvOperation> operations = new();
+	private CsvOperationType selectedOperationType;
+	private string column;
+	private string condition;
+	private string value;
+	private Stream fileStream;
+	private string message;
 
+	private void SelectedCsvOperationTypeChanged(string chartType)
+	{
+		selectedOperationType = (CsvOperationType) Enum.Parse(typeof(CsvOperationType), chartType);
+	}
+
+	private void AddOperation()
+	{
+		var operation = new CsvOperation
+			{
+				OperationType = selectedOperationType,
+				Column = column,
+				Condition = condition,
+				Value = value
+			};
+		operations.Add(operation);
+		ClearOperationFields();
+	}
+
+	private void ClearOperationFields()
+	{
+		selectedOperationType = CsvOperationType.Select;
+		column = string.Empty;
+		condition = string.Empty;
+		value = string.Empty;
+	}
+
+	private async Task ProcessCsvFile()
+	{
+		if (fileStream == null || !operations.Any())
+		{
+			message = "请添加至少一个操作";
+			return;
+		}
+
+		var response = await _DataProcessing.PostAsJsonAsync($"api/CsvProcessing/process/{FileId}", operations);
+
+		if (response.IsSuccessStatusCode)
+		{
+			var processedFile = await response.Content.ReadFromJsonAsync<StoredFileInfoDto>();
+			message = $"CSV文件处理成功，文件ID: {processedFile.Id}";
+		}
+		else
+		{
+			message = "处理CSV文件时发生错误";
+		}
+	}
 }

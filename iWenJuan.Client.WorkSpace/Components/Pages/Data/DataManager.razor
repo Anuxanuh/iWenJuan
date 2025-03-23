@@ -1,9 +1,13 @@
 ﻿@page "/data-manager"
+@using iWenJuan.Client.WorkSpace.Components.Custom
 @inject AuthenticationService AuthenticationService
 @inject NavigationManager Navigation
+@inject IDialogService DialogService
 @inject IHttpClientFactory httpClientFactory
+@inject IJSRuntime JS
+
 @code {
-	private HttpClient _DataStorage;
+	private HttpClient _DataStorage = default!;
 
 	private IQueryable<StoredFileInfoDto> storedFileInfos = Enumerable.Empty<StoredFileInfoDto>().AsQueryable();
 
@@ -11,11 +15,14 @@
 	{
 		_DataStorage = httpClientFactory.CreateClient("DataStoreService");
 
+		await LoadData();
+	}
+
+	private async Task LoadData()
+	{
 		var userId = AuthenticationService.CurrentUser.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 		var fileInfoList = await _DataStorage.GetFromJsonAsync<IEnumerable<StoredFileInfoDto>>($"api/FileStorage/file/{userId}/list");
 		storedFileInfos = fileInfoList?.AsQueryable() ?? Enumerable.Empty<StoredFileInfoDto>().AsQueryable();
-
-		await base.OnInitializedAsync();
 	}
 }
 
@@ -34,13 +41,27 @@
 		<FluentButton @onclick="@(()=>VisualizeData(context))"
 					  IconStart="@(new Icons.Regular.Size16.DataTrending())">数据可视化</FluentButton>
 		<FluentButton @onclick="@(()=>ProcessData(context))"
-					  IconStart="@(new Icons.Regular.Size16.DataTrending())">数据处理</FluentButton>
-		<FluentButton @onclick="@(()=>ProcessData(context))"
-					  IconStart="@(new Icons.Regular.Size16.DataTrending())">下载数据</FluentButton>
-		<FluentButton @onclick="@(()=>ProcessData(context))"
-					  IconStart="@(new Icons.Regular.Size16.DataTrending())">删除数据</FluentButton>
+					  IconStart="@(new Icons.Regular.Size16.BookDatabase())">数据处理</FluentButton>
+		<FluentButton @onclick="@(()=>DownloadFileFromStream(context))"
+					  IconStart="@(new Icons.Regular.Size16.ArrowDownload())">下载数据</FluentButton>
+		<FluentButton @onclick="@(()=>DeleteFile(context))"
+					  IconStart="@(new Icons.Regular.Size16.Delete())">删除数据</FluentButton>
 	</TemplateColumn>
 </FluentDataGrid>
+
+<script>
+	window.downloadFileFromStream = async (fileName, contentStreamReference) => {
+	  const arrayBuffer = await contentStreamReference.arrayBuffer();
+	  const blob = new Blob([arrayBuffer]);
+	  const url = URL.createObjectURL(blob);
+	  const anchorElement = document.createElement('a');
+	  anchorElement.href = url;
+	  anchorElement.download = fileName ?? '';
+	  anchorElement.click();
+	  anchorElement.remove();
+	  URL.revokeObjectURL(url);
+	}
+</script>
 
 @code {
 	private void PreviewData(StoredFileInfoDto fileInfo)
@@ -56,5 +77,32 @@
 	private void ProcessData(StoredFileInfoDto fileInfo)
 	{
 		Navigation.NavigateTo($"/data-processer/{fileInfo.Id}");
+	}
+
+	private async Task DownloadFileFromStream(StoredFileInfoDto fileInfo)
+	{
+		var fileStream = await _DataStorage.GetByteArrayAsync($"api/FileStorage/file/{fileInfo.Id}/data");
+
+		var fileName = fileInfo.FileName;
+
+		using var streamRef = new DotNetStreamReference(stream: new MemoryStream(fileStream));
+
+		await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+	}
+
+	private async Task DeleteFile(StoredFileInfoDto fileInfo)
+	{
+		var dialog = await DialogService.ShowDialogAsync<FluentConfirmDialog>($"确定要删除 {fileInfo.FileName} 吗？",
+			new DialogParameters()
+				{
+					Title = $"警告",
+				}
+			);
+		var result = await dialog.Result;
+		if (!result.Cancelled && result.Data != null && (bool) result.Data == true)
+		{
+			await _DataStorage.DeleteAsync($"api/FileStorage/file/{fileInfo.Id}");
+			await LoadData();
+		}
 	}
 }

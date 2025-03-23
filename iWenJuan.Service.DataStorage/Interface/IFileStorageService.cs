@@ -1,4 +1,5 @@
 ﻿using iWenJuan.Service.DataStorage.Models;
+using iWenJuan.Shared.Dtos;
 
 namespace iWenJuan.Service.DataStorage.Interface;
 
@@ -10,12 +11,16 @@ public interface IFileStorageService
 	/// <summary>
 	/// 异步保存文件
 	/// </summary>
-	/// <param name="owner">文件所有者</param>
-	/// <param name="fileName">文件名</param>
-	/// <param name="contentType">文件类型</param>
-	/// <param name="data">文件数据</param>
-	/// <returns>文件ID</returns>
-	Task<int> SaveFileAsync(Guid owner, string fileName, string contentType, byte[] data);
+	/// <param name="storedFile"></param>
+	/// <returns></returns>
+	Task<int> SaveFileAsync(StoredFile storedFile);
+
+	/// <summary>
+	/// 得到指定所有者的文件
+	/// </summary>
+	/// <param name="ownerId"></param>
+	/// <returns></returns>
+	Task<IEnumerable<StoredFileInfoDto>> GetFileInfosByOwnerIdAsync(Guid ownerId);
 
 	/// <summary>
 	/// 根据ID异步获取文件
@@ -23,4 +28,10 @@ public interface IFileStorageService
 	/// <param name="id">文件ID</param>
 	/// <returns>存储的文件</returns>
 	Task<StoredFile?> GetFileByIdAsync(int id);
+
+	/// <summary>
+	/// 异步删除文件
+	/// </summary>
+	/// <param name="id">文件ID</param>
+	Task DeleteFileAsync(int id);
 }

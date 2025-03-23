@@ -5,5 +5,5 @@ namespace iWenJuan.Service.DataProcessing.Interface;
 
 public interface ICsvProcessingService
 {
-	Task<MemoryStream> ProcessCsvAsync(Stream csvStream, List<CsvOperation> operations);
+	Task<byte[]> ProcessCsvAsync(Stream csvStream, List<CsvOperation> operations);
 }
