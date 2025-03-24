@@ -1,5 +1,36 @@
-﻿<h3>OperationEditor</h3>
+﻿@code {
+	[Parameter]
+	public CsvOperation Operation { get; set; }
 
-@code {
-
+	[Parameter]
+	public EventCallback OnRemove { get; set; }
 }
+
+<FluentCard Style="padding-top: 10px">
+	<FluentStack Orientation="Orientation.Vertical">
+		<FluentStack HorizontalAlignment="HorizontalAlignment.SpaceBetween">
+			<FluentLabel Typo="Typography.H4">@Operation.OperationType.GetDisplayName()</FluentLabel>
+			<FluentButton @onclick="OnRemove" Appearance="Appearance.Accent">删除</FluentButton>
+		</FluentStack>
+
+		@if (Operation.OperationType == CsvOperationType.Select)
+		{
+
+		}
+		else if (Operation.OperationType == CsvOperationType.Filter)
+		{
+		}
+		else if (Operation.OperationType == CsvOperationType.OrderBy)
+		{
+		}
+		else if (Operation.OperationType == CsvOperationType.GroupBy)
+		{
+		}
+		else if (Operation.OperationType == CsvOperationType.Aggregate)
+		{
+		}
+
+	</FluentStack>
+</FluentCard>
+
+<FluentDivider Style="width: 100%;" Role="DividerRole.Presentation"></FluentDivider>

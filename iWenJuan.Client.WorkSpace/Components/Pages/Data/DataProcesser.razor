@@ -52,6 +52,7 @@
 		// }
 	}
 }
+<FluentMenuProvider />
 
 <PageTitle>数据处理</PageTitle>
 
@@ -61,14 +62,6 @@
 				 Width="20%">
 		<FluentLabel Typo="Typography.H4">数据信息</FluentLabel>
 		<FluentCard>
-@* 			<FluentLabel>@FileId</FluentLabel>
-			@if (fileInfo != null)
-			{
-				<FluentLabel>@fileInfo.FileName</FluentLabel>
-				<FluentLabel>@fileInfo.ContentType</FluentLabel>
-				<FluentLabel>@fileInfo.CreatedAt</FluentLabel>
-			} *@
-
 			<FluentTextField Value="FileId" Label="数据ID" ReadOnly="true" Style="width: 100%;"></FluentTextField>
 			@if (fileInfo != null)
 			{
@@ -82,17 +75,19 @@
 
 		<FluentLabel Typo="Typography.H4">操作</FluentLabel>
 		<FluentCard>
-@* 			<FluentMenuButton Text="添加处理" OnMenuChanged="@HandleOnMenuChanged">
-				<FluentMenuItem Id="0">Default</FluentMenuItem>
+			<FluentStack>
+				<FluentMenuButton @ref=menubutton Text="添加处理步骤" OnMenuChanged="@HandleOnMenuChanged">
+					@foreach (var csvOperationType in (CsvOperationType[]) Enum.GetValues(typeof(CsvOperationType)))
+					{
+						<FluentMenuItem Id="@csvOperationType.ToString()">@csvOperationType.GetDisplayName()</FluentMenuItem>
+					}
+				</FluentMenuButton>
 
-				@foreach (var csvOperationType in (CsvOperationType[]) Enum.GetValues(typeof(CsvOperationType)))
-				{
-					<FluentMenuItem Id="@csvOperationType.ToString()">@csvOperationType.GetDisplayName()</FluentMenuItem>
-				}
-			</FluentMenuButton> *@
-			<FluentButton @onclick="ProcessCsvFile"
-						  Appearance="Appearance.Accent"
-						  Style="width:100%">处理数据</FluentButton>
+				<FluentButton @onclick="ProcessCsvFile"
+							  Appearance="Appearance.Accent">处理数据</FluentButton>
+			</FluentStack>
+
+
 		</FluentCard>
 
 		<FluentDivider Style="width: 100%;" Role="DividerRole.Presentation"></FluentDivider>
@@ -116,7 +111,7 @@
 
 		@foreach (var operation in operations)
 		{
-			@* <OperationEditor @key="operation" Operation="operation" OnRemove="() => RemoveQuestion(operation)" /> *@
+			<OperationEditor @key="operation" Operation="operation" OnRemove="() => RemoveOperation(operation)" />
 		}
 	</FluentStack>
 
@@ -124,7 +119,7 @@
 
 	<FluentStack Orientation=Orientation.Vertical
 				 Width="20%">
-		<FluentLabel Typo="Typography.H4">附加</FluentLabel>
+		@* <FluentLabel Typo="Typography.H4">附加</FluentLabel> *@
 
 
 	</FluentStack>
@@ -132,6 +127,7 @@
 </FluentStack>
 
 @code {
+	private FluentMenuButton menubutton = new();
 	private List<CsvOperation> operations = [];
 
 	private void HandleOnMenuChanged(MenuChangeEventArgs args)
@@ -141,6 +137,11 @@
 				OperationType = (CsvOperationType) Enum.Parse(typeof(CsvOperationType), args.Id!),
 			};
 		operations.Add(operation);
+	}
+
+	private void RemoveOperation(CsvOperation operation)
+	{
+		operations?.Remove(operation);
 	}
 
 	private async Task ProcessCsvFile()

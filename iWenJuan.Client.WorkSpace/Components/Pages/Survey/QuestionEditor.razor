@@ -31,10 +31,10 @@
 
 <FluentCard Style="padding-top: 10px">
 	<FluentStack Orientation="Orientation.Vertical">
-		<FluentStack>
-			<FluentLabel Typo="Typography.H4">@Question.QuestionType.GetDisplayName()</FluentLabel>
+		<FluentStack HorizontalAlignment="HorizontalAlignment.SpaceBetween">
 			<FluentLabel Typo="Typography.H4">@(Question.QuestionId == default ? "未创建题目" : Question.QuestionId)</FluentLabel>
-			<FluentButton @onclick="OnRemove">删除</FluentButton>
+			<FluentLabel Typo="Typography.H4">@Question.QuestionType.GetDisplayName()</FluentLabel>
+			<FluentButton @onclick="OnRemove" Appearance="Appearance.Accent">删除</FluentButton>
 		</FluentStack>
 
 		<FluentTextArea @bind-Value="Question.QuestionText" Label="题目" Style="width: 60%"></FluentTextArea>
