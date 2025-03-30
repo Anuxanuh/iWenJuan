@@ -8,7 +8,6 @@ public class CsvOperation
 
 	/// <summary>
 	/// 操作的列名
-	/// 仅当 OperationType 为 Count 时: 可以为空
 	/// 仅当 OperationType 为 Select 时：为数组, 用 `,` 分隔列名
 	/// </summary>
 	public string? Column { get; set; }
@@ -26,7 +25,7 @@ public class CsvOperation
 	/// 聚合操作
 	/// 仅当 OperationType 为 GroupBy, Aggregate 时有效
 	/// Key为操作, Value为列名
-	/// 仅当 Key 为 Count时 Value 可以为 null
+	/// 仅当 Key 为 Count 时 Value 可以为 null
 	/// </summary>
 	public Dictionary<AggregateOperationType, string?>? AggregateOperations { get; set; }
 }

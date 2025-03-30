@@ -111,7 +111,7 @@
 
 		@foreach (var operation in operations)
 		{
-			<OperationEditor @key="operation" Operation="operation" OnRemove="() => RemoveOperation(operation)" />
+			<OperationEditor @key="operation" Operation="operation" Headers="headers" OnRemove="() => RemoveOperation(operation)" />
 		}
 	</FluentStack>
 
@@ -157,7 +157,6 @@
 		if (response.IsSuccessStatusCode)
 		{
 			var processedFile = await response.Content.ReadFromJsonAsync<StoredFileInfoDto>();
-
 		}
 		else
 		{

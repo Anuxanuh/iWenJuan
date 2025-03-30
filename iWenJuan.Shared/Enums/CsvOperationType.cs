@@ -10,6 +10,8 @@ public enum CsvOperationType
 	Filter,
 	[Display(Name = "排序")]
 	OrderBy,
+	[Display(Name = "降序排序")]
+	OrderByDescending,
 	[Display(Name = "分组")]
 	GroupBy,
 	[Display(Name = "聚合")]

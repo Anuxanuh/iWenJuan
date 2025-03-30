@@ -1,36 +1,95 @@
-﻿@code {
+﻿@using MudBlazor
+@using FU = Microsoft.FluentUI.AspNetCore.Components
+
+@code {
 	[Parameter]
 	public CsvOperation Operation { get; set; }
+
+	[Parameter]
+	public IEnumerable<string> Headers { get; set; }
 
 	[Parameter]
 	public EventCallback OnRemove { get; set; }
 }
 
-<FluentCard Style="padding-top: 10px">
-	<FluentStack Orientation="Orientation.Vertical">
-		<FluentStack HorizontalAlignment="HorizontalAlignment.SpaceBetween">
-			<FluentLabel Typo="Typography.H4">@Operation.OperationType.GetDisplayName()</FluentLabel>
+<FluentCard Style="padding-top: 10px" AreaRestricted="false">
+	<FluentStack Orientation="FU.Orientation.Vertical">
+		<FluentStack HorizontalAlignment="FU.HorizontalAlignment.SpaceBetween">
+			<FluentLabel Typo="FU.Typography.H4">@Operation.OperationType.GetDisplayName()</FluentLabel>
 			<FluentButton @onclick="OnRemove" Appearance="Appearance.Accent">删除</FluentButton>
 		</FluentStack>
 
-		@if (Operation.OperationType == CsvOperationType.Select)
+		@if (Operation.OperationType == CsvOperationType.Select)  // 选择操作
+		{
+			<FluentLabel Typo="FU.Typography.H6">选择你需要的列</FluentLabel>
+			<MudChipSet @bind-SelectedValues="_selectedColumns"
+						SelectionMode="SelectionMode.MultiSelection"
+						Variant="Variant.Text"
+						CheckMark="true">
+				@foreach (var header in Headers)
+				{
+					<MudChip Value="@header"/>
+				}
+			</MudChipSet>
+		}
+		else if (Operation.OperationType == CsvOperationType.Filter)    // 过滤操作
+		{
+			<FluentSelect @bind-Value="@Operation.Column" TOption="string" Label="操作列" Width="100%">
+				@foreach (var header in Headers)
+				{
+					<FluentOption Value="@header">@header</FluentOption>
+				}
+			</FluentSelect>
+			<FluentSelect ValueChanged="@SelectedOperatorChanged" TOption="string" Label="运算符" Width="100%">
+				@foreach (var o in (Operator[]) Enum.GetValues(typeof(Operator)))
+				{
+					<FluentOption Value="@o.ToString()">@o.GetDisplayName()</FluentOption>
+				}
+			</FluentSelect>
+			<FluentTextField @bind-Value="Operation.Value" Label="条件值" Style="width:100%" />
+		}
+		else if (Operation.OperationType == CsvOperationType.OrderBy ||
+		Operation.OperationType == CsvOperationType.OrderByDescending)  // 排序操作
+		{
+			<FluentSelect @bind-SelectedOption="@Operation.Column" TOption="string" Label="操作列" Width="100%">
+				@foreach (var header in Headers)
+				{
+					<FluentOption Value="@header">@header</FluentOption>
+				}
+			</FluentSelect>
+		}
+		else if (Operation.OperationType == CsvOperationType.GroupBy)   // 分组操作
 		{
 
 		}
-		else if (Operation.OperationType == CsvOperationType.Filter)
+		else if (Operation.OperationType == CsvOperationType.Aggregate) // 聚合操作
 		{
-		}
-		else if (Operation.OperationType == CsvOperationType.OrderBy)
-		{
-		}
-		else if (Operation.OperationType == CsvOperationType.GroupBy)
-		{
-		}
-		else if (Operation.OperationType == CsvOperationType.Aggregate)
-		{
-		}
 
+		}
 	</FluentStack>
 </FluentCard>
 
 <FluentDivider Style="width: 100%;" Role="DividerRole.Presentation"></FluentDivider>
+
+@code {
+	// 选择操作
+	private IReadOnlyCollection<string> _selectedColumns
+	{
+		get
+		{
+			return Operation.Column?.Split(',') ?? [];
+		}
+		set
+		{
+			Operation.Column = string.Join(",", value);
+		}
+	}
+
+	// 过滤操作
+	private void SelectedOperatorChanged(string value)
+	{
+		Operation.Condition = Enum.Parse<Operator>(value);
+	}
+
+
+}

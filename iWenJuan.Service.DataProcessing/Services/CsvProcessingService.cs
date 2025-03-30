@@ -5,6 +5,7 @@ using iWenJuan.Service.DataProcessing.Utils;
 using iWenJuan.Shared.Dtos;
 using iWenJuan.Shared.Enums;
 using iWenJuan.Shared.Extension;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
@@ -57,11 +58,29 @@ public class CsvProcessingService : ICsvProcessingService
 		// 创建内存流用于存储处理后的CSV内容
 		var memoryStream = new MemoryStream();
 		using var writer = new StreamWriter(memoryStream);
-		using var csvWriter = new CsvWriter(writer, new CsvConfiguration(System.Globalization.CultureInfo.InvariantCulture));
+		using var csvWriter = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture));
 		// 异步写入处理后的记录到内存流
-		await csvWriter.WriteRecordsAsync(fileData);
+		var newheaders = fileData.SelectMany(dict => dict.Keys).Distinct().ToList();;
+		// 写入表头
+		foreach (var column in newheaders)
+		{
+			csvWriter.WriteField(column);
+		}
+		csvWriter.NextRecord();
+
+		// 写入记录
+		foreach (var dict in fileData)
+		{
+			foreach (var column in newheaders)
+			{
+				csvWriter.WriteField(dict.TryGetValue(column, out var value) ? value : "");
+			}
+			csvWriter.NextRecord();
+		}
+		// 刷新缓冲区
 		await writer.FlushAsync();
-		return memoryStream.ToArray(); // 返回
+		// 返回
+		return memoryStream.ToArray();
 	}
 
 	/// <summary>
@@ -80,6 +99,8 @@ public class CsvProcessingService : ICsvProcessingService
 				return [.. records.Where(r => FilterRecords(r, operation.Column!, operation.Condition!.Value, operation.Value!))];
 			case CsvOperationType.OrderBy:
 				return OrderByColumn(records, operation.Column!);
+			case CsvOperationType.OrderByDescending:
+				return OrderByColumn(records, operation.Column!, true);
 			case CsvOperationType.GroupBy:
 				return GroupByColumn(records, operation.Column!, operation.AggregateOperations!);
 			case CsvOperationType.Aggregate:
@@ -153,9 +174,16 @@ public class CsvProcessingService : ICsvProcessingService
 	/// <param name="records">CSV记录列表</param>
 	/// <param name="column">列名</param>
 	/// <returns>排序后的记录列表</returns>
-	private List<Dictionary<string, string>> OrderByColumn(List<Dictionary<string, string>> records, string column)
+	private List<Dictionary<string, string>> OrderByColumn(List<Dictionary<string, string>> records, string column, bool isDescending = false)
 	{
-		return records.OrderBy(r => ((IDictionary<string, object>) r)[column]).ToList();
+		if (isDescending)
+		{
+			return [.. records.OrderByDescending(r => r[column])];
+		}
+		else
+		{
+			return [.. records.OrderBy(r => r[column])];
+		}
 	}
 
 	private List<Dictionary<string, string>> GroupByColumn(List<Dictionary<string, string>> records, string column, Dictionary<AggregateOperationType, string> aggregateOperations)

@@ -1,6 +1,8 @@
 ﻿using iWenJuan.Service.DataProcessing.Interface;
 using iWenJuan.Shared.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace iWenJuan.Service.DataProcessing.Controllers;
 
@@ -10,17 +12,21 @@ public class CsvProcessingController : ControllerBase
 {
 	private readonly ICsvProcessingService _csvProcessingService;
 	private readonly HttpClient _httpClient;
+	private readonly ILogger<CsvProcessingController> _logger;
 
-	public CsvProcessingController(ICsvProcessingService csvProcessingService, IHttpClientFactory httpClientFactory)
+	public CsvProcessingController(ICsvProcessingService csvProcessingService, IHttpClientFactory httpClientFactory, ILogger<CsvProcessingController> logger)
 	{
 		_csvProcessingService = csvProcessingService;
 		_httpClient = httpClientFactory.CreateClient("DataStoreService");
+		_logger = logger;
 	}
 
 	[HttpPost("process/{fileId}")]
 	public async Task<IActionResult> ProcessCsv(int fileId, [FromBody] List<CsvOperation> operations)
 	{
-		var file = await _httpClient.GetStreamAsync($"api/file/{fileId}/data");
+		_logger.LogError($"{JsonSerializer.Serialize(operations)}");
+
+		var file = await _httpClient.GetStreamAsync($"api/FileStorage/file/{fileId}/data");
 
 		if (file == null || operations == null)
 		{
@@ -29,9 +35,17 @@ public class CsvProcessingController : ControllerBase
 
 		var processedCsv = await _csvProcessingService.ProcessCsvAsync(file, operations);
 
-		var httpContent = new ByteArrayContent(processedCsv);
+		// 将 byte[] 转换为 ByteArrayContent
+		var fileContent = new ByteArrayContent(processedCsv);
+		fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
-		var response = await _httpClient.PostAsync($"api/save/{fileId}", httpContent);
+		// 创建 MultipartFormDataContent
+		var formData = new MultipartFormDataContent
+		{
+			{ fileContent, "newFile", "processedFile.csv" }
+		};
+
+		var response = await _httpClient.PostAsync($"api/FileStorage/save/{fileId}", formData);
 
 		response.EnsureSuccessStatusCode();
 

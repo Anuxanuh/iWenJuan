@@ -1,8 +1,10 @@
-﻿@inherits LayoutComponentBase
+﻿@using MudBlazor
+@using FU = Microsoft.FluentUI.AspNetCore.Components
+@inherits LayoutComponentBase
 @inject NavigationManager Navigation
 @inject AuthenticationService AuthenticationService
 @inject HttpOnlyCookieService HttpOnlyCookieService
-@inject IDialogService DialogService
+@inject FU.IDialogService DialogService
 @inject IHttpClientFactory httpClientFactory
 @inject ILogger<MainLayout> Logger
 @inject IJSRuntime JS
@@ -13,11 +15,14 @@
 	<FluentToastProvider />
 	<FluentTooltipProvider />
 
+	<MudThemeProvider />
+	<MudPopoverProvider />
+
 	<FluentHeader>
 		@* iWenJuan.Client.WorkSpace *@
 		基于.NET Aspire和Blazor的问卷系统的设计与实现
 	</FluentHeader>
-	<FluentStack Class="main" Orientation="Orientation.Horizontal" Width="100%">
+	<FluentStack Class="main" Orientation="FU.Orientation.Horizontal" Width="100%">
 		<NavMenu />
 		<FluentBodyContent Class="body-content">
 			<AuthorizeView>
@@ -27,19 +32,19 @@
 					</div>
 				</Authorized>
 				<NotAuthorized>
-					<FluentStack HorizontalAlignment="HorizontalAlignment.Center"
+					<FluentStack HorizontalAlignment="FU.HorizontalAlignment.Center"
 								 VerticalAlignment="VerticalAlignment.Center"
 								 Style="padding-top:20px">
 						<FluentCard Width="30%">
-							<FluentStack Orientation="Orientation.Vertical">
+							<FluentStack Orientation="FU.Orientation.Vertical">
 								<FluentStack VerticalAlignment="VerticalAlignment.Center">
 									<FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size32.Warning())" />
-									<FluentLabel Typo="Typography.H1">请登录!</FluentLabel>
+									<FluentLabel Typo="FU.Typography.H1">请登录!</FluentLabel>
 								</FluentStack>
 								<FluentStack Style="padding:3px">
-									<FluentLabel Typo="Typography.H3">尚未登录的用户无法访问此页面</FluentLabel>
+									<FluentLabel Typo="FU.Typography.H3">尚未登录的用户无法访问此页面</FluentLabel>
 								</FluentStack>
-								<FluentStack HorizontalAlignment="HorizontalAlignment.Right">
+								<FluentStack HorizontalAlignment="FU.HorizontalAlignment.Right">
 									<FluentButton @onclick=GoToLogin>前往登录</FluentButton>
 								</FluentStack>
 							</FluentStack>
