@@ -4,6 +4,7 @@
 
 @inject NavigationManager Navigation
 @inject IHttpClientFactory httpClientFactory
+@inject IDialogService DialogService
 
 @code {
 	[Parameter]
@@ -152,15 +153,43 @@
 			return;
 		}
 
+		foreach (var operation in operations)
+		{
+			switch (operation.OperationType)
+			{
+				case CsvOperationType.Select:
+					if (string.IsNullOrEmpty(operation.Column))
+						await DialogService.ShowErrorAsync("错误", "请选择至少一个列");
+					break;
+				case CsvOperationType.Filter:
+					operation.Condition ??= Operator.Equals;
+					operation.Column ??= headers.FirstOrDefault();
+					if (string.IsNullOrEmpty(operation.Column) || string.IsNullOrEmpty(operation.Value))
+						await DialogService.ShowErrorAsync("错误", "请填写完整的过滤条件");
+					break;
+				case CsvOperationType.OrderBy:
+				case CsvOperationType.OrderByDescending:
+					operation.Column ??= headers.FirstOrDefault();
+					if (string.IsNullOrEmpty(operation.Column))
+						await DialogService.ShowErrorAsync("错误", "请选择排序列");
+					break;
+				case CsvOperationType.GroupBy:
+					break;
+				case CsvOperationType.Aggregate:
+					break;
+			}
+		}
+
 		var response = await _DataProcessing.PostAsJsonAsync($"api/CsvProcessing/process/{FileId}", operations);
 
 		if (response.IsSuccessStatusCode)
 		{
 			var processedFile = await response.Content.ReadFromJsonAsync<StoredFileInfoDto>();
+			await DialogService.ShowSuccessAsync("处理成功", $"数据处理完成, 新文件{processedFile.FileName}已保存到数据列表中");
 		}
 		else
 		{
-
+			await DialogService.ShowErrorAsync("处理失败", "数据处理失败");
 		}
 	}
 }

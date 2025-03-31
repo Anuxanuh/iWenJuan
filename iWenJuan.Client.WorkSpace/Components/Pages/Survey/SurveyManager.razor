@@ -25,6 +25,8 @@
 		surveys = surveyList?.AsQueryable() ?? Enumerable.Empty<SurveyDto>().AsQueryable();
 	}
 }
+<FluentMenuProvider />
+
 <PageTitle>问卷管理</PageTitle>
 
 <FluentLabel Typo="Typography.H1">问卷管理</FluentLabel>
@@ -42,6 +44,11 @@
 		</FluentButton>
 		<FluentButton @onclick="@(()=>ExportSurvey(context))"
 					  IconStart="@(new Icons.Regular.Size16.ArrowExportUp())">导出数据</FluentButton>
+@* 		<FluentMenuButton @ref=menubutton Text="导出数据" OnMenuChanged="@HandleOnExportChanged">
+			<FluentMenuItem Id=@($"ExportDataToDb#{context.SurveyId}")>导出到数据管理</FluentMenuItem>
+			<FluentMenuItem Id=@($"ExportAsCSV#{context.SurveyId}")>下载CSV</FluentMenuItem>
+			<FluentMenuItem Id=@($"ExportAsXLS#{context.SurveyId}")>下载XLS</FluentMenuItem>
+		</FluentMenuButton> *@
 		@if (context.IsPublished)
 		{
 			<FluentButton @onclick="@(()=>ShowAnswerLink(context))"
@@ -59,6 +66,8 @@
 
 
 @code {
+	private FluentMenuButton menubutton = new();
+
 	/// <summary>
 	/// 开发或关闭问卷作答
 	/// </summary>
@@ -70,6 +79,11 @@
 		await _SurveyService.PutAsJsonAsync($"api/surveys/{survey.SurveyId}", survey);
 	}
 
+	// private async Task HandleOnExportChanged(MenuChangeEventArgs args)
+	// {
+
+	// }
+
 	/// <summary>
 	/// 导出问卷答题数据到数据管理服务
 	/// </summary>
@@ -78,10 +92,10 @@
 	private async Task ExportSurvey(SurveyDto survey)
 	{
 		var result = await _DataStorage.PostAsJsonAsync("api/FileStorage/exportSurveyResult", new ExportSurveyResultDto
-		{
-			Owner = survey.CreatedBy,
-			SurveyId = survey.SurveyId
-		});
+			{
+				Owner = survey.CreatedBy,
+				SurveyId = survey.SurveyId
+			});
 		if (result.IsSuccessStatusCode)
 			await DialogService.ShowSuccessAsync("导出成功", "问卷数据已导出");
 		else
