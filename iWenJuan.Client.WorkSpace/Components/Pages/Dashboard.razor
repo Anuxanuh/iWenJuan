@@ -79,8 +79,7 @@
 
 	private List<TimeSeriesChartSeries.TimeValue> SurveyAnswerTimeSeries => answers.GroupBy(a => a.CreatedAt).Select(g => new TimeSeriesChartSeries.TimeValue(g.Key, g.Count())).ToList();
 
-	private List<TimeSeriesChartSeries> timeSeries =>
-										[
+	private List<TimeSeriesChartSeries> timeSeries => [
 		new TimeSeriesChartSeries()
 		{
 			Index = 0,
