@@ -42,8 +42,6 @@
 										TimeLabelSpacing="TimeSpan.FromMinutes(1)"
 										DataMarkerTooltipTimeLabelFormat="yyyy MMM dd HH:mm:ss" />
 
-					<FluentDivider Style="width: 100%;height:2px" Role="DividerRole.Presentation"></FluentDivider>
-
 					<FluentStack Orientation="FU.Orientation.Vertical">
 						<FluentSwitch ValueChanged="(v)=> timeSeries.ForEach(x => x.ShowDataMarkers = v)" Label="数据标记"></FluentSwitch>
 					</FluentStack>
@@ -57,7 +55,7 @@
 					</FluentStack>
 				</FluentStack>
 			</FluentCard>
-			<FluentCard Width="40%">
+			<FluentCard Width="39%">
 				<MudChart ChartType="ChartType.Pie" InputData=surveyAnswers InputLabels=surveysName Width="100%" />
 			</FluentCard>
 		</FluentStack>
@@ -101,7 +99,7 @@
 
 	private ChartOptions options = new ChartOptions()
 		{
-			YAxisTicks = 3,
+			YAxisTicks = 2,
 		};
 	private AxisChartOptions axisChartOptions = new AxisChartOptions();
 
