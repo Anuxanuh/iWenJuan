@@ -1,0 +1,124 @@
+﻿@using MudBlazor
+@using FU = Microsoft.FluentUI.AspNetCore.Components
+@using System.Text.Json
+
+@inject AuthenticationService AuthenticationService
+@inject NavigationManager Navigation
+@inject IHttpClientFactory httpClientFactory
+@inject FU.IDialogService DialogService
+
+<FluentStack Orientation="FU.Orientation.Vertical">
+	@if (surveys.Any())
+	{
+		<FluentStack HorizontalAlignment="FU.HorizontalAlignment.SpaceBetween"
+					 Style="height:20%">
+			<FluentCard Width="23%">
+				<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">问卷总数：@TotalSurveys</FluentLabel>
+			</FluentCard>
+			<FluentCard Width="23%">
+				<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">收集答案：@TotalAnswers</FluentLabel>
+			</FluentCard>
+			<FluentCard Width="23%">
+				<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">平均问卷答案数：@AverageAnswers</FluentLabel>
+			</FluentCard>
+			<FluentCard Width="23%">
+				<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">答题最多问卷：@MostAnswersSurvey.Title</FluentLabel>
+			</FluentCard>
+		</FluentStack>
+
+		<FluentDivider Style="width: 100%;height:2px" Role="DividerRole.Presentation"></FluentDivider>
+
+		<FluentStack HorizontalAlignment="FU.HorizontalAlignment.SpaceBetween">
+			<FluentCard Width="58%" Height="100%">
+				<FluentStack Orientation="FU.Orientation.Vertical"
+							 VerticalAlignment="FU.VerticalAlignment.SpaceBetween"
+							 Style="height:100%">
+					<MudTimeSeriesChart ChartSeries="@timeSeries"
+										Width="100%"
+										Height="100%"
+										ChartOptions="@options"
+										AxisChartOptions="@axisChartOptions"
+										CanHideSeries="true"
+										TimeLabelSpacing="TimeSpan.FromMinutes(1)"
+										DataMarkerTooltipTimeLabelFormat="yyyy MMM dd HH:mm:ss" />
+
+					<FluentDivider Style="width: 100%;height:2px" Role="DividerRole.Presentation"></FluentDivider>
+
+					<FluentStack Orientation="FU.Orientation.Vertical">
+						<FluentSwitch ValueChanged="(v)=> timeSeries.ForEach(x => x.ShowDataMarkers = v)" Label="数据标记"></FluentSwitch>
+					</FluentStack>
+					<FluentStack Orientation="FU.Orientation.Vertical">
+						<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">标签倾斜度</FluentLabel>
+						<FluentSlider @bind-Value="axisChartOptions.LabelRotation" Min="0" Max="90" Step="15"></FluentSlider>
+					</FluentStack>
+					<FluentStack Orientation="FU.Orientation.Vertical">
+						<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">Y轴最大值: @options.YAxisTicks.ToString()</FluentLabel>
+						<FluentSlider @bind-Value="options.YAxisTicks" Min="1" Max="400" Step="1"></FluentSlider>
+					</FluentStack>
+				</FluentStack>
+			</FluentCard>
+			<FluentCard Width="40%">
+				<MudChart ChartType="ChartType.Pie" InputData=surveyAnswers InputLabels=surveysName Width="100%" />
+			</FluentCard>
+		</FluentStack>
+	}
+</FluentStack>
+
+@code {
+	private IEnumerable<SurveyDto> surveys = Enumerable.Empty<SurveyDto>();
+
+	private IEnumerable<AnswerDto> answers => surveys.SelectMany(s => s.Questions ?? []).SelectMany(q => q.Answers ?? []);
+
+	private int TotalSurveys => surveys.Count();
+
+	private int TotalAnswers => answers.Count();
+
+	private double AverageAnswers => TotalSurveys == 0 ? 0 : TotalAnswers / TotalSurveys;
+
+	private SurveyDto MostAnswersSurvey => surveys.MaxBy(s => s.Questions?.SelectMany(q => q.Answers ?? []).Count()) ?? default!;
+
+	private List<TimeSeriesChartSeries.TimeValue> SurveyAnswerTimeSeries => answers.GroupBy(a => a.CreatedAt).Select(g => new TimeSeriesChartSeries.TimeValue(g.Key, g.Count())).ToList();
+
+	private List<TimeSeriesChartSeries> timeSeries =>
+										[
+		new TimeSeriesChartSeries()
+		{
+			Index = 0,
+			Name = "问卷答案数",
+			Data = SurveyAnswerTimeSeries,
+			IsVisible = true,
+			LineDisplayType = LineDisplayType.Line,
+			DataMarkerTooltipTitleFormat = "{{X_VALUE}}",
+			DataMarkerTooltipSubtitleFormat = "{{Y_VALUE}}"
+		}
+	];
+
+	private string[] surveysName => surveys.Select(s => s.Title).ToArray();
+
+	private double[] surveyAnswers => surveys.Select(s => (double) (s.Questions?.SelectMany(q => q.Answers ?? []).Count() ?? 0))
+												.Select(d => d == 0 ? 0.01 : d)
+												.ToArray();
+
+
+	private ChartOptions options = new ChartOptions()
+		{
+			YAxisTicks = 3,
+		};
+	private AxisChartOptions axisChartOptions = new AxisChartOptions();
+
+	private HttpClient _SurveyService = default!;
+
+	protected override async Task OnInitializedAsync()
+	{
+		_SurveyService = httpClientFactory.CreateClient("SurveyService");
+
+		await LoadData();
+	}
+
+	private async Task LoadData()
+	{
+		var userId = AuthenticationService.CurrentUser.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+		var surveyList = await _SurveyService.GetFromJsonAsync<List<SurveyDto>>($"api/Dashboard/{userId}/all-surveys");
+		surveys = surveyList ?? Enumerable.Empty<SurveyDto>();
+	}
+}

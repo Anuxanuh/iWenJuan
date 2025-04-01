@@ -36,6 +36,8 @@ public class Program
 		builder.Services.AddScoped<IAnswerService, AnswerService>();
 		// 添加导出服务的依赖注入配置
 		builder.Services.AddScoped<IExportService, ExportService>();
+		// 添加仪表板服务的依赖注入配置
+		builder.Services.AddScoped<IDashboardService, DashboardService>();
 		#endregion 依赖注入服务配置
 
 		// 构建 WebApplication 实例

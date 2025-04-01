@@ -42,6 +42,37 @@ public static class SurveyModelMapper
 		};
 	}
 
+	public static SurveyDto ToDtoWithAnswers(this SurveyModel survey)
+	{
+		return new SurveyDto
+		{
+			SurveyId = survey.SurveyId,
+			Title = survey.Title,
+			Description = survey.Description,
+			IsPublished = survey.IsPublished,
+			CreatedBy = survey.CreatedBy,
+			CreatedAt = survey.CreatedAt,
+			Questions = survey.Questions != null ?
+			[.. survey.Questions.Select(q => new QuestionDto
+			{
+				QuestionId = q.QuestionId,
+				QuestionType = q.QuestionType,
+				QuestionText = q.QuestionText,
+				Options = default!,
+				Conditions =  default!,
+				Answers = q.Answers != null ?
+				[.. q.Answers.Select(c => new AnswerDto
+				{
+					AnswerId = c.AnswerId,
+					QuestionId = c.QuestionId,
+					UserId = c.UserId,
+					AnswerText = c.AnswerText,
+					CreatedAt = c.CreatedAt,
+				})] : default!,
+			})] : default!,
+		};
+	}
+
 	public static SurveyModel ToModelWithFullMapper(this SurveyDto survey)
 	{
 		return new SurveyModel

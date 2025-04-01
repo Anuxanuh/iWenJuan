@@ -43,7 +43,7 @@ public class SurveysController : ControllerBase
 			CreatedAt = s.CreatedAt,
 		});
 		// 返回包含所有问卷的Ok结果
-		return Ok(surveys);
+		return Ok(responseSurveys);
 	}
 
 	/// <summary>
