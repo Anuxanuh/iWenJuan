@@ -17,6 +17,7 @@ public class DashboardService : IDashboardService
 
 	public async Task<List<Models.Survey>> GetAllServeys(Guid createdBy)
 	{
+		var sevenDaysAgo = DateTime.UtcNow.AddDays(-7);
 		var surveys = await _context.Surveys.AsNoTrackingWithIdentityResolution()
 										   .Include(s => s.Questions)
 										   .ThenInclude(q => q.Answers)

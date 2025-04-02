@@ -39,8 +39,8 @@
 										ChartOptions="@options"
 										AxisChartOptions="@axisChartOptions"
 										CanHideSeries="true"
-										TimeLabelSpacing="TimeSpan.FromMinutes(1)"
-										DataMarkerTooltipTimeLabelFormat="yyyy MMM dd HH:mm:ss" />
+										TimeLabelSpacing="TimeSpan.FromDays(1)"
+										DataMarkerTooltipTimeLabelFormat="yyyy MM dd" />
 
 					<FluentStack Orientation="FU.Orientation.Vertical">
 						<FluentSwitch ValueChanged="(v)=> timeSeries.ForEach(x => x.ShowDataMarkers = v)" Label="数据标记"></FluentSwitch>
@@ -75,7 +75,7 @@
 
 	private SurveyDto MostAnswersSurvey => surveys.MaxBy(s => s.Questions?.SelectMany(q => q.Answers ?? []).Count()) ?? default!;
 
-	private List<TimeSeriesChartSeries.TimeValue> SurveyAnswerTimeSeries => answers.GroupBy(a => new DateTime(a.CreatedAt.Ticks / TimeSpan.TicksPerMinute * TimeSpan.TicksPerMinute)).Select(g => new TimeSeriesChartSeries.TimeValue(g.Key, g.Count())).ToList();
+	private List<TimeSeriesChartSeries.TimeValue> SurveyAnswerTimeSeries => answers.GroupBy(a => new DateTime(a.CreatedAt.Ticks / TimeSpan.TicksPerDay * TimeSpan.TicksPerDay)).Select(g => new TimeSeriesChartSeries.TimeValue(g.Key, g.Count())).ToList();
 
 	private List<TimeSeriesChartSeries> timeSeries => [
 		new TimeSeriesChartSeries()
