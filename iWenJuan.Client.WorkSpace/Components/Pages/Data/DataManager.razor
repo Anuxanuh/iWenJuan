@@ -31,8 +31,8 @@
 <FluentLabel Typo="Typography.H1">数据管理</FluentLabel>
 
 <FluentDataGrid Items="storedFileInfos" AutoFit="true" RowSize="@DataGridRowSize.Medium">
-	<PropertyColumn Property="@(s => s.Id)" Title="ID" Sortable="true" />
-	<PropertyColumn Property="@(s => s.FileName)" Title="名称" Sortable="true" IsDefaultSortColumn=true />
+	<PropertyColumn Property="@(s => s.Id)" Title="ID" Sortable="true" IsDefaultSortColumn=true />
+	<PropertyColumn Property="@(s => s.FileName)" Title="名称" Sortable="true"/>
 	<PropertyColumn Property="@(s => s.ContentType)" Title="类型" />
 	<PropertyColumn Property="@(s => s.CreatedAt)" Title="创建时间" Sortable="true" />
 	<TemplateColumn Title="操作">

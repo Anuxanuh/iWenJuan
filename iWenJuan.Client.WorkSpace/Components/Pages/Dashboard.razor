@@ -11,7 +11,7 @@
 	@if (surveys.Any())
 	{
 		<FluentStack HorizontalAlignment="FU.HorizontalAlignment.SpaceBetween"
-					 Style="height:20%">
+		Style="height:20%">
 			<FluentCard Width="23%">
 				<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">问卷总数：@TotalSurveys</FluentLabel>
 			</FluentCard>
@@ -31,19 +31,20 @@
 		<FluentStack HorizontalAlignment="FU.HorizontalAlignment.SpaceBetween">
 			<FluentCard Width="58%" Height="100%">
 				<FluentStack Orientation="FU.Orientation.Vertical"
-							 VerticalAlignment="FU.VerticalAlignment.SpaceBetween"
-							 Style="height:100%">
+				VerticalAlignment="FU.VerticalAlignment.SpaceBetween"
+				Style="height:100%">
 					<MudTimeSeriesChart ChartSeries="@timeSeries"
-										Width="100%"
-										Height="100%"
-										ChartOptions="@options"
-										AxisChartOptions="@axisChartOptions"
-										CanHideSeries="true"
-										TimeLabelSpacing="TimeSpan.FromDays(1)"
-										DataMarkerTooltipTimeLabelFormat="yyyy MM dd" />
+					Width="100%"
+					Height="100%"
+					ChartOptions="@options"
+					AxisChartOptions="@axisChartOptions"
+					CanHideSeries="true"
+					TimeLabelSpacing="TimeSpan.FromDays(1)"
+					DataMarkerTooltipTimeLabelFormat="yyyy/MM/dd"
+					TimeLabelFormat="MM/dd" />
 
 					<FluentStack Orientation="FU.Orientation.Vertical">
-						<FluentSwitch ValueChanged="(v)=> timeSeries.ForEach(x => x.ShowDataMarkers = v)" Label="数据标记"></FluentSwitch>
+						<FluentSwitch @bind-Value="showDataMarkers" Label="数据标记"></FluentSwitch>
 					</FluentStack>
 					<FluentStack Orientation="FU.Orientation.Vertical">
 						<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">标签倾斜度</FluentLabel>
@@ -51,7 +52,7 @@
 					</FluentStack>
 					<FluentStack Orientation="FU.Orientation.Vertical">
 						<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">Y轴最大值: @options.YAxisTicks.ToString()</FluentLabel>
-						<FluentSlider @bind-Value="options.YAxisTicks" Min="1" Max="400" Step="1"></FluentSlider>
+						<FluentSlider @bind-Value="options.YAxisTicks" Min="1" Max="50" Step="1"></FluentSlider>
 					</FluentStack>
 				</FluentStack>
 			</FluentCard>
@@ -75,18 +76,22 @@
 
 	private SurveyDto MostAnswersSurvey => surveys.MaxBy(s => s.Questions?.SelectMany(q => q.Answers ?? []).Count()) ?? default!;
 
-	private List<TimeSeriesChartSeries.TimeValue> SurveyAnswerTimeSeries => answers.GroupBy(a => new DateTime(a.CreatedAt.Ticks / TimeSpan.TicksPerDay * TimeSpan.TicksPerDay)).Select(g => new TimeSeriesChartSeries.TimeValue(g.Key, g.Count())).ToList();
+	private List<TimeSeriesChartSeries.TimeValue> SurveyAnswerTimeSeries => answers
+			.GroupBy(a => new DateTime(a.CreatedAt.Ticks / TimeSpan.TicksPerDay * TimeSpan.TicksPerDay))
+			.Select(g => new TimeSeriesChartSeries.TimeValue(g.Key, g.Count()))
+			.ToList();
 
 	private List<TimeSeriesChartSeries> timeSeries => [
 		new TimeSeriesChartSeries()
 		{
 			Index = 0,
-			Name = "问卷答案数",
+			Name = "问卷答题数",
 			Data = SurveyAnswerTimeSeries,
 			IsVisible = true,
 			LineDisplayType = LineDisplayType.Line,
-			DataMarkerTooltipTitleFormat = "{{X_VALUE}}",
-			DataMarkerTooltipSubtitleFormat = "{{Y_VALUE}}"
+			DataMarkerTooltipTitleFormat = "日期：{{X_VALUE}}",
+			DataMarkerTooltipSubtitleFormat = "答题数：{{Y_VALUE}}",
+			ShowDataMarkers = showDataMarkers,
 		}
 	];
 
@@ -96,12 +101,16 @@
 												.Select(d => d == 0 ? 0.01 : d)
 												.ToArray();
 
+	private bool showDataMarkers;
 
 	private ChartOptions options = new ChartOptions()
 		{
 			YAxisTicks = 2,
 		};
-	private AxisChartOptions axisChartOptions = new AxisChartOptions();
+	private AxisChartOptions axisChartOptions = new AxisChartOptions()
+		{
+			MatchBoundsToSize = true,
+		};
 
 	private HttpClient _SurveyService = default!;
 
