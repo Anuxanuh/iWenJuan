@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iWenJuan.Shared", "iWenJuan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iWenJuan.Client.WorkSpace", "iWenJuan.Client.WorkSpace\iWenJuan.Client.WorkSpace.csproj", "{9F574283-9558-420B-8C58-25FA5235D6A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iWenJuan.Service.TemplateCommunity", "iWenJuan.Service.TemplateCommunity\iWenJuan.Service.TemplateCommunity.csproj", "{F595DA0E-B24F-7EA4-4640-9FD8D07F211D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iWenJuan.Client.Answer", "iWenJuan.Client.Answer\iWenJuan.Client.Answer.csproj", "{10A517D1-6A9F-45A7-A71F-E968DDF1659C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +69,14 @@ Global
 		{9F574283-9558-420B-8C58-25FA5235D6A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F574283-9558-420B-8C58-25FA5235D6A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F574283-9558-420B-8C58-25FA5235D6A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F595DA0E-B24F-7EA4-4640-9FD8D07F211D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F595DA0E-B24F-7EA4-4640-9FD8D07F211D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F595DA0E-B24F-7EA4-4640-9FD8D07F211D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F595DA0E-B24F-7EA4-4640-9FD8D07F211D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10A517D1-6A9F-45A7-A71F-E968DDF1659C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10A517D1-6A9F-45A7-A71F-E968DDF1659C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10A517D1-6A9F-45A7-A71F-E968DDF1659C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10A517D1-6A9F-45A7-A71F-E968DDF1659C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,6 @@
+@iWenJuan.Service.TemplateCommunity_HostAddress = http://localhost:5100
+
+GET {{iWenJuan.Service.TemplateCommunity_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

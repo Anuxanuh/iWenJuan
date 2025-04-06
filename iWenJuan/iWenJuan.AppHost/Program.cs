@@ -59,12 +59,21 @@ var dataStorage = builder.AddProject<Projects.iWenJuan_Service_DataStorage>("iwe
 var dataProcessing = builder.AddProject<Projects.iWenJuan_Service_DataProcessing>("iwenjuan-service-dataprocessing")
 	.WithReference(dataStorage);
 
+// 服务器-问卷模板社区微服务
+var templateCommunity = builder.AddProject<Projects.iWenJuan_Service_TemplateCommunity>("iwenjuan-service-templatecommunity")
+	.WithReference(surveyDataDb);
+
 // 前端-问卷编辑工作台
 builder.AddProject<Projects.iWenJuan_Client_WorkSpace>("iwenjuan-client-workspace")
 	.WithReference(authService)
 	.WithReference(surveyService)
 	.WithReference(dataStorage)
-	.WithReference(dataProcessing);
+	.WithReference(dataProcessing)
+	.WithReference(templateCommunity);
+
+// 前端-问卷调查微服务
+builder.AddProject<Projects.iWenJuan_Client_Answer>("iwenjuan-client-answer")
+	.WithReference(surveyService);
 #endregion 微服务配置
 
 builder.Build().Run();

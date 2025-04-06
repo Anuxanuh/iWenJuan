@@ -23,12 +23,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\iWenJuan.Client.Answer\iWenJuan.Client.Answer.csproj" />
     <ProjectReference Include="..\..\iWenJuan.Client.WorkSpace\iWenJuan.Client.WorkSpace.csproj" />
     <ProjectReference Include="..\..\iWenJuan.Service.Auth\iWenJuan.Service.Auth.csproj" />
     <ProjectReference Include="..\..\iWenJuan.Service.DataProcessing\iWenJuan.Service.DataProcessing.csproj" />
     <ProjectReference Include="..\..\iWenJuan.Service.DataStorage\iWenJuan.Service.DataStorage.csproj" />
     <ProjectReference Include="..\..\iWenJuan.Service.Email\iWenJuan.Service.Email.csproj" />
     <ProjectReference Include="..\..\iWenJuan.Service.Survey\iWenJuan.Service.Survey.csproj" />
+    <ProjectReference Include="..\..\iWenJuan.Service.TemplateCommunity\iWenJuan.Service.TemplateCommunity.csproj" />
   </ItemGroup>
 
   <ItemGroup>

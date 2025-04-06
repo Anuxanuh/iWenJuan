@@ -59,6 +59,13 @@ public class Program
 					  ?? throw new InvalidOperationException("DataProcessingService endpoint is not configured.");
 			client.BaseAddress = new Uri(url);
 		});
+		builder.Services.AddHttpClient("TemplateCommunityService", client =>
+		{
+			// 从配置中获取 SurveyService 的端点 URL
+			var url = builder.Configuration["Endpoint:TemplateCommunityService"]
+					  ?? throw new InvalidOperationException("TemplateCommunityService endpoint is not configured.");
+			client.BaseAddress = new Uri(url);
+		});
 		#endregion 其他微服务HttpClient
 
 		var app = builder.Build();

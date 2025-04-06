@@ -1,10 +1,10 @@
 # Details
 
-Date : 2025-03-30 19:28:29
+Date : 2025-04-06 13:41:50
 
 Directory c:\\Users\\Anuxa\\source\\repos\\iWenJuan
 
-Total : 158 files,  5530 codes, 942 comments, 1074 blanks, all 7546 lines
+Total : 172 files,  6034 codes, 971 comments, 1165 blanks, all 8170 lines
 
 [Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
 
@@ -24,7 +24,7 @@ Total : 158 files,  5530 codes, 942 comments, 1074 blanks, all 7546 lines
 | [iWenJuan.Client.WorkSpace/Components/Custom/FluentConfirmDialog.razor](/iWenJuan.Client.WorkSpace/Components/Custom/FluentConfirmDialog.razor) | Razor | 33 | 0 | 7 | 40 |
 | [iWenJuan.Client.WorkSpace/Components/Custom/FluentSelectEnum.razor](/iWenJuan.Client.WorkSpace/Components/Custom/FluentSelectEnum.razor) | Razor | 51 | 0 | 7 | 58 |
 | [iWenJuan.Client.WorkSpace/Components/Layout/AuthLayout.razor](/iWenJuan.Client.WorkSpace/Components/Layout/AuthLayout.razor) | Razor | 14 | 0 | 3 | 17 |
-| [iWenJuan.Client.WorkSpace/Components/Layout/MainLayout.razor](/iWenJuan.Client.WorkSpace/Components/Layout/MainLayout.razor) | Razor | 127 | 0 | 12 | 139 |
+| [iWenJuan.Client.WorkSpace/Components/Layout/MainLayout.razor](/iWenJuan.Client.WorkSpace/Components/Layout/MainLayout.razor) | Razor | 131 | 0 | 13 | 144 |
 | [iWenJuan.Client.WorkSpace/Components/Layout/NavMenu.razor](/iWenJuan.Client.WorkSpace/Components/Layout/NavMenu.razor) | Razor | 16 | 0 | 2 | 18 |
 | [iWenJuan.Client.WorkSpace/Components/Pages/Auth/ChangePassword.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Auth/ChangePassword.razor) | Razor | 82 | 0 | 14 | 96 |
 | [iWenJuan.Client.WorkSpace/Components/Pages/Auth/Login.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Auth/Login.razor) | Razor | 127 | 0 | 11 | 138 |
@@ -32,29 +32,31 @@ Total : 158 files,  5530 codes, 942 comments, 1074 blanks, all 7546 lines
 | [iWenJuan.Client.WorkSpace/Components/Pages/Auth/Register.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Auth/Register.razor) | Razor | 83 | 0 | 15 | 98 |
 | [iWenJuan.Client.WorkSpace/Components/Pages/Auth/VerifyChangePassword.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Auth/VerifyChangePassword.razor) | Razor | 83 | 0 | 13 | 96 |
 | [iWenJuan.Client.WorkSpace/Components/Pages/Auth/VerifyRegister.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Auth/VerifyRegister.razor) | Razor | 86 | 0 | 13 | 99 |
+| [iWenJuan.Client.WorkSpace/Components/Pages/Dashboard.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Dashboard.razor) | Razor | 109 | 0 | 22 | 131 |
+| [iWenJuan.Client.WorkSpace/Components/Pages/Data/AggregateOperationEditor.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Data/AggregateOperationEditor.razor) | Razor | 3 | 0 | 3 | 6 |
 | [iWenJuan.Client.WorkSpace/Components/Pages/Data/DataManager.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Data/DataManager.razor) | Razor | 91 | 0 | 17 | 108 |
 | [iWenJuan.Client.WorkSpace/Components/Pages/Data/DataPreviewer.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Data/DataPreviewer.razor) | Razor | 61 | 0 | 14 | 75 |
-| [iWenJuan.Client.WorkSpace/Components/Pages/Data/DataProcesser.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Data/DataProcesser.razor) | Razor | 133 | 0 | 35 | 168 |
+| [iWenJuan.Client.WorkSpace/Components/Pages/Data/DataProcesser.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Data/DataProcesser.razor) | Razor | 162 | 0 | 34 | 196 |
 | [iWenJuan.Client.WorkSpace/Components/Pages/Data/DataVisualizer.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Data/DataVisualizer.razor) | Razor | 199 | 0 | 40 | 239 |
-| [iWenJuan.Client.WorkSpace/Components/Pages/Data/OperationEditor.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Data/OperationEditor.razor) | Razor | 30 | 0 | 7 | 37 |
+| [iWenJuan.Client.WorkSpace/Components/Pages/Data/OperationEditor.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Data/OperationEditor.razor) | Razor | 83 | 0 | 12 | 95 |
 | [iWenJuan.Client.WorkSpace/Components/Pages/Error.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Error.razor) | Razor | 29 | 0 | 8 | 37 |
 | [iWenJuan.Client.WorkSpace/Components/Pages/Home.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Home.razor) | Razor | 4 | 0 | 3 | 7 |
-| [iWenJuan.Client.WorkSpace/Components/Pages/Survey/ConditionEditorDialog.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Survey/ConditionEditorDialog.razor) | Razor | 56 | 0 | 12 | 68 |
+| [iWenJuan.Client.WorkSpace/Components/Pages/Survey/ConditionEditorDialog.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Survey/ConditionEditorDialog.razor) | Razor | 56 | 0 | 11 | 67 |
 | [iWenJuan.Client.WorkSpace/Components/Pages/Survey/ConditonEditor.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Survey/ConditonEditor.razor) | Razor | 23 | 0 | 4 | 27 |
 | [iWenJuan.Client.WorkSpace/Components/Pages/Survey/OptionEditor.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Survey/OptionEditor.razor) | Razor | 10 | 0 | 3 | 13 |
 | [iWenJuan.Client.WorkSpace/Components/Pages/Survey/QuestionEditor.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Survey/QuestionEditor.razor) | Razor | 51 | 0 | 12 | 63 |
 | [iWenJuan.Client.WorkSpace/Components/Pages/Survey/SurveyEditor.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Survey/SurveyEditor.razor) | Razor | 199 | 0 | 28 | 227 |
-| [iWenJuan.Client.WorkSpace/Components/Pages/Survey/SurveyManager.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Survey/SurveyManager.razor) | Razor | 124 | 0 | 13 | 137 |
+| [iWenJuan.Client.WorkSpace/Components/Pages/Survey/SurveyManager.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Survey/SurveyManager.razor) | Razor | 134 | 0 | 17 | 151 |
 | [iWenJuan.Client.WorkSpace/Components/Pages/Test.razor](/iWenJuan.Client.WorkSpace/Components/Pages/Test.razor) | Razor | 0 | 0 | 1 | 1 |
 | [iWenJuan.Client.WorkSpace/Components/Routes.razor](/iWenJuan.Client.WorkSpace/Components/Routes.razor) | Razor | 6 | 0 | 1 | 7 |
 | [iWenJuan.Client.WorkSpace/Components/\_Imports.razor](/iWenJuan.Client.WorkSpace/Components/_Imports.razor) | Razor | 23 | 0 | 0 | 23 |
-| [iWenJuan.Client.WorkSpace/Program.cs](/iWenJuan.Client.WorkSpace/Program.cs) | C# | 66 | 9 | 15 | 90 |
+| [iWenJuan.Client.WorkSpace/Program.cs](/iWenJuan.Client.WorkSpace/Program.cs) | C# | 72 | 10 | 15 | 97 |
 | [iWenJuan.Client.WorkSpace/Properties/launchSettings.json](/iWenJuan.Client.WorkSpace/Properties/launchSettings.json) | JSON | 23 | 0 | 1 | 24 |
 | [iWenJuan.Client.WorkSpace/Services/AuthStateProvider.cs](/iWenJuan.Client.WorkSpace/Services/AuthStateProvider.cs) | C# | 17 | 0 | 6 | 23 |
 | [iWenJuan.Client.WorkSpace/Services/AuthenticationService.cs](/iWenJuan.Client.WorkSpace/Services/AuthenticationService.cs) | C# | 17 | 0 | 5 | 22 |
 | [iWenJuan.Client.WorkSpace/Services/HttpOnlyCookieService.cs](/iWenJuan.Client.WorkSpace/Services/HttpOnlyCookieService.cs) | C# | 31 | 11 | 8 | 50 |
 | [iWenJuan.Client.WorkSpace/appsettings.Development.json](/iWenJuan.Client.WorkSpace/appsettings.Development.json) | JSON | 8 | 0 | 1 | 9 |
-| [iWenJuan.Client.WorkSpace/appsettings.json](/iWenJuan.Client.WorkSpace/appsettings.json) | JSON | 15 | 0 | 1 | 16 |
+| [iWenJuan.Client.WorkSpace/appsettings.json](/iWenJuan.Client.WorkSpace/appsettings.json) | JSON | 16 | 0 | 1 | 17 |
 | [iWenJuan.Client.WorkSpace/iWenJuan.Client.WorkSpace.csproj](/iWenJuan.Client.WorkSpace/iWenJuan.Client.WorkSpace.csproj) | XML | 19 | 0 | 4 | 23 |
 | [iWenJuan.Client.WorkSpace/wwwroot/app.css](/iWenJuan.Client.WorkSpace/wwwroot/app.css) | CSS | 157 | 0 | 35 | 192 |
 | [iWenJuan.Client.WorkSpace/wwwroot/clipboard.js](/iWenJuan.Client.WorkSpace/wwwroot/clipboard.js) | JavaScript | 6 | 0 | 0 | 6 |
@@ -79,15 +81,15 @@ Total : 158 files,  5530 codes, 942 comments, 1074 blanks, all 7546 lines
 | [iWenJuan.Service.Auth/appsettings.Development.json](/iWenJuan.Service.Auth/appsettings.Development.json) | JSON | 8 | 0 | 1 | 9 |
 | [iWenJuan.Service.Auth/appsettings.json](/iWenJuan.Service.Auth/appsettings.json) | JSON | 15 | 0 | 1 | 16 |
 | [iWenJuan.Service.Auth/iWenJuan.Service.Auth.csproj](/iWenJuan.Service.Auth/iWenJuan.Service.Auth.csproj) | XML | 22 | 0 | 5 | 27 |
-| [iWenJuan.Service.DataProcessing/Controllers/CsvProcessingController.cs](/iWenJuan.Service.DataProcessing/Controllers/CsvProcessingController.cs) | C# | 31 | 0 | 12 | 43 |
+| [iWenJuan.Service.DataProcessing/Controllers/CsvProcessingController.cs](/iWenJuan.Service.DataProcessing/Controllers/CsvProcessingController.cs) | C# | 41 | 2 | 14 | 57 |
 | [iWenJuan.Service.DataProcessing/Dockerfile](/iWenJuan.Service.DataProcessing/Dockerfile) | Docker | 20 | 5 | 5 | 30 |
 | [iWenJuan.Service.DataProcessing/Interface/ICsvProcessingService.cs](/iWenJuan.Service.DataProcessing/Interface/ICsvProcessingService.cs) | C# | 6 | 0 | 4 | 10 |
 | [iWenJuan.Service.DataProcessing/Program.cs](/iWenJuan.Service.DataProcessing/Program.cs) | C# | 29 | 4 | 13 | 46 |
 | [iWenJuan.Service.DataProcessing/Properties/launchSettings.json](/iWenJuan.Service.DataProcessing/Properties/launchSettings.json) | JSON | 32 | 0 | 0 | 32 |
-| [iWenJuan.Service.DataProcessing/Services/CsvProcessingService.cs](/iWenJuan.Service.DataProcessing/Services/CsvProcessingService.cs) | C# | 155 | 42 | 25 | 222 |
+| [iWenJuan.Service.DataProcessing/Services/CsvProcessingService.cs](/iWenJuan.Service.DataProcessing/Services/CsvProcessingService.cs) | C# | 178 | 46 | 26 | 250 |
 | [iWenJuan.Service.DataProcessing/Utils/StringOrNumericComparer.cs](/iWenJuan.Service.DataProcessing/Utils/StringOrNumericComparer.cs) | C# | 15 | 0 | 2 | 17 |
 | [iWenJuan.Service.DataProcessing/appsettings.Development.json](/iWenJuan.Service.DataProcessing/appsettings.Development.json) | JSON | 8 | 0 | 1 | 9 |
-| [iWenJuan.Service.DataProcessing/appsettings.json](/iWenJuan.Service.DataProcessing/appsettings.json) | JSON | 9 | 0 | 1 | 10 |
+| [iWenJuan.Service.DataProcessing/appsettings.json](/iWenJuan.Service.DataProcessing/appsettings.json) | JSON | 15 | 0 | 1 | 16 |
 | [iWenJuan.Service.DataProcessing/iWenJuan.Service.DataProcessing.csproj](/iWenJuan.Service.DataProcessing/iWenJuan.Service.DataProcessing.csproj) | XML | 17 | 0 | 5 | 22 |
 | [iWenJuan.Service.DataStorage/Controllers/FileStorageController.cs](/iWenJuan.Service.DataStorage/Controllers/FileStorageController.cs) | C# | 103 | 54 | 12 | 169 |
 | [iWenJuan.Service.DataStorage/Data/StorageDbContext.cs](/iWenJuan.Service.DataStorage/Data/StorageDbContext.cs) | C# | 10 | 0 | 3 | 13 |
@@ -113,14 +115,16 @@ Total : 158 files,  5530 codes, 942 comments, 1074 blanks, all 7546 lines
 | [iWenJuan.Service.Email/iWenJuan.Service.Email.csproj](/iWenJuan.Service.Email/iWenJuan.Service.Email.csproj) | XML | 20 | 0 | 5 | 25 |
 | [iWenJuan.Service.Survey/Controllers/AnswersController.cs](/iWenJuan.Service.Survey/Controllers/AnswersController.cs) | C# | 31 | 17 | 7 | 55 |
 | [iWenJuan.Service.Survey/Controllers/ConditionsController.cs](/iWenJuan.Service.Survey/Controllers/ConditionsController.cs) | C# | 40 | 6 | 12 | 58 |
+| [iWenJuan.Service.Survey/Controllers/DashboardController.cs](/iWenJuan.Service.Survey/Controllers/DashboardController.cs) | C# | 24 | 2 | 6 | 32 |
 | [iWenJuan.Service.Survey/Controllers/ExportController.cs](/iWenJuan.Service.Survey/Controllers/ExportController.cs) | C# | 43 | 20 | 6 | 69 |
 | [iWenJuan.Service.Survey/Controllers/OptionsController.cs](/iWenJuan.Service.Survey/Controllers/OptionsController.cs) | C# | 40 | 6 | 11 | 57 |
 | [iWenJuan.Service.Survey/Controllers/QuestionsController.cs](/iWenJuan.Service.Survey/Controllers/QuestionsController.cs) | C# | 41 | 5 | 10 | 56 |
 | [iWenJuan.Service.Survey/Controllers/SurveysController.cs](/iWenJuan.Service.Survey/Controllers/SurveysController.cs) | C# | 88 | 42 | 11 | 141 |
 | [iWenJuan.Service.Survey/Data/SurveyDbContext.cs](/iWenJuan.Service.Survey/Data/SurveyDbContext.cs) | C# | 40 | 0 | 8 | 48 |
 | [iWenJuan.Service.Survey/Dockerfile](/iWenJuan.Service.Survey/Dockerfile) | Docker | 20 | 5 | 5 | 30 |
-| [iWenJuan.Service.Survey/Extension/SurveyModelMapper.cs](/iWenJuan.Service.Survey/Extension/SurveyModelMapper.cs) | C# | 76 | 0 | 4 | 80 |
+| [iWenJuan.Service.Survey/Extension/SurveyModelMapper.cs](/iWenJuan.Service.Survey/Extension/SurveyModelMapper.cs) | C# | 106 | 0 | 5 | 111 |
 | [iWenJuan.Service.Survey/Interface/IAnswerService.cs](/iWenJuan.Service.Survey/Interface/IAnswerService.cs) | C# | 7 | 10 | 3 | 20 |
+| [iWenJuan.Service.Survey/Interface/IDashboardService.cs](/iWenJuan.Service.Survey/Interface/IDashboardService.cs) | C# | 6 | 0 | 2 | 8 |
 | [iWenJuan.Service.Survey/Interface/IExportService.cs](/iWenJuan.Service.Survey/Interface/IExportService.cs) | C# | 6 | 13 | 3 | 22 |
 | [iWenJuan.Service.Survey/Interface/ISurveyService.cs](/iWenJuan.Service.Survey/Interface/ISurveyService.cs) | C# | 36 | 123 | 25 | 184 |
 | [iWenJuan.Service.Survey/Models/Answer.cs](/iWenJuan.Service.Survey/Models/Answer.cs) | C# | 14 | 0 | 3 | 17 |
@@ -128,14 +132,22 @@ Total : 158 files,  5530 codes, 942 comments, 1074 blanks, all 7546 lines
 | [iWenJuan.Service.Survey/Models/Option.cs](/iWenJuan.Service.Survey/Models/Option.cs) | C# | 12 | 0 | 3 | 15 |
 | [iWenJuan.Service.Survey/Models/Question.cs](/iWenJuan.Service.Survey/Models/Question.cs) | C# | 18 | 0 | 6 | 24 |
 | [iWenJuan.Service.Survey/Models/Survey.cs](/iWenJuan.Service.Survey/Models/Survey.cs) | C# | 15 | 0 | 4 | 19 |
-| [iWenJuan.Service.Survey/Program.cs](/iWenJuan.Service.Survey/Program.cs) | C# | 39 | 19 | 16 | 74 |
+| [iWenJuan.Service.Survey/Program.cs](/iWenJuan.Service.Survey/Program.cs) | C# | 40 | 20 | 16 | 76 |
 | [iWenJuan.Service.Survey/Properties/launchSettings.json](/iWenJuan.Service.Survey/Properties/launchSettings.json) | JSON | 31 | 0 | 0 | 31 |
 | [iWenJuan.Service.Survey/Services/AnswerService.cs](/iWenJuan.Service.Survey/Services/AnswerService.cs) | C# | 25 | 14 | 6 | 45 |
+| [iWenJuan.Service.Survey/Services/DashboardService.cs](/iWenJuan.Service.Survey/Services/DashboardService.cs) | C# | 25 | 0 | 5 | 30 |
 | [iWenJuan.Service.Survey/Services/ExportService.cs](/iWenJuan.Service.Survey/Services/ExportService.cs) | C# | 80 | 25 | 15 | 120 |
 | [iWenJuan.Service.Survey/Services/SurveyService.cs](/iWenJuan.Service.Survey/Services/SurveyService.cs) | C# | 257 | 0 | 21 | 278 |
 | [iWenJuan.Service.Survey/appsettings.Development.json](/iWenJuan.Service.Survey/appsettings.Development.json) | JSON | 8 | 0 | 1 | 9 |
 | [iWenJuan.Service.Survey/appsettings.json](/iWenJuan.Service.Survey/appsettings.json) | JSON | 15 | 0 | 1 | 16 |
 | [iWenJuan.Service.Survey/iWenJuan.Service.Survey.csproj](/iWenJuan.Service.Survey/iWenJuan.Service.Survey.csproj) | XML | 20 | 0 | 5 | 25 |
+| [iWenJuan.Service.TemplateCommunity/Controllers/SearchController.cs](/iWenJuan.Service.TemplateCommunity/Controllers/SearchController.cs) | C# | 38 | 15 | 9 | 62 |
+| [iWenJuan.Service.TemplateCommunity/Extension/SearchResultExtension.cs](/iWenJuan.Service.TemplateCommunity/Extension/SearchResultExtension.cs) | C# | 15 | 0 | 3 | 18 |
+| [iWenJuan.Service.TemplateCommunity/Program.cs](/iWenJuan.Service.TemplateCommunity/Program.cs) | C# | 26 | 4 | 15 | 45 |
+| [iWenJuan.Service.TemplateCommunity/Properties/launchSettings.json](/iWenJuan.Service.TemplateCommunity/Properties/launchSettings.json) | JSON | 23 | 0 | 1 | 24 |
+| [iWenJuan.Service.TemplateCommunity/appsettings.Development.json](/iWenJuan.Service.TemplateCommunity/appsettings.Development.json) | JSON | 8 | 0 | 1 | 9 |
+| [iWenJuan.Service.TemplateCommunity/appsettings.json](/iWenJuan.Service.TemplateCommunity/appsettings.json) | JSON | 16 | 0 | 1 | 17 |
+| [iWenJuan.Service.TemplateCommunity/iWenJuan.Service.TemplateCommunity.csproj](/iWenJuan.Service.TemplateCommunity/iWenJuan.Service.TemplateCommunity.csproj) | XML | 10 | 0 | 4 | 14 |
 | [iWenJuan.ServiceDefaults/Extensions.cs](/iWenJuan.ServiceDefaults/Extensions.cs) | C# | 75 | 23 | 22 | 120 |
 | [iWenJuan.ServiceDefaults/iWenJuan.ServiceDefaults.csproj](/iWenJuan.ServiceDefaults/iWenJuan.ServiceDefaults.csproj) | XML | 18 | 0 | 5 | 23 |
 | [iWenJuan.Shared/Dtos/Auth/EmailVerificationMessage.cs](/iWenJuan.Shared/Dtos/Auth/EmailVerificationMessage.cs) | C# | 11 | 6 | 4 | 21 |
@@ -144,7 +156,8 @@ Total : 158 files,  5530 codes, 942 comments, 1074 blanks, all 7546 lines
 | [iWenJuan.Shared/Dtos/Auth/UserDto.cs](/iWenJuan.Shared/Dtos/Auth/UserDto.cs) | C# | 10 | 0 | 6 | 16 |
 | [iWenJuan.Shared/Dtos/Auth/VerifyChangePasswordDto.cs](/iWenJuan.Shared/Dtos/Auth/VerifyChangePasswordDto.cs) | C# | 9 | 0 | 3 | 12 |
 | [iWenJuan.Shared/Dtos/Auth/VerifyRegisterDto.cs](/iWenJuan.Shared/Dtos/Auth/VerifyRegisterDto.cs) | C# | 14 | 0 | 3 | 17 |
-| [iWenJuan.Shared/Dtos/DataProcess/CsvOperation.cs](/iWenJuan.Shared/Dtos/DataProcess/CsvOperation.cs) | C# | 10 | 17 | 6 | 33 |
+| [iWenJuan.Shared/Dtos/Dashboard/SurveySummaryDto.cs](/iWenJuan.Shared/Dtos/Dashboard/SurveySummaryDto.cs) | C# | 10 | 0 | 4 | 14 |
+| [iWenJuan.Shared/Dtos/DataProcess/CsvOperation.cs](/iWenJuan.Shared/Dtos/DataProcess/CsvOperation.cs) | C# | 10 | 16 | 6 | 32 |
 | [iWenJuan.Shared/Dtos/SurveyData/ExportSurveyResultDto.cs](/iWenJuan.Shared/Dtos/SurveyData/ExportSurveyResultDto.cs) | C# | 11 | 0 | 4 | 15 |
 | [iWenJuan.Shared/Dtos/SurveyData/StoredFileInfoDto.cs](/iWenJuan.Shared/Dtos/SurveyData/StoredFileInfoDto.cs) | C# | 9 | 0 | 2 | 11 |
 | [iWenJuan.Shared/Dtos/Survey/AnswerDto.cs](/iWenJuan.Shared/Dtos/Survey/AnswerDto.cs) | C# | 10 | 0 | 3 | 13 |
@@ -152,8 +165,9 @@ Total : 158 files,  5530 codes, 942 comments, 1074 blanks, all 7546 lines
 | [iWenJuan.Shared/Dtos/Survey/OptionDto.cs](/iWenJuan.Shared/Dtos/Survey/OptionDto.cs) | C# | 14 | 0 | 3 | 17 |
 | [iWenJuan.Shared/Dtos/Survey/QuestionDto.cs](/iWenJuan.Shared/Dtos/Survey/QuestionDto.cs) | C# | 19 | 0 | 3 | 22 |
 | [iWenJuan.Shared/Dtos/Survey/SurveyDto.cs](/iWenJuan.Shared/Dtos/Survey/SurveyDto.cs) | C# | 17 | 0 | 4 | 21 |
+| [iWenJuan.Shared/Dtos/TemplateCommunity/SearchResultDto.cs](/iWenJuan.Shared/Dtos/TemplateCommunity/SearchResultDto.cs) | C# | 12 | 0 | 2 | 14 |
 | [iWenJuan.Shared/Enums/AggregateOperationType.cs](/iWenJuan.Shared/Enums/AggregateOperationType.cs) | C# | 20 | 0 | 2 | 22 |
-| [iWenJuan.Shared/Enums/CsvOperationType.cs](/iWenJuan.Shared/Enums/CsvOperationType.cs) | C# | 15 | 0 | 3 | 18 |
+| [iWenJuan.Shared/Enums/CsvOperationType.cs](/iWenJuan.Shared/Enums/CsvOperationType.cs) | C# | 17 | 0 | 3 | 20 |
 | [iWenJuan.Shared/Enums/Effect.cs](/iWenJuan.Shared/Enums/Effect.cs) | C# | 14 | 0 | 3 | 17 |
 | [iWenJuan.Shared/Enums/IWenJuanChartType.cs](/iWenJuan.Shared/Enums/IWenJuanChartType.cs) | C# | 28 | 0 | 3 | 31 |
 | [iWenJuan.Shared/Enums/Operator.cs](/iWenJuan.Shared/Enums/Operator.cs) | C# | 24 | 0 | 4 | 28 |
@@ -162,10 +176,10 @@ Total : 158 files,  5530 codes, 942 comments, 1074 blanks, all 7546 lines
 | [iWenJuan.Shared/Extension/ExpandoObjectExtension.cs](/iWenJuan.Shared/Extension/ExpandoObjectExtension.cs) | C# | 21 | 0 | 3 | 24 |
 | [iWenJuan.Shared/Extension/HttpClientExtension.cs](/iWenJuan.Shared/Extension/HttpClientExtension.cs) | C# | 25 | 6 | 8 | 39 |
 | [iWenJuan.Shared/iWenJuan.Shared.csproj](/iWenJuan.Shared/iWenJuan.Shared.csproj) | XML | 7 | 0 | 3 | 10 |
-| [iWenJuan/iWenJuan.AppHost/Program.cs](/iWenJuan/iWenJuan.AppHost/Program.cs) | C# | 38 | 21 | 12 | 71 |
+| [iWenJuan/iWenJuan.AppHost/Program.cs](/iWenJuan/iWenJuan.AppHost/Program.cs) | C# | 41 | 22 | 13 | 76 |
 | [iWenJuan/iWenJuan.AppHost/Properties/launchSettings.json](/iWenJuan/iWenJuan.AppHost/Properties/launchSettings.json) | JSON | 29 | 0 | 1 | 30 |
 | [iWenJuan/iWenJuan.AppHost/appsettings.json](/iWenJuan/iWenJuan.AppHost/appsettings.json) | JSON | 9 | 0 | 1 | 10 |
-| [iWenJuan/iWenJuan.AppHost/iWenJuan.AppHost.csproj](/iWenJuan/iWenJuan.AppHost/iWenJuan.AppHost.csproj) | XML | 38 | 0 | 9 | 47 |
+| [iWenJuan/iWenJuan.AppHost/iWenJuan.AppHost.csproj](/iWenJuan/iWenJuan.AppHost/iWenJuan.AppHost.csproj) | XML | 39 | 0 | 9 | 48 |
 | [iWenJuan/iWenJuan.ServiceDefaults/Extensions.cs](/iWenJuan/iWenJuan.ServiceDefaults/Extensions.cs) | C# | 75 | 23 | 22 | 120 |
 | [iWenJuan/iWenJuan.ServiceDefaults/iWenJuan.ServiceDefaults.csproj](/iWenJuan/iWenJuan.ServiceDefaults/iWenJuan.ServiceDefaults.csproj) | XML | 18 | 0 | 5 | 23 |
 | [launchSettings.json](/launchSettings.json) | JSON | 11 | 0 | 0 | 11 |

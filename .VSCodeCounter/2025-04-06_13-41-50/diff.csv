@@ -1,0 +1,15 @@
+"filename", "language", "JSON", "C#", "XML", "Razor", "comment", "blank", "total"
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Dashboard.razor", "Razor", 0, 0, 0, 6, 0, 0, 6
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Program.cs", "C#", 0, 6, 0, 0, 1, 0, 7
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\appsettings.json", "JSON", 1, 0, 0, 0, 0, 0, 1
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Controllers\SearchController.cs", "C#", 0, 38, 0, 0, 15, 9, 62
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Extension\SearchResultExtension.cs", "C#", 0, 15, 0, 0, 0, 3, 18
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Program.cs", "C#", 0, 26, 0, 0, 4, 15, 45
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Properties\launchSettings.json", "JSON", 23, 0, 0, 0, 0, 1, 24
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\appsettings.Development.json", "JSON", 8, 0, 0, 0, 0, 1, 9
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\appsettings.json", "JSON", 16, 0, 0, 0, 0, 1, 17
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\iWenJuan.Service.TemplateCommunity.csproj", "XML", 0, 0, 10, 0, 0, 4, 14
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\TemplateCommunity\SearchResultDto.cs", "C#", 0, 12, 0, 0, 0, 2, 14
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan\iWenJuan.AppHost\Program.cs", "C#", 0, 3, 0, 0, 1, 1, 5
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan\iWenJuan.AppHost\iWenJuan.AppHost.csproj", "XML", 0, 0, 1, 0, 0, 0, 1
+"Total", "-", 48, 100, 11, 6, 21, 37, 223

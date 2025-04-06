@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.1.0" />
+    <PackageReference Include="jieba.NET" Version="0.42.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\iWenJuan.Service.Survey\iWenJuan.Service.Survey.csproj" />
+    <ProjectReference Include="..\iWenJuan.Shared\iWenJuan.Shared.csproj" />
+    <ProjectReference Include="..\iWenJuan\iWenJuan.ServiceDefaults\iWenJuan.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+</Project>
