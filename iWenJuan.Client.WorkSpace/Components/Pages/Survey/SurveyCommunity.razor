@@ -15,32 +15,42 @@
 
 <PageTitle>问卷模板社区</PageTitle>
 
-<FluentLabel Typo="Typography.H1">问卷模板社区</FluentLabel>
+<FluentStack Orientation="Orientation.Vertical">
+	<FluentLabel Typo="Typography.HeroTitle" MarginBlock="20px">问卷模板社区</FluentLabel>
 
-<FluentSearch @bind-Value=searchKey
-			  @bind-Value:after=HandleSearchInput
-			  Placeholder="输入你想要的模板关键词"
-			  style="width: 100%;">
-</FluentSearch>
+	<FluentSearch @bind-Value=searchKey
+				  @bind-Value:after=HandleSearchInput
+				  Placeholder="输入你想要的模板关键词"
+				  Style="width: 100%;">
+	</FluentSearch>
 
-@if (results.Count == 0)
-{
-	<FluentCard>
-		<FluentLabel Typo="Typography.H3">什么都没有哦</FluentLabel>
-		<FluentSkeleton Shape="SkeletonShape.Circle"></FluentSkeleton>
-	</FluentCard>
-}
-else
-{
-	<FluentGrid Justify="JustifyContent.FlexStart">
-		@foreach (var result in results)
+	<FluentCard Style="padding-top:20px">
+		@if (results.Count == 0)
 		{
-			<FluentGridItem>
-				<SurveyCard Result="result" />
-			</FluentGridItem>
+			<FluentStack>
+				<FluentLabel Typo="Typography.H2">什么都没有哦</FluentLabel>
+			</FluentStack>
 		}
-	</FluentGrid>
-})
+		else
+		{
+			<FluentGrid Justify="JustifyContent.FlexStart">
+				@foreach (var result in results)
+				{
+					<FluentGridItem xs="6" sm="4">
+						<SurveyCard Result="result" />
+					</FluentGridItem>
+				}
+			</FluentGrid>
+		}
+	</FluentCard>
+</FluentStack>
+
+<FluentOverlay @bind-Visible=progressRingVisible
+			   Dismissable="false"
+			   FullScreen="true"
+			   Opacity="0.4">
+	<FluentProgressRing Width="128px" />
+</FluentOverlay>
 
 @code {
 	private string searchKey = string.Empty;
@@ -50,14 +60,29 @@ else
 		if (string.IsNullOrWhiteSpace(searchKey))
 			return;
 
+		// 显示加载动画
+		progressRingVisible = true;
+
+		// 发送请求
 		var response = await _httpClient.GetAsync($"api/search?key={searchKey}");
 
+		// 请求失败
 		if (!response.IsSuccessStatusCode)
 		{
 
+			// 隐藏加载动画
+			progressRingVisible = false;
+			StateHasChanged();
 			return;
 		}
 
+		// 解析结果
 		results = await response.Content.ReadFromJsonAsync<List<SearchResultDto>>() ?? [];
+
+		// 隐藏加载动画
+		progressRingVisible = false;
+		StateHasChanged();
 	}
+
+	private bool progressRingVisible = false;
 }

@@ -1,0 +1,40 @@
+﻿@page "/{SurveyId}"
+@inject IDialogService DialogService
+@inject IHttpClientFactory httpClientFactory
+@inject ILogger<Preview> Logger
+
+@code {
+	[Parameter] public string SurveyId { get; set; } = default!;
+	private HttpClient _httpClient = default!;
+	private static Dictionary<string, QuestionTypeEnum> questionTypes =
+					Enum.GetValues(typeof(QuestionTypeEnum))
+					.Cast<QuestionTypeEnum>()
+					.Select(value => new
+					{
+						Value = value,
+						DisplayName = value.GetDisplayName()
+					})
+					.Where(x => x.DisplayName != null)
+					.ToDictionary(x => x.DisplayName!, x => x.Value);
+
+	private SurveyDto survey = new SurveyDto
+		{
+			Title = "新问卷",
+			Questions = []
+		};
+
+	private List<ConditionDto> conditions = [];
+
+	protected override async Task OnInitializedAsync()
+	{
+		_httpClient = httpClientFactory.CreateClient("SurveyService");
+
+		if (SurveyId is not null)
+		{
+			survey = (await _httpClient.GetFromJsonAsync<SurveyDto>($"api/surveys/{SurveyId}"))!;
+			conditions = survey.Questions?.SelectMany(q => q.Conditions ?? []).ToList() ?? [];
+		}
+	}
+}
+
+<PageTitle>问卷预览</PageTitle>

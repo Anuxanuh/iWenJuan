@@ -47,23 +47,30 @@ public class Program
 		});
 		builder.Services.AddHttpClient("DataStoreService", client =>
 		{
-			// 从配置中获取 SurveyService 的端点 URL
+			// 从配置中获取 DataStoreService 的端点 URL
 			var url = builder.Configuration["Endpoint:DataStoreService"]
 					  ?? throw new InvalidOperationException("DataStoreService endpoint is not configured.");
 			client.BaseAddress = new Uri(url);
 		});
 		builder.Services.AddHttpClient("DataProcessingService", client =>
 		{
-			// 从配置中获取 SurveyService 的端点 URL
+			// 从配置中获取 DataProcessingService 的端点 URL
 			var url = builder.Configuration["Endpoint:DataProcessingService"]
 					  ?? throw new InvalidOperationException("DataProcessingService endpoint is not configured.");
 			client.BaseAddress = new Uri(url);
 		});
 		builder.Services.AddHttpClient("TemplateCommunityService", client =>
 		{
-			// 从配置中获取 SurveyService 的端点 URL
+			// 从配置中获取 TemplateCommunityService 的端点 URL
 			var url = builder.Configuration["Endpoint:TemplateCommunityService"]
 					  ?? throw new InvalidOperationException("TemplateCommunityService endpoint is not configured.");
+			client.BaseAddress = new Uri(url);
+		});
+		builder.Services.AddHttpClient("AnswerClient", client =>
+		{
+			// 从配置中获取 AnswerClient 的端点 URL
+			var url = builder.Configuration["Endpoint:AnswerClient"]
+					  ?? throw new InvalidOperationException("AnswerClient endpoint is not configured.");
 			client.BaseAddress = new Uri(url);
 		});
 		#endregion 其他微服务HttpClient

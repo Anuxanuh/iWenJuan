@@ -4,7 +4,8 @@
 	<nav class="sitenav" aria-labelledby="main-menu">
 		<FluentNavMenu Id="main-menu" Collapsible="true" Width="250" Title="Navigation menu" @bind-Expanded="expanded" CustomToggle="true">
 			<FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())" IconColor="Color.Accent">主页</FluentNavLink>
-			<FluentNavLink Href="/survey-editor" Icon="@(new Icons.Regular.Size20.ClipboardTextEdit())" IconColor="Color.Accent">创建问卷</FluentNavLink>
+			<FluentNavLink Href="/survey-editor" Icon="@(new Icons.Regular.Size20.ClipboardTextEdit())" IconColor="Color.Accent">创建问卷</FluentNavLink>			
+			<FluentNavLink Href="/survey-community" Icon="@(new Icons.Regular.Size20.ClipboardDay())" IconColor="Color.Accent">问卷社区</FluentNavLink>
 			<FluentNavLink Href="/survey-manager" Icon="@(new Icons.Regular.Size20.ClipboardNote())" IconColor="Color.Accent">问卷管理</FluentNavLink>
 			<FluentNavLink Href="/data-manager" Icon="@(new Icons.Regular.Size20.BookDatabase())" IconColor="Color.Accent">数据管理</FluentNavLink>
 			<FluentNavLink Href="/personal-space" Icon="@(new Icons.Regular.Size20.Person())" IconColor="Color.Accent">个人中心</FluentNavLink>

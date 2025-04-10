@@ -1,4 +1,4 @@
-﻿using iWenJuan.Shared.Dtos.TemplateCommunity;
+﻿using iWenJuan.Shared.Dtos;
 using SurveyModel = iWenJuan.Service.Survey.Models.Survey;
 
 namespace iWenJuan.Service.TemplateCommunity.Extension;
