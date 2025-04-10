@@ -49,7 +49,7 @@ public class SearchController : ControllerBase
 		 */
 
 		// 记录日志
-		_logger.LogInformation("搜索关键词: {key}, 匹配到问卷数量: {count}", key, searchResults.Count);
+		_logger.LogInformation("搜索关键词: {key}, 匹配到问卷数量: {count}", string.Join("/", keys), searchResults.Count);
 
 		// 返回结果
 		if (searchResults.Count == 0)
