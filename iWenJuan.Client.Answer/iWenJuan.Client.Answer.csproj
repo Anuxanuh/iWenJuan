@@ -12,6 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\iWenJuan.Shared\iWenJuan.Shared.csproj" />
     <ProjectReference Include="..\iWenJuan\iWenJuan.ServiceDefaults\iWenJuan.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Components\Customs\" />
   </ItemGroup>
 </Project>

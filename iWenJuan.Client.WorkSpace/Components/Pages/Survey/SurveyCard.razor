@@ -1,0 +1,21 @@
+﻿<FluentCard>
+    <FluentLabel Typo="Typography.H3">@Result.Title</FluentLabel>
+    <p>@Result.Description</p>
+    <FluentButton @onclick="OnViewDetails">预览问卷</FluentButton>
+    <FluentButton Appearance="Appearance.Accent" @onclick="CreateSurvey">以此模板创建问卷</FluentButton>
+</FluentCard>
+
+@code {
+    [Parameter]
+    public SearchResultDto Result { get; set; } = default!;
+
+    private void OnViewDetails()
+    {
+        
+    }
+
+    private void CreateSurvey()
+    {
+        
+    }
+}

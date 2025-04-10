@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace iWenJuan.Shared.Dtos.TemplateCommunity;
+namespace iWenJuan.Shared.Dtos;
 public class SearchResultDto
 {
 	public int Id { get; set; }
