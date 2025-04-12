@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using iWenJuan.Service.TemplateCommunity.Utils;
+using iWenJuan.Shared.Dtos;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iWenJuan.Service.TemplateCommunity.Controllers;
@@ -15,18 +17,30 @@ public class CreateController : ControllerBase
 		_httpClient = httpClientFactory.CreateClient("SurveyService");
 	}
 
-	[HttpPost]
-	public async Task<IActionResult> Post([FromBody] string title)
+	[HttpGet]
+	public async Task<IActionResult> CreateSurveyFromTemplate([FromQuery] int surveyId, [FromQuery] Guid userId)
 	{
-		// 创建问卷
-		var response = await _httpClient.PostAsJsonAsync("api/Survey", new { Title = title });
-		if (response.IsSuccessStatusCode)
-		{
-			return Ok("问卷创建成功");
-		}
-		else
-		{
-			return BadRequest("问卷创建失败");
-		}
+		var response = await _httpClient.GetAsync($"api/Surveys/{surveyId}");
+
+		if (!response.IsSuccessStatusCode)
+			return NotFound("要复制的问卷不存在");
+
+		var originalSurvey = await response.Content.ReadFromJsonAsync<SurveyDto>();
+
+		if (originalSurvey == null)
+			return NotFound("要复制的问卷不存在");
+
+		var newSurvey = originalSurvey.Copy(userId);
+
+		var createResponse = await _httpClient.PostAsJsonAsync("api/Surveys", newSurvey);
+
+		if (!createResponse.IsSuccessStatusCode)
+			return Problem("创建问卷出错");
+
+		var uri = createResponse.Headers.Location;
+
+		var createdSurvey = await createResponse.Content.ReadFromJsonAsync<SurveyDto>();
+
+		return Created(uri, createdSurvey);
 	}
 }

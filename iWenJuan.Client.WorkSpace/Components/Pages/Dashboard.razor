@@ -11,7 +11,7 @@
 	@if (surveys.Any())
 	{
 		<FluentStack HorizontalAlignment="FU.HorizontalAlignment.SpaceBetween"
-		Style="height:20%">
+					 Style="height:20%">
 			<FluentCard Width="23%">
 				<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">问卷总数：@TotalSurveys</FluentLabel>
 			</FluentCard>
@@ -28,27 +28,31 @@
 
 		<FluentDivider Style="width: 100%;height:2px" Role="DividerRole.Presentation"></FluentDivider>
 
-		<FluentStack HorizontalAlignment="FU.HorizontalAlignment.SpaceBetween">
-			<FluentCard Width="58%" Height="100%">
+		<FluentStack HorizontalAlignment="FU.HorizontalAlignment.SpaceBetween"
+					 Style="height:75%">
+			<FluentCard Width="56%">
 				<FluentStack Orientation="FU.Orientation.Vertical"
-				VerticalAlignment="FU.VerticalAlignment.SpaceBetween"
-				Style="height:100%">
+							 VerticalAlignment="FU.VerticalAlignment.SpaceBetween">
 					<MudTimeSeriesChart ChartSeries="@timeSeries"
-					Width="100%"
-					Height="100%"
-					ChartOptions="@options"
-					AxisChartOptions="@axisChartOptions"
-					CanHideSeries="true"
-					TimeLabelSpacing="TimeSpan.FromDays(1)"
-					DataMarkerTooltipTimeLabelFormat="yyyy/MM/dd"
-					TimeLabelFormat="MM/dd" />
+										Width="100%"
+										Height="100%"
+										ChartOptions="@options"
+										AxisChartOptions="@axisChartOptions"
+										CanHideSeries="true"
+										TimeLabelSpacing="TimeSpan.FromDays(timeLabelSpacing)"
+										DataMarkerTooltipTimeLabelFormat="yyyy/MM/dd"
+										TimeLabelFormat="MM/dd" />
 
 					<FluentStack Orientation="FU.Orientation.Vertical">
 						<FluentSwitch @bind-Value="showDataMarkers" Label="数据标记"></FluentSwitch>
 					</FluentStack>
 					<FluentStack Orientation="FU.Orientation.Vertical">
-						<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">标签倾斜度</FluentLabel>
+						<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">标签倾斜度: @(axisChartOptions.LabelRotation)°</FluentLabel>
 						<FluentSlider @bind-Value="axisChartOptions.LabelRotation" Min="0" Max="90" Step="15"></FluentSlider>
+					</FluentStack>
+					<FluentStack Orientation="FU.Orientation.Vertical">
+						<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">X轴细腻度: @(timeLabelSpacing)天</FluentLabel>
+						<FluentSlider @bind-Value="timeLabelSpacing" Min="1" Max="31" Step="1"></FluentSlider>
 					</FluentStack>
 					<FluentStack Orientation="FU.Orientation.Vertical">
 						<FluentLabel Typo="Microsoft.FluentUI.AspNetCore.Components.Typography.H4">Y轴最大值: @options.YAxisTicks.ToString()</FluentLabel>
@@ -56,7 +60,7 @@
 					</FluentStack>
 				</FluentStack>
 			</FluentCard>
-			<FluentCard Width="39%">
+			<FluentCard Width="42%">
 				<MudChart ChartType="ChartType.Pie" InputData=surveyAnswers InputLabels=surveysName Width="100%" />
 			</FluentCard>
 		</FluentStack>
@@ -79,6 +83,7 @@
 	private List<TimeSeriesChartSeries.TimeValue> SurveyAnswerTimeSeries => answers
 			.GroupBy(a => new DateTime(a.CreatedAt.Ticks / TimeSpan.TicksPerDay * TimeSpan.TicksPerDay))
 			.Select(g => new TimeSeriesChartSeries.TimeValue(g.Key, g.Count()))
+			.OrderBy(g => g.DateTime)
 			.ToList();
 
 	private List<TimeSeriesChartSeries> timeSeries => [
@@ -111,6 +116,8 @@
 		{
 			MatchBoundsToSize = true,
 		};
+
+	private int timeLabelSpacing = 1;
 
 	private HttpClient _SurveyService = default!;
 

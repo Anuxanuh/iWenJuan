@@ -66,13 +66,13 @@ public class Program
 					  ?? throw new InvalidOperationException("TemplateCommunityService endpoint is not configured.");
 			client.BaseAddress = new Uri(url);
 		});
-		builder.Services.AddHttpClient("AnswerClient", client =>
-		{
-			// 从配置中获取 AnswerClient 的端点 URL
-			var url = builder.Configuration["Endpoint:AnswerClient"]
-					  ?? throw new InvalidOperationException("AnswerClient endpoint is not configured.");
-			client.BaseAddress = new Uri(url);
-		});
+		//builder.Services.AddHttpClient("AnswerClient", client =>
+		//{
+		//	// 从配置中获取 AnswerClient 的端点 URL
+		//	var url = builder.Configuration["Endpoint:AnswerClient"]
+		//			  ?? throw new InvalidOperationException("AnswerClient endpoint is not configured.");
+		//	client.BaseAddress = new Uri(url);
+		//});
 		#endregion 其他微服务HttpClient
 
 		var app = builder.Build();

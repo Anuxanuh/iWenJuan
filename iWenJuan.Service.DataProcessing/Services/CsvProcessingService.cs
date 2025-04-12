@@ -60,7 +60,8 @@ public class CsvProcessingService : ICsvProcessingService
 		using var writer = new StreamWriter(memoryStream);
 		using var csvWriter = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture));
 		// 异步写入处理后的记录到内存流
-		var newheaders = fileData.SelectMany(dict => dict.Keys).Distinct().ToList();;
+		var newheaders = fileData.SelectMany(dict => dict.Keys).Distinct().ToList();
+		;
 		// 写入表头
 		foreach (var column in newheaders)
 		{
@@ -222,28 +223,38 @@ public class CsvProcessingService : ICsvProcessingService
 
 	private string SubAggregateColumn(IEnumerable<IDictionary<string, string>> records, string? column, AggregateOperationType aggregateOperation)
 	{
+		// 处理 Count 操作
+		if (aggregateOperation == AggregateOperationType.Count)
+		{
+			if (string.IsNullOrEmpty(column))
+			{
+				return records.Count().ToString();
+			}
+			else
+			{
+				return records.Where(r => !string.IsNullOrWhiteSpace(r[column])).Count().ToString();
+			}
+		}
+
+		// 处理其他操作
+		var tmp = records.Where(r => r.CanConvertToDouble(column!));
+		if (!tmp.Any())
+			return "0";
+
 		switch (aggregateOperation)
 		{
-			case AggregateOperationType.Count:
-				if (string.IsNullOrEmpty(column))
-				{
-					return records.Count().ToString();
-				}
-				else
-				{
-					return records.Where(r => string.IsNullOrWhiteSpace(r[column])).Count().ToString();
-				}
 			case AggregateOperationType.Sum:
-				return records.Where(r => r.CanConvertToDouble(column!)).Sum(r => double.Parse(r[column!])).ToString();
+				return tmp.Sum(r => double.Parse(r[column!])).ToString();
 			case AggregateOperationType.Average:
-				return records.Where(r => r.CanConvertToDouble(column!)).Average(r => double.Parse(r[column!])).ToString();
+				return tmp.Average(r => double.Parse(r[column!])).ToString();
 			case AggregateOperationType.Min:
-				return records.Where(r => r.CanConvertToDouble(column!)).Min(r => double.Parse(r[column!])).ToString();
+				return tmp.Min(r => double.Parse(r[column!])).ToString();
 			case AggregateOperationType.Max:
-				return records.Where(r => r.CanConvertToDouble(column!)).Max(r => double.Parse(r[column!])).ToString();
+				return tmp.Max(r => double.Parse(r[column!])).ToString();
 			default:
 				break;
 		}
+		// 如果没有匹配的操作，返回空字符串
 		return "";
 	}
 }

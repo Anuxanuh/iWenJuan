@@ -1,21 +1,66 @@
-﻿<FluentCard>
-    <FluentLabel Typo="Typography.H3">@Result.Title</FluentLabel>
-    <p>@Result.Description</p>
-    <FluentButton @onclick="OnViewDetails">预览问卷</FluentButton>
-    <FluentButton Appearance="Appearance.Accent" @onclick="CreateSurvey">以此模板创建问卷</FluentButton>
-</FluentCard>
+﻿@inject AuthenticationService AuthenticationService
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
+@inject IHttpClientFactory httpClientFactory
 
 @code {
-    [Parameter]
-    public SearchResultDto Result { get; set; } = default!;
+	private HttpClient _httpClient = default!;
 
-    private void OnViewDetails()
-    {
-        
-    }
+	protected override void OnInitialized()
+	{
+		_httpClient = httpClientFactory.CreateClient("TemplateCommunityService");
+	}
+}
 
-    private void CreateSurvey()
-    {
-        
-    }
+<FluentCard>
+	<FluentLabel Typo="Typography.H3">@Result.Title</FluentLabel>
+	<p>@Result.Description</p>
+	<br />
+	<FluentAnchor Href="@($"https://localhost:7139/preview/{Result.Id}")" Target="_blank">预览问卷</FluentAnchor>
+	<FluentButton Appearance="Appearance.Accent" @onclick="CreateSurvey">以此模板创建问卷</FluentButton>
+</FluentCard>
+
+<FluentOverlay @bind-Visible=progressRingVisible
+			   Dismissable="false"
+			   FullScreen="true"
+			   Opacity="0.4">
+	<FluentProgressRing Width="128px" />
+</FluentOverlay>
+
+@code {
+	[Parameter]
+	public SearchResultDto Result { get; set; } = default!;
+
+	private bool progressRingVisible = false;
+
+	private async Task CreateSurvey()
+	{
+		// 显示加载动画
+		progressRingVisible = true;
+
+		var userId = Guid.Parse(AuthenticationService.CurrentUser.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+		var response = await _httpClient.GetAsync($"api/Create?surveyId={Result.Id}&userId={userId}");
+
+		// 隐藏加载动画
+		progressRingVisible = false;
+		StateHasChanged();
+
+		if (response.IsSuccessStatusCode)
+		{
+			var newSurvey = await response.Content.ReadFromJsonAsync<SurveyDto>();
+
+			var dialog = await DialogService.ShowSuccessAsync("创建问卷成功，是否跳转到编辑页面？","创建成功");
+			var result = await dialog.Result;
+			if (!result.Cancelled)
+			{
+				// 跳转到问卷编辑页面
+				Navigation.NavigateTo($"/survey-editor/{newSurvey?.SurveyId}");
+			}
+		}
+		else
+		{
+			await DialogService.ShowErrorAsync("创建问卷失败，请稍后再试。", "创建失败");
+		}
+	}
 }

@@ -61,7 +61,8 @@ var dataProcessing = builder.AddProject<Projects.iWenJuan_Service_DataProcessing
 
 // 服务器-问卷模板社区微服务
 var templateCommunity = builder.AddProject<Projects.iWenJuan_Service_TemplateCommunity>("iwenjuan-service-templatecommunity")
-	.WithReference(surveyDataDb);
+	.WithReference(surveyDataDb)
+	.WithReference(surveyService);
 
 // 前端-问卷调查微服务
 var answerClient = builder.AddProject<Projects.iWenJuan_Client_Answer>("iwenjuan-client-answer")

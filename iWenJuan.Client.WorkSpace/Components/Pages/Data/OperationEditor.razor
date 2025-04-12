@@ -1,12 +1,15 @@
 ﻿@using MudBlazor
 @using FU = Microsoft.FluentUI.AspNetCore.Components
+@using System.Text.Json
+
+@inject ILogger<OperationEditor> Logger
 
 @code {
 	[Parameter]
-	public CsvOperation Operation { get; set; }
+	public CsvOperation Operation { get; set; } = default!;
 
 	[Parameter]
-	public IEnumerable<string> Headers { get; set; }
+	public IEnumerable<string> Headers { get; set; } = default!;
 
 	[Parameter]
 	public EventCallback OnRemove { get; set; }
@@ -28,7 +31,7 @@
 						CheckMark="true">
 				@foreach (var header in Headers)
 				{
-					<MudChip Value="@header"/>
+					<MudChip Value="@header" />
 				}
 			</MudChipSet>
 		}
@@ -60,11 +63,61 @@
 		}
 		else if (Operation.OperationType == CsvOperationType.GroupBy)   // 分组操作
 		{
-
+			<FluentSelect @bind-Value="@Operation.Column" TOption="string" Label="操作列" Width="100%">
+				@foreach (var header in Headers)
+				{
+					<FluentOption Value="@header">@header</FluentOption>
+				}
+			</FluentSelect>
+			<FluentStack Orientation="FU.Orientation.Vertical">
+				@foreach (var aggType in (AggregateOperationType[]) Enum.GetValues(typeof(AggregateOperationType)))
+				{
+					bool isChecked = Operation.AggregateOperations?.ContainsKey(aggType) ?? false;
+					<FluentCheckbox Label="@aggType.GetDisplayName()"
+									@bind-Value:get="isChecked"
+									@bind-Value:set="c => SetAggregateOperationType(aggType, c)" />
+					@if (isChecked)
+					{
+						<FluentSelect ValueChanged="str => SetOperationValue(aggType,str)"
+									  TOption="string"
+									  Width="100%">
+							@foreach (var header in Headers)
+							{
+								<FluentOption Value="@header">@header</FluentOption>
+							}
+						</FluentSelect>
+					}
+				}
+			</FluentStack>
 		}
 		else if (Operation.OperationType == CsvOperationType.Aggregate) // 聚合操作
 		{
-
+			<FluentSelect @bind-Value="@Operation.Column" TOption="string" Label="操作列" Width="100%">
+				@foreach (var header in Headers)
+				{
+					<FluentOption Value="@header">@header</FluentOption>
+				}
+			</FluentSelect>
+			<FluentStack Orientation="FU.Orientation.Vertical">
+				@foreach (var aggType in (AggregateOperationType[]) Enum.GetValues(typeof(AggregateOperationType)))
+				{
+					bool isChecked = Operation.AggregateOperations?.ContainsKey(aggType) ?? false;
+					<FluentCheckbox Label="@aggType.GetDisplayName()"
+									@bind-Value:get="isChecked"
+									@bind-Value:set="c => SetAggregateOperationType(aggType, c)" />
+					@if (isChecked)
+					{
+						<FluentSelect ValueChanged="str => SetOperationValue(aggType,str)"
+									  TOption="string"
+									  Width="100%">
+							@foreach (var header in Headers)
+							{
+								<FluentOption Value="@header">@header</FluentOption>
+							}
+						</FluentSelect>
+					}
+				}
+			</FluentStack>
 		}
 	</FluentStack>
 </FluentCard>
@@ -91,5 +144,34 @@
 		Operation.Condition = Enum.Parse<Operator>(value);
 	}
 
+	// 聚合操作
+	private void SetAggregateOperationType(AggregateOperationType aggType, bool isAdd)
+	{
+		if (Operation.AggregateOperations == null)
+		{
+			Operation.AggregateOperations = new();
+		}
 
+		if (isAdd)
+		{
+			Operation.AggregateOperations[aggType] = Headers.FirstOrDefault() ?? string.Empty;
+		}
+		else
+		{
+			Operation.AggregateOperations.Remove(aggType);
+		}
+	}
+
+	// 聚合操作设置操作列
+	private void SetOperationValue(AggregateOperationType aggType, string? column)
+	{
+		if (Operation.AggregateOperations == null)
+		{
+			Operation.AggregateOperations = new();
+		}
+
+		Operation.AggregateOperations[aggType] = column ?? string.Empty;
+
+		Logger.LogInformation("选择操作列{0}", JsonSerializer.Serialize(Operation));
+	}
 }

@@ -1,10 +1,12 @@
 ﻿@page "/data-processer/{FileId}"
 @using System.Text
 @using System.Globalization
+@using System.Text.Json
 
 @inject NavigationManager Navigation
-@inject IHttpClientFactory httpClientFactory
 @inject IDialogService DialogService
+@inject IHttpClientFactory httpClientFactory
+@inject ILogger<DataProcesser> Logger
 
 @code {
 	[Parameter]
@@ -15,7 +17,7 @@
 
 	private StoredFileInfoDto fileInfo = default!;
 	private List<string> headers = [];
-	private List<Dictionary<string, string>> fileData = [];
+	// private List<Dictionary<string, string>> fileData = [];
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -63,7 +65,7 @@
 				 Width="20%">
 		<FluentLabel Typo="Typography.H4">数据信息</FluentLabel>
 		<FluentCard>
-			<FluentTextField Value="FileId" Label="数据ID" ReadOnly="true" Style="width: 100%;"></FluentTextField>
+			<FluentTextField Value="@FileId" Label="数据ID" ReadOnly="true" Style="width: 100%;"></FluentTextField>
 			@if (fileInfo != null)
 			{
 				<FluentTextField Value="@fileInfo.FileName" Label="文件名" ReadOnly="true" Style="width: 100%;"></FluentTextField>
@@ -136,6 +138,7 @@
 		var operation = new CsvOperation
 			{
 				OperationType = (CsvOperationType) Enum.Parse(typeof(CsvOperationType), args.Id!),
+				Column = headers.FirstOrDefault()!,
 			};
 		operations.Add(operation);
 	}
@@ -147,6 +150,8 @@
 
 	private async Task ProcessCsvFile()
 	{
+		Logger.LogInformation("处理操作: {CsvOperation}", JsonSerializer.Serialize(operations));
+
 		if (!operations.Any())
 		{
 			_ = "请添加至少一个操作";
@@ -159,19 +164,17 @@
 			{
 				case CsvOperationType.Select:
 					if (string.IsNullOrEmpty(operation.Column))
-						await DialogService.ShowErrorAsync("错误", "请选择至少一个列");
+						await DialogService.ShowErrorAsync("请选择至少一个列", "错误");
 					break;
 				case CsvOperationType.Filter:
 					operation.Condition ??= Operator.Equals;
-					operation.Column ??= headers.FirstOrDefault();
 					if (string.IsNullOrEmpty(operation.Column) || string.IsNullOrEmpty(operation.Value))
-						await DialogService.ShowErrorAsync("错误", "请填写完整的过滤条件");
+						await DialogService.ShowErrorAsync("请填写完整的过滤条件", "错误");
 					break;
 				case CsvOperationType.OrderBy:
 				case CsvOperationType.OrderByDescending:
-					operation.Column ??= headers.FirstOrDefault();
 					if (string.IsNullOrEmpty(operation.Column))
-						await DialogService.ShowErrorAsync("错误", "请选择排序列");
+						await DialogService.ShowErrorAsync("请选择排序列", "错误");
 					break;
 				case CsvOperationType.GroupBy:
 					break;
@@ -185,11 +188,11 @@
 		if (response.IsSuccessStatusCode)
 		{
 			var processedFile = await response.Content.ReadFromJsonAsync<StoredFileInfoDto>();
-			await DialogService.ShowSuccessAsync("处理成功", $"数据处理完成, 新文件{processedFile.FileName}已保存到数据列表中");
+			await DialogService.ShowSuccessAsync($"数据处理完成, 新文件{processedFile?.FileName}已保存到数据列表中", "处理成功");
 		}
 		else
 		{
-			await DialogService.ShowErrorAsync("处理失败", "数据处理失败");
+			await DialogService.ShowErrorAsync("数据处理失败", "处理失败");
 		}
 	}
 }

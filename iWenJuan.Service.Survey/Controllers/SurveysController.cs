@@ -74,29 +74,13 @@ public class SurveysController : ControllerBase
 	public async Task<IActionResult> CreateSurvey([FromBody] SurveyDto survey)
 	{
 		// 创建问卷模型
-		var surveyModel = new SurveyModel
-		{
-			Title = survey.Title,
-			Description = survey.Description,
-			IsPublished = survey.IsPublished,
-			CreatedBy = survey.CreatedBy,
-			Questions = [..survey.Questions.Select(q => new Question
-			{
-				QuestionType = q.QuestionType,
-				QuestionText = q.QuestionText,
-				Options = q.Options != null ? [.. q.Options.Select(o => new Option
-				{
-					OptionText = o.OptionText,
-				})] : default!,
-				Conditions = default!,
-				Answers = default!,
-			})]
-		};
+		var surveyModel = survey.ToModelWithFullMapper();
 		// 异步创建问卷
 		var newSurvey = await surveyService.CreateSurveyAsync(surveyModel);
-
+		// 将创建的问卷转换为DTO
+		var surveyDto = newSurvey.ToDto();
 		// 返回包含创建问卷的CreatedAtAction结果
-		return CreatedAtAction(nameof(GetSurveyById), new { id = newSurvey.SurveyId }, survey);
+		return CreatedAtAction(nameof(GetSurveyById), new { id = surveyDto.SurveyId }, surveyDto);
 	}
 
 	/// <summary>
@@ -119,9 +103,10 @@ public class SurveysController : ControllerBase
 		// 更新问卷模型
 		var surveyModel = survey.ToModelWithFullMapper();
 		// 异步更新问卷
-		await surveyService.UpdateSurveyAsync(surveyModel);
+		var newSurvey = await surveyService.UpdateSurveyAsync(surveyModel);
+		var surveyDto = newSurvey.ToDto();
 		// 返回结果
-		return NoContent();
+		return CreatedAtAction(nameof(GetSurveyById), new { id = survey.SurveyId }, surveyDto);
 	}
 
 	/// <summary>

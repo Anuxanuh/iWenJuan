@@ -48,8 +48,15 @@
 			<FluentTextField @bind-Value="SurveyId" Label="问卷ID" ReadOnly="true" Placeholder="未创建问卷" Style="width: 100%;"></FluentTextField>
 			<FluentTextField @bind-Value="survey.Title" Label="问卷标题" Style="width: 100%;"></FluentTextField>
 			<FluentTextArea @bind-Value="survey.Description" Label="问卷简述" Style="width: 100%;"></FluentTextArea>
-			<FluentButton @onclick="SaveSurvey"
-						  Appearance="Appearance.Accent">@(survey.SurveyId == default ? "创建问卷" : "保存问卷")</FluentButton>
+			<FluentStack Style="padding-top:10px">
+				<FluentButton @onclick="SaveSurvey"
+							  Appearance="Appearance.Accent">@(survey.SurveyId == default ? "创建问卷" : "保存问卷")</FluentButton>
+				@* <FluentSpacer Width="10" /> *@
+				@if (survey.SurveyId != default)
+				{
+					<FluentAnchor Href="@($"https://localhost:7139/preview/{survey.SurveyId}")" Target="_blank">预览问卷</FluentAnchor>
+				}
+			</FluentStack>
 		</FluentCard>
 
 		<FluentDivider Style="width: 100%;" Role="DividerRole.Presentation"></FluentDivider>
@@ -186,14 +193,17 @@
 			survey.CreatedBy = userId;
 			var response = await _httpClient.PostAsJsonAsync("api/surveys", survey);
 			response.EnsureSuccessStatusCode();
-			var uri = response.Headers.Location;
-			survey = (await _httpClient.GetFromJsonAsync<SurveyDto>(uri)) ?? survey;
+			// var uri = response.Headers.Location;
+			// survey = (await _httpClient.GetFromJsonAsync<SurveyDto>(uri)) ?? survey;
+			survey = await response.Content.ReadFromJsonAsync<SurveyDto>() ?? survey;
 		}
 		else
 		{
 			Logger.LogInformation("Update survey {SurveyId}", survey.SurveyId);
-			await _httpClient.PutAsJsonAsync($"api/surveys/{survey.SurveyId}", survey);
-			survey = (await _httpClient.GetFromJsonAsync<SurveyDto>($"api/surveys/{survey.SurveyId}")) ?? survey;
+			var response = await _httpClient.PutAsJsonAsync($"api/surveys/{survey.SurveyId}", survey);
+			response.EnsureSuccessStatusCode();
+			// survey = (await _httpClient.GetFromJsonAsync<SurveyDto>($"api/surveys/{survey.SurveyId}")) ?? survey;
+			survey = await response.Content.ReadFromJsonAsync<SurveyDto>() ?? survey;
 		}
 		SurveyId = survey.SurveyId.ToString();
 		conditions = survey.Questions?.SelectMany(q => q.Conditions ?? []).ToList() ?? [];

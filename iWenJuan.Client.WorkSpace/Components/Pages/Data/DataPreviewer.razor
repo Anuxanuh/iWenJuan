@@ -29,19 +29,26 @@
 
 <FluentLabel Typo="Typography.H1">数据预览</FluentLabel>
 
-<FluentDataGrid Items=@fileData
-				AutoFit=true
-				ResizableColumns=true
-				Pagination=@pagination
-				AutoItemsPerPage=true>
-	@foreach (var header in headers)
-	{
-		<PropertyColumn Property="@(data => data[header])" Title=@header Sortable=true />
-	}
-	<PropertyColumn Property="@(data => data["UserId"])" Title="UserId" Sortable=true />
-</FluentDataGrid>
+@if (fileData.Count() == 0)
+{
+	<FluentLabel Typo="Typography.H2">数据加载中</FluentLabel>
+}
+else
+{
+	<FluentDataGrid Items=@fileData
+					AutoFit=true
+					ResizableColumns=true
+					Pagination=@pagination
+					AutoItemsPerPage=true>
+		@foreach (var header in headers)
+		{
+			<PropertyColumn Property="@(data => data[header])" Title=@header Sortable=true />
+		}
+		@* <propertycolumn property="@(data => data["userid"])" title="userid" sortable=true /> *@
+	</FluentDataGrid>
 
-<FluentPaginator State="@pagination" />
+	<FluentPaginator State="@pagination" />
+}
 
 @code {
 	private async Task LoadData()
@@ -70,6 +77,6 @@
 			fileData = fileData.Append(dict);
 		}
 		// 移除UserId列
-		headers.Remove("UserId");
+		// headers.Remove("UserId");
 	}
 }

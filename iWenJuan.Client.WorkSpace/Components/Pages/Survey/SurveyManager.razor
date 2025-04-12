@@ -109,7 +109,9 @@
 	/// <returns></returns>
 	private async Task ShowAnswerLink(SurveyDto survey)
 	{
-		var dialog = await DialogService.ShowDialogAsync<FluentAnswerLinkDialog>($"/answer/{survey.SurveyId}",
+		// var uri = new Uri($"https:localhost:7139/answer/{survey.SurveyId}").ToString();
+
+		var dialog = await DialogService.ShowDialogAsync<FluentAnswerLinkDialog>($"https://localhost:7139/{survey.SurveyId}",
 			new DialogParameters()
 				{
 					Title = $"问卷链接",
