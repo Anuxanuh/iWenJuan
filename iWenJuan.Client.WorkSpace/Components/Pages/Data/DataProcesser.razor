@@ -122,6 +122,13 @@
 	</FluentStack>
 </FluentStack>
 
+<FluentOverlay @bind-Visible=progressRingVisible
+			   Dismissable="false"
+			   FullScreen="true"
+			   Opacity="0.4">
+	<FluentProgressRing Width="128px" />
+</FluentOverlay>
+
 @code {
 	private FluentMenuButton menubutton = new();
 	private List<CsvOperation> operations = [];
@@ -143,49 +150,64 @@
 
 	private async Task ProcessCsvFile()
 	{
+		// 显示加载动画
+		progressRingVisible = true;
+
 		Logger.LogInformation("处理操作: {CsvOperation}", JsonSerializer.Serialize(operations));
 
-		if (!operations.Any())
+		try
 		{
-			_ = "请添加至少一个操作";
-			return;
-		}
-
-		foreach (var operation in operations)
-		{
-			switch (operation.OperationType)
+			if (!operations.Any())
 			{
-				case CsvOperationType.Select:
-					if (string.IsNullOrEmpty(operation.Column))
-						await DialogService.ShowErrorAsync("请选择至少一个列", "错误");
-					break;
-				case CsvOperationType.Filter:
-					operation.Condition ??= Operator.Equals;
-					if (string.IsNullOrEmpty(operation.Column) || string.IsNullOrEmpty(operation.Value))
-						await DialogService.ShowErrorAsync("请填写完整的过滤条件", "错误");
-					break;
-				case CsvOperationType.OrderBy:
-				case CsvOperationType.OrderByDescending:
-					if (string.IsNullOrEmpty(operation.Column))
-						await DialogService.ShowErrorAsync("请选择排序列", "错误");
-					break;
-				case CsvOperationType.GroupBy:
-					break;
-				case CsvOperationType.Aggregate:
-					break;
+				_ = "请添加至少一个操作";
+				return;
 			}
-		}
 
-		var response = await _DataProcessing.PostAsJsonAsync($"api/CsvProcessing/process/{FileId}", operations);
+			foreach (var operation in operations)
+			{
+				switch (operation.OperationType)
+				{
+					case CsvOperationType.Select:
+						if (string.IsNullOrEmpty(operation.Column))
+							await DialogService.ShowErrorAsync("请选择至少一个列", "错误");
+						break;
+					case CsvOperationType.Filter:
+						operation.Condition ??= Operator.Equals;
+						if (string.IsNullOrEmpty(operation.Column) || string.IsNullOrEmpty(operation.Value))
+							await DialogService.ShowErrorAsync("请填写完整的过滤条件", "错误");
+						break;
+					case CsvOperationType.OrderBy:
+					case CsvOperationType.OrderByDescending:
+						if (string.IsNullOrEmpty(operation.Column))
+							await DialogService.ShowErrorAsync("请选择排序列", "错误");
+						break;
+					case CsvOperationType.GroupBy:
+						break;
+					case CsvOperationType.Aggregate:
+						break;
+				}
+			}
 
-		if (response.IsSuccessStatusCode)
-		{
-			var processedFile = await response.Content.ReadFromJsonAsync<StoredFileInfoDto>();
-			await DialogService.ShowSuccessAsync($"数据处理完成, 新文件{processedFile?.FileName}已保存到数据列表中", "处理成功");
+			var response = await _DataProcessing.PostAsJsonAsync($"api/CsvProcessing/process/{FileId}", operations);
+
+			if (response.IsSuccessStatusCode)
+			{
+				var processedFile = await response.Content.ReadFromJsonAsync<StoredFileInfoDto>();
+				await DialogService.ShowSuccessAsync($"数据处理完成, 新文件{processedFile?.FileName}已保存到数据列表中", "处理成功");
+			}
+			else
+			{
+				await DialogService.ShowErrorAsync("数据处理失败", "处理失败");
+			}
+
 		}
-		else
+		finally
 		{
-			await DialogService.ShowErrorAsync("数据处理失败", "处理失败");
+			// 隐藏加载动画
+			progressRingVisible = false;
+			StateHasChanged();
 		}
 	}
+
+	private bool progressRingVisible = false;
 }

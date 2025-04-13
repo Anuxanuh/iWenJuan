@@ -1,4 +1,5 @@
 ﻿@page "/{SurveyId}"
+@inject NavigationManager Navigation
 @inject IDialogService DialogService
 @inject IHttpClientFactory httpClientFactory
 @inject ILogger<AnswerComponent> Logger
@@ -16,6 +17,25 @@
 		if (SurveyId is not null)
 		{
 			survey = (await _httpClient.GetFromJsonAsync<SurveyDto>($"api/surveys/{SurveyId}"))!;
+			answers = survey.Questions?.ToDictionary(q => q.QuestionId, q => string.Empty) ?? new();
+			conditions = survey.Questions?.SelectMany(q => q.Conditions ?? []).ToList() ?? [];
+
+			InitShow();
+		}
+	}
+
+	private void InitShow()
+	{
+		// 显示所有的题目
+		QuestionIsShow = survey.Questions?.ToDictionary(q => q.QuestionId, q => true) ?? new();
+
+		// 隐藏要符合条件才显示的题目
+		foreach (var condition in conditions)
+		{
+			if (condition.Effect == Effect.Show && condition.NextQuestionId != null)
+			{
+				QuestionIsShow[condition.NextQuestionId.Value] = false;
+			}
 		}
 	}
 }
@@ -34,16 +54,42 @@
 				 Width="40%">
 		<FluentCard>
 			<FluentLabel Typo="Typography.HeroTitle">@survey.Title</FluentLabel>
-			<FluentLabel Typo="Typography.Body">@survey.Description</FluentLabel>
+			<FluentLabel Typo="Typography.PaneHeader">@survey.Description</FluentLabel>
 		</FluentCard>
 
 		<FluentDivider Style="width: 100%;height:5px;" Role="DividerRole.Presentation"></FluentDivider>
 
-		@if (survey.Questions != null)
-			@foreach (var question in survey.Questions)
-			{
-				<QuestionComponent @key="question" Question="question" />
-			}
+		@if (survey.IsPublished)
+		{
+			@if (survey.Questions != null)
+				@foreach (var question in survey.Questions)
+				{
+					@if (QuestionIsShow[question.QuestionId])
+					{
+						<QuestionComponent Question="question" OnAnswerTextChanged="@(str => HandleValueChanged(question.QuestionId, str))" />
+					}
+				}
+		}
+		else
+		{
+			<FluentCard Style="padding-top: 10px">
+				<FluentStack Orientation="Orientation.Vertical">
+					<FluentLabel Typo="Typography.PageTitle">问卷尚未开发作答</FluentLabel>
+					<FluentLabel Typo="Typography.Header">请联系管理员发布问卷</FluentLabel>
+				</FluentStack>
+			</FluentCard>
+		}
+
+		<FluentDivider Style="width: 100%;height:5px;" Role="DividerRole.Presentation"></FluentDivider>
+
+		<FluentCard Style="height:88px">
+			<FluentStack Orientation="Orientation.Vertical"
+						 VerticalAlignment="VerticalAlignment.Center"
+						 HorizontalAlignment="HorizontalAlignment.Center"
+						 Style="height:100%">
+				<FluentButton Appearance="Appearance.Accent" Style="width:100%;height:100%" @onclick=HandleSubmit>提交问卷</FluentButton>
+			</FluentStack>
+		</FluentCard>
 	</FluentStack>
 
 	<FluentDivider Role="DividerRole.Presentation" Orientation="Orientation.Vertical"></FluentDivider>
@@ -51,9 +97,86 @@
 	<FluentStack Orientation=Orientation.Vertical
 				 Width="20%">
 	</FluentStack>
-
 </FluentStack>
 
+<FluentOverlay @bind-Visible=progressRingVisible
+			   Dismissable="false"
+			   FullScreen="true"
+			   Opacity="0.4">
+	<FluentProgressRing Width="128px" />
+</FluentOverlay>
+
 @code {
-	private IEnumerable<AnswerDto> answers = [];
+	private IEnumerable<ConditionDto> conditions = [];
+
+	private Dictionary<int, string> answers = [];
+
+	private Dictionary<int, bool> QuestionIsShow = [];
+
+	private void HandleShow()
+	{
+		foreach (var condition in conditions)
+		{
+			if (condition.NextQuestionId == null)
+				continue;
+
+			var ans = answers[condition.QuestionId];
+
+			var conditionValue = condition.Value;
+
+			QuestionIsShow[condition.NextQuestionId.Value] = condition.Operator switch
+			{
+				Operator.Equals => ans == conditionValue,
+				Operator.NotEquals => ans != conditionValue,
+				Operator.Contains => ans.Contains(conditionValue),
+				Operator.GreaterThan => StringOrNumericComparer.Compare(ans, conditionValue) > 0,
+				Operator.LessThan => StringOrNumericComparer.Compare(ans, conditionValue) < 0,
+				Operator.GreaterThanOrEquals => StringOrNumericComparer.Compare(ans, conditionValue) >= 0,
+				Operator.LessThanOrEquals => StringOrNumericComparer.Compare(ans, conditionValue) <= 0,
+				_ => false,
+			};
+		}
+	}
+
+	private void HandleValueChanged(int questionId, string newValue)
+	{
+		answers[questionId] = newValue;
+		HandleShow();
+	}
+
+	private async Task HandleSubmit()
+	{
+		// 加载动画
+		progressRingVisible = true;
+
+		try
+		{
+			var submitAnswers = QuestionIsShow.Where(q => q.Value).Select(q => q.Key).Select(q => new AnswerDto
+				{
+					QuestionId = q,
+					AnswerText = answers[q]
+				});
+
+			var response = await _httpClient.PostAsJsonAsync($"api/Answers", submitAnswers);
+
+			if (response.IsSuccessStatusCode)
+			{
+				var dialog = await DialogService.ShowSuccessAsync("提交成功", "成功");
+				await dialog.Result;
+				Navigation.NavigateTo("/completed");
+			}
+			else
+			{
+				await DialogService.ShowErrorAsync("提交失败", "错误");
+			}
+		}
+		finally
+		{
+			// 隐藏加载动画
+			progressRingVisible = false;
+			StateHasChanged();
+		}
+	}
+
+	private bool progressRingVisible = false;
 }

@@ -1,5 +1,10 @@
-﻿namespace iWenJuan.Service.DataProcessing.Utils;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
+namespace iWenJuan.Shared.Utils;
 public static class StringOrNumericComparer
 {
 	public static int Compare(string a, string b)

@@ -3,10 +3,22 @@
 	public QuestionDto Question { get; set; } = default!;
 
 	[Parameter]
-	public string AnswerText { get; set; } = default!;
+	public EventCallback<string> OnAnswerTextChanged { get; set; }
+
+	private string _answerText = string.Empty;
+
+	public string AnswerText
+	{
+		get => _answerText;
+		set
+		{
+			_answerText = value;
+			OnAnswerTextChanged.InvokeAsync(value);
+		}
+	}
 }
 
-<FluentCard Style="padding-top: 10px">
+<FluentCard>
 	<FluentStack Orientation="Orientation.Vertical">
 		<FluentStack HorizontalAlignment="HorizontalAlignment.SpaceBetween">
 			<FluentLabel Typo="Typography.H4">@Question.QuestionType.GetDisplayName()</FluentLabel>
@@ -15,7 +27,7 @@
 
 		<FluentDivider Style="width: 100%;" Role="DividerRole.Presentation"></FluentDivider>
 
-		<FluentLabel Typo="Typography.Body">@Question.QuestionText</FluentLabel>
+		<FluentLabel Typo="Typography.Header">@Question.QuestionText</FluentLabel>
 
 		@if (Question.QuestionType == QuestionTypeEnum.SingleChoice)
 		{
@@ -32,7 +44,6 @@
 			else
 			{
 				<FluentLabel Typo="Typography.Body">单选题 Error</FluentLabel>
-
 			}
 		}
 		else if (Question.QuestionType == QuestionTypeEnum.MultipleChoice)

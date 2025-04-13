@@ -1,10 +1,10 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using iWenJuan.Service.DataProcessing.Interface;
-using iWenJuan.Service.DataProcessing.Utils;
 using iWenJuan.Shared.Dtos;
 using iWenJuan.Shared.Enums;
 using iWenJuan.Shared.Extension;
+using iWenJuan.Shared.Utils;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
