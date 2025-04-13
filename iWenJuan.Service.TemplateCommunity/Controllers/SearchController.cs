@@ -33,7 +33,7 @@ public class SearchController : ControllerBase
 		var searchResults = await _context.Surveys
 			.Where(s => keys.Any(k => s.Title.Contains(k) || (s.Description != null && s.Description.Contains(k))))
 			.OrderByDescending(s => keys.Count(k => s.Title.Contains(k) || (s.Description != null && s.Description.Contains(k))))
-			.Take(10)
+			.Take(12)
 			.Select(s => s.ToSearchResultDto())
 			.ToListAsync();
 

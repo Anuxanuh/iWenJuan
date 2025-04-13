@@ -88,7 +88,7 @@
 						 VerticalAlignment="VerticalAlignment.Center"
 						 HorizontalAlignment="HorizontalAlignment.Center"
 						 Style="height:100%">
-				<FluentButton Appearance="Appearance.Accent" Style="width:100%;height:100%" @onclick=HandleSubmit>提交问卷</FluentButton>
+				<FluentButton Appearance="Appearance.Accent" Style="width:100%;height:100%" @onclick=HandleSubmit Disabled=!survey.IsPublished>提交问卷</FluentButton>
 			</FluentStack>
 		</FluentCard>
 	</FluentStack>
@@ -137,6 +137,7 @@
 				_ => false,
 			};
 		}
+		StateHasChanged();
 	}
 
 	private void HandleValueChanged(int questionId, string newValue)
