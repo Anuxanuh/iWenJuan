@@ -1,0 +1,12 @@
+"filename", "language", "C#", "Razor", "comment", "blank", "total"
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Layout\MainLayout.razor", "Razor", 0, -6, 0, -1, -7
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Pages\AnswerComponent.razor", "Razor", 0, 119, 0, 26, 145
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Pages\Completed.razor", "Razor", 0, 23, 0, 6, 29
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Pages\Preview.razor", "Razor", 0, 65, 0, 18, 83
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Pages\QuestionComponent.razor", "Razor", 0, 144, 0, 11, 155
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\_Imports.razor", "Razor", 0, 1, 0, 0, 1
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Data\DataProcesser.razor", "Razor", 0, 10, 0, -1, 9
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Survey\SurveyCommunity.razor", "Razor", 0, 1, 0, -1, 0
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataProcessing\Utils\StringOrNumericComparer.cs", "C#", -15, 0, 0, -2, -17
+"c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Utils\StringOrNumericComparer.cs", "C#", 20, 0, 0, 2, 22
+"Total", "-", 5, 357, 0, 58, 420

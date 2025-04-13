@@ -1,0 +1,311 @@
+Date : 2025-04-13 21:09:17
+Directory : c:\Users\Anuxa\source\repos\iWenJuan
+Total : 192 files,  7176 codes, 990 comments, 1371 blanks, all 9537 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| C#         |         94 |      3,036 |        965 |        704 |      4,705 |
+| Razor      |         43 |      2,872 |          0 |        479 |      3,351 |
+| JSON       |         30 |        520 |          0 |         23 |        543 |
+| CSS        |          2 |        314 |          0 |         70 |        384 |
+| XML        |         13 |        256 |          0 |         67 |        323 |
+| Docker     |          5 |        102 |         25 |         25 |        152 |
+| Ignore     |          1 |         30 |          0 |          0 |         30 |
+| JavaScript |          2 |         28 |          0 |          2 |         30 |
+| YAML       |          2 |         18 |          0 |          1 |         19 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                   |        192 |      7,176 |        990 |      1,371 |      9,537 |
+| . (Files)                                                                                                           |          4 |         59 |          0 |          1 |         60 |
+| iWenJuan                                                                                                            |          6 |        216 |         46 |         52 |        314 |
+| iWenJuan.AppHost                                                                                                    |          5 |         86 |          7 |         13 |        106 |
+| iWenJuan.AppHost (Files)                                                                                            |          4 |         54 |          7 |         13 |         74 |
+| iWenJuan.AppHost\Properties                                                                                         |          1 |         32 |          0 |          0 |         32 |
+| iWenJuan.Client.Answer                                                                                              |         16 |        760 |          4 |        146 |        910 |
+| iWenJuan.Client.Answer (Files)                                                                                      |          4 |         75 |          4 |         18 |         97 |
+| iWenJuan.Client.Answer\Components                                                                                   |         10 |        505 |          0 |         92 |        597 |
+| iWenJuan.Client.Answer\Components (Files)                                                                           |          3 |         39 |          0 |          5 |         44 |
+| iWenJuan.Client.Answer\Components\Layout                                                                            |          1 |         15 |          0 |          2 |         17 |
+| iWenJuan.Client.Answer\Components\Pages                                                                             |          6 |        451 |          0 |         85 |        536 |
+| iWenJuan.Client.Answer\Properties                                                                                   |          1 |         23 |          0 |          1 |         24 |
+| iWenJuan.Client.Answer\wwwroot                                                                                      |          1 |        157 |          0 |         35 |        192 |
+| iWenJuan.Client.WorkSpace                                                                                           |         44 |      2,756 |         28 |        465 |      3,249 |
+| iWenJuan.Client.WorkSpace (Files)                                                                                   |          4 |        116 |         17 |         21 |        154 |
+| iWenJuan.Client.WorkSpace\Components                                                                                |         33 |      2,367 |          0 |        387 |      2,754 |
+| iWenJuan.Client.WorkSpace\Components (Files)                                                                        |          3 |         51 |          0 |          6 |         57 |
+| iWenJuan.Client.WorkSpace\Components\Custom                                                                         |          3 |        136 |          0 |         23 |        159 |
+| iWenJuan.Client.WorkSpace\Components\Layout                                                                         |          3 |        162 |          0 |         18 |        180 |
+| iWenJuan.Client.WorkSpace\Components\Pages                                                                          |         24 |      2,018 |          0 |        340 |      2,358 |
+| iWenJuan.Client.WorkSpace\Components\Pages (Files)                                                                  |          4 |        203 |          0 |         41 |        244 |
+| iWenJuan.Client.WorkSpace\Components\Pages\Auth                                                                     |          6 |        505 |          0 |         73 |        578 |
+| iWenJuan.Client.WorkSpace\Components\Pages\Data                                                                     |          6 |        699 |          0 |        122 |        821 |
+| iWenJuan.Client.WorkSpace\Components\Pages\Survey                                                                   |          8 |        611 |          0 |        104 |        715 |
+| iWenJuan.Client.WorkSpace\Properties                                                                                |          1 |         23 |          0 |          1 |         24 |
+| iWenJuan.Client.WorkSpace\Services                                                                                  |          3 |         65 |         11 |         19 |         95 |
+| iWenJuan.Client.WorkSpace\wwwroot                                                                                   |          3 |        185 |          0 |         37 |        222 |
+| iWenJuan.Service.Auth                                                                                               |         20 |        589 |        244 |        128 |        961 |
+| iWenJuan.Service.Auth (Files)                                                                                       |          5 |        134 |         31 |         24 |        189 |
+| iWenJuan.Service.Auth\Controllers                                                                                   |          2 |        138 |         60 |         33 |        231 |
+| iWenJuan.Service.Auth\Data                                                                                          |          1 |         14 |          0 |          4 |         18 |
+| iWenJuan.Service.Auth\Interface                                                                                     |          5 |         31 |         72 |         16 |        119 |
+| iWenJuan.Service.Auth\Models                                                                                        |          1 |         15 |          0 |          7 |         22 |
+| iWenJuan.Service.Auth\Properties                                                                                    |          1 |         31 |          0 |          0 |         31 |
+| iWenJuan.Service.Auth\Services                                                                                      |          4 |        179 |         54 |         35 |        268 |
+| iWenJuan.Service.Auth\Utils                                                                                         |          1 |         47 |         27 |          9 |         83 |
+| iWenJuan.Service.DataProcessing                                                                                     |          9 |        352 |         60 |         71 |        483 |
+| iWenJuan.Service.DataProcessing (Files)                                                                             |          5 |         89 |          9 |         25 |        123 |
+| iWenJuan.Service.DataProcessing\Controllers                                                                         |          1 |         41 |          2 |         14 |         57 |
+| iWenJuan.Service.DataProcessing\Interface                                                                           |          1 |          6 |          0 |          4 |         10 |
+| iWenJuan.Service.DataProcessing\Properties                                                                          |          1 |         32 |          0 |          0 |         32 |
+| iWenJuan.Service.DataProcessing\Services                                                                            |          1 |        184 |         49 |         28 |        261 |
+| iWenJuan.Service.DataStorage                                                                                        |         13 |        338 |        137 |         67 |        542 |
+| iWenJuan.Service.DataStorage (Files)                                                                                |          5 |        104 |         13 |         27 |        144 |
+| iWenJuan.Service.DataStorage\Controllers                                                                            |          1 |        103 |         54 |         12 |        169 |
+| iWenJuan.Service.DataStorage\Data                                                                                   |          1 |         10 |          0 |          3 |         13 |
+| iWenJuan.Service.DataStorage\Interface                                                                              |          2 |         15 |         30 |          8 |         53 |
+| iWenJuan.Service.DataStorage\Models                                                                                 |          1 |         15 |          0 |          3 |         18 |
+| iWenJuan.Service.DataStorage\Properties                                                                             |          1 |         31 |          0 |          0 |         31 |
+| iWenJuan.Service.DataStorage\Services                                                                               |          2 |         60 |         40 |         14 |        114 |
+| iWenJuan.Service.Email                                                                                              |          9 |        209 |         82 |         50 |        341 |
+| iWenJuan.Service.Email (Files)                                                                                      |          5 |         93 |         13 |         25 |        131 |
+| iWenJuan.Service.Email\Interface                                                                                    |          1 |          5 |         10 |          2 |         17 |
+| iWenJuan.Service.Email\Properties                                                                                   |          1 |         31 |          0 |          0 |         31 |
+| iWenJuan.Service.Email\Services                                                                                     |          2 |         80 |         59 |         23 |        162 |
+| iWenJuan.Service.Survey                                                                                             |         28 |      1,091 |        309 |        203 |      1,603 |
+| iWenJuan.Service.Survey (Files)                                                                                     |          5 |        103 |         25 |         28 |        156 |
+| iWenJuan.Service.Survey\Controllers                                                                                 |          7 |        292 |         99 |         62 |        453 |
+| iWenJuan.Service.Survey\Data                                                                                        |          1 |         40 |          0 |          8 |         48 |
+| iWenJuan.Service.Survey\Extension                                                                                   |          1 |        106 |          0 |          5 |        111 |
+| iWenJuan.Service.Survey\Interface                                                                                   |          4 |         55 |        146 |         33 |        234 |
+| iWenJuan.Service.Survey\Models                                                                                      |          5 |         77 |          0 |         20 |         97 |
+| iWenJuan.Service.Survey\Properties                                                                                  |          1 |         31 |          0 |          0 |         31 |
+| iWenJuan.Service.Survey\Services                                                                                    |          4 |        387 |         39 |         47 |        473 |
+| iWenJuan.Service.TemplateCommunity                                                                                  |          9 |        215 |         22 |         54 |        291 |
+| iWenJuan.Service.TemplateCommunity (Files)                                                                          |          4 |         66 |          4 |         22 |         92 |
+| iWenJuan.Service.TemplateCommunity\Controllers                                                                      |          2 |         72 |         15 |         22 |        109 |
+| iWenJuan.Service.TemplateCommunity\Extension                                                                        |          1 |         15 |          0 |          3 |         18 |
+| iWenJuan.Service.TemplateCommunity\Properties                                                                       |          1 |         23 |          0 |          1 |         24 |
+| iWenJuan.Service.TemplateCommunity\Utils                                                                            |          1 |         39 |          3 |          6 |         48 |
+| iWenJuan.ServiceDefaults                                                                                            |          2 |         93 |         23 |         27 |        143 |
+| iWenJuan.Shared                                                                                                     |         27 |        412 |         28 |         94 |        534 |
+| iWenJuan.Shared (Files)                                                                                             |          1 |          7 |          0 |          3 |         10 |
+| iWenJuan.Shared\Dtos                                                                                                |         16 |        200 |         22 |         56 |        278 |
+| iWenJuan.Shared\Dtos\Auth                                                                                           |          6 |         70 |          6 |         22 |         98 |
+| iWenJuan.Shared\Dtos\Dashboard                                                                                      |          1 |         10 |          0 |          4 |         14 |
+| iWenJuan.Shared\Dtos\DataProcess                                                                                    |          1 |         10 |         16 |          6 |         32 |
+| iWenJuan.Shared\Dtos\Survey                                                                                         |          5 |         78 |          0 |         16 |         94 |
+| iWenJuan.Shared\Dtos\SurveyData                                                                                     |          2 |         20 |          0 |          6 |         26 |
+| iWenJuan.Shared\Dtos\TemplateCommunity                                                                              |          1 |         12 |          0 |          2 |         14 |
+| iWenJuan.Shared\Enums                                                                                               |          6 |        121 |          0 |         18 |        139 |
+| iWenJuan.Shared\Extension                                                                                           |          3 |         64 |          6 |         15 |         85 |
+| iWenJuan.Shared\Utils                                                                                               |          1 |         20 |          0 |          2 |         22 |
+| iWenJuan\iWenJuan.AppHost                                                                                           |          4 |        123 |         23 |         25 |        171 |
+| iWenJuan\iWenJuan.AppHost (Files)                                                                                   |          3 |         94 |         23 |         24 |        141 |
+| iWenJuan\iWenJuan.AppHost\Properties                                                                                |          1 |         29 |          0 |          1 |         30 |
+| iWenJuan\iWenJuan.ServiceDefaults                                                                                   |          2 |         93 |         23 |         27 |        143 |
++---------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                            | language   | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\Anuxa\source\repos\iWenJuan\.dockerignore                                                                  | Ignore     |         30 |          0 |          0 |         30 |
+| c:\Users\Anuxa\source\repos\iWenJuan\docker-compose.override.yml                                                    | YAML       |         12 |          0 |          0 |         12 |
+| c:\Users\Anuxa\source\repos\iWenJuan\docker-compose.yml                                                             | YAML       |          6 |          0 |          1 |          7 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.AppHost\Program.cs                                                    | C#         |         14 |          7 |          5 |         26 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.AppHost\Properties\launchSettings.json                                | JSON       |         32 |          0 |          0 |         32 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.AppHost\appsettings.Development.json                                  | JSON       |          8 |          0 |          1 |          9 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.AppHost\appsettings.json                                              | JSON       |          9 |          0 |          1 |         10 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.AppHost\iWenJuan.AppHost.csproj                                       | XML        |         23 |          0 |          6 |         29 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\App.razor                                    | Razor      |         17 |          0 |          4 |         21 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Layout\MainLayout.razor                      | Razor      |         15 |          0 |          2 |         17 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Pages\AnswerComponent.razor                  | Razor      |        153 |          0 |         33 |        186 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Pages\Completed.razor                        | Razor      |         23 |          0 |          6 |         29 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Pages\Error.razor                            | Razor      |         29 |          0 |          8 |         37 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Pages\Home.razor                             | Razor      |          3 |          0 |          2 |          5 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Pages\Preview.razor                          | Razor      |         99 |          0 |         25 |        124 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Pages\QuestionComponent.razor                | Razor      |        144 |          0 |         11 |        155 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Routes.razor                                 | Razor      |          6 |          0 |          1 |          7 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\_Imports.razor                               | Razor      |         16 |          0 |          0 |         16 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Program.cs                                              | C#         |         33 |          4 |         11 |         48 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Properties\launchSettings.json                          | JSON       |         23 |          0 |          1 |         24 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\appsettings.Development.json                            | JSON       |          8 |          0 |          1 |          9 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\appsettings.json                                        | JSON       |         16 |          0 |          1 |         17 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\iWenJuan.Client.Answer.csproj                           | XML        |         18 |          0 |          5 |         23 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\wwwroot\app.css                                         | CSS        |        157 |          0 |         35 |        192 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\App.razor                                 | Razor      |         22 |          0 |          5 |         27 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Custom\FluentAnswerLinkDialog.razor       | Razor      |         52 |          0 |          9 |         61 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Custom\FluentConfirmDialog.razor          | Razor      |         33 |          0 |          7 |         40 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Custom\FluentSelectEnum.razor             | Razor      |         51 |          0 |          7 |         58 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Layout\AuthLayout.razor                   | Razor      |         14 |          0 |          3 |         17 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Layout\MainLayout.razor                   | Razor      |        131 |          0 |         13 |        144 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Layout\NavMenu.razor                      | Razor      |         17 |          0 |          2 |         19 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Auth\ChangePassword.razor           | Razor      |         82 |          0 |         14 |         96 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Auth\Login.razor                    | Razor      |        127 |          0 |         11 |        138 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Auth\PersonalSpace.razor            | Razor      |         44 |          0 |          7 |         51 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Auth\Register.razor                 | Razor      |         83 |          0 |         15 |         98 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Auth\VerifyChangePassword.razor     | Razor      |         83 |          0 |         13 |         96 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Auth\VerifyRegister.razor           | Razor      |         86 |          0 |         13 |         99 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Dashboard.razor                     | Razor      |        115 |          0 |         23 |        138 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Data\AggregateOperationEditor.razor | Razor      |          3 |          0 |          3 |          6 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Data\DataManager.razor              | Razor      |         92 |          0 |         17 |        109 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Data\DataPreviewer.razor            | Razor      |         68 |          0 |         14 |         82 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Data\DataProcesser.razor            | Razor      |        174 |          0 |         34 |        208 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Data\DataVisualizer.razor           | Razor      |        199 |          0 |         40 |        239 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Data\OperationEditor.razor          | Razor      |        163 |          0 |         14 |        177 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Error.razor                         | Razor      |         29 |          0 |          8 |         37 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Home.razor                          | Razor      |          4 |          0 |          3 |          7 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Survey\ConditionEditorDialog.razor  | Razor      |         56 |          0 |         11 |         67 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Survey\ConditonEditor.razor         | Razor      |         23 |          0 |          4 |         27 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Survey\OptionEditor.razor           | Razor      |         10 |          0 |          3 |         13 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Survey\QuestionEditor.razor         | Razor      |         51 |          0 |         12 |         63 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Survey\SurveyCard.razor             | Razor      |         54 |          0 |         12 |         66 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Survey\SurveyCommunity.razor        | Razor      |         73 |          0 |         16 |         89 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Survey\SurveyEditor.razor           | Razor      |        209 |          0 |         28 |        237 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Survey\SurveyManager.razor          | Razor      |        135 |          0 |         18 |        153 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Test.razor                          | Razor      |         55 |          0 |          7 |         62 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Routes.razor                              | Razor      |          6 |          0 |          1 |          7 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\_Imports.razor                            | Razor      |         23 |          0 |          0 |         23 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Program.cs                                           | C#         |         72 |         17 |         15 |        104 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Properties\launchSettings.json                       | JSON       |         23 |          0 |          1 |         24 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Services\AuthStateProvider.cs                        | C#         |         17 |          0 |          6 |         23 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Services\AuthenticationService.cs                    | C#         |         17 |          0 |          5 |         22 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Services\HttpOnlyCookieService.cs                    | C#         |         31 |         11 |          8 |         50 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\appsettings.Development.json                         | JSON       |          8 |          0 |          1 |          9 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\appsettings.json                                     | JSON       |         17 |          0 |          1 |         18 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\iWenJuan.Client.WorkSpace.csproj                     | XML        |         19 |          0 |          4 |         23 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\wwwroot\app.css                                      | CSS        |        157 |          0 |         35 |        192 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\wwwroot\clipboard.js                                 | JavaScript |          6 |          0 |          0 |          6 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\wwwroot\cookieHelper.js                              | JavaScript |         22 |          0 |          2 |         24 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Controllers\AuthController.cs                            | C#         |        107 |         52 |         27 |        186 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Controllers\UserController.cs                            | C#         |         31 |          8 |          6 |         45 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Data\AuthDbContext.cs                                    | C#         |         14 |          0 |          4 |         18 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Dockerfile                                               | Docker     |         21 |          5 |          5 |         31 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Interface\IJwtTokenHelper.cs                             | C#         |          6 |         12 |          3 |         21 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Interface\IMessageQueueService.cs                        | C#         |          6 |         13 |          3 |         22 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Interface\IPasswordHasher.cs                             | C#         |          6 |         11 |          3 |         20 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Interface\IRedisService.cs                               | C#         |          7 |         21 |          4 |         32 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Interface\IVerificationCodeService.cs                    | C#         |          6 |         15 |          3 |         24 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Models\User.cs                                           | C#         |         15 |          0 |          7 |         22 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Program.cs                                               | C#         |         68 |         26 |         12 |        106 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Properties\launchSettings.json                           | JSON       |         31 |          0 |          0 |         31 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Services\JwtTokenHelper.cs                               | C#         |         73 |         34 |         11 |        118 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Services\RabbitMQService.cs                              | C#         |         32 |         20 |          8 |         60 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Services\RedisService.cs                                 | C#         |         32 |          0 |          7 |         39 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Services\VerificationCodeService.cs                      | C#         |         42 |          0 |          9 |         51 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\Utils\PasswordHasherWithArgon2.cs                        | C#         |         47 |         27 |          9 |         83 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\appsettings.Development.json                             | JSON       |          8 |          0 |          1 |          9 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\appsettings.json                                         | JSON       |         15 |          0 |          1 |         16 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Auth\iWenJuan.Service.Auth.csproj                             | XML        |         22 |          0 |          5 |         27 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataProcessing\Controllers\CsvProcessingController.cs         | C#         |         41 |          2 |         14 |         57 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataProcessing\Dockerfile                                     | Docker     |         20 |          5 |          5 |         30 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataProcessing\Interface\ICsvProcessingService.cs             | C#         |          6 |          0 |          4 |         10 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataProcessing\Program.cs                                     | C#         |         29 |          4 |         13 |         46 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataProcessing\Properties\launchSettings.json                 | JSON       |         32 |          0 |          0 |         32 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataProcessing\Services\CsvProcessingService.cs               | C#         |        184 |         49 |         28 |        261 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataProcessing\appsettings.Development.json                   | JSON       |          8 |          0 |          1 |          9 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataProcessing\appsettings.json                               | JSON       |         15 |          0 |          1 |         16 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataProcessing\iWenJuan.Service.DataProcessing.csproj         | XML        |         17 |          0 |          5 |         22 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataStorage\Controllers\FileStorageController.cs              | C#         |        103 |         54 |         12 |        169 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataStorage\Data\StorageDbContext.cs                          | C#         |         10 |          0 |          3 |         13 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataStorage\Dockerfile                                        | Docker     |         20 |          5 |          5 |         30 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataStorage\Interface\IExportService.cs                       | C#         |          5 |          8 |          2 |         15 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataStorage\Interface\IFileStorageService.cs                  | C#         |         10 |         22 |          6 |         38 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataStorage\Models\StoredFile.cs                              | C#         |         15 |          0 |          3 |         18 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataStorage\Program.cs                                        | C#         |         43 |          8 |         15 |         66 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataStorage\Properties\launchSettings.json                    | JSON       |         31 |          0 |          0 |         31 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataStorage\Services\ExportService.cs                         | C#         |         15 |         10 |          5 |         30 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataStorage\Services\FileStorageService.cs                    | C#         |         45 |         30 |          9 |         84 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataStorage\appsettings.Development.json                      | JSON       |          8 |          0 |          1 |          9 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataStorage\appsettings.json                                  | JSON       |         15 |          0 |          1 |         16 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataStorage\iWenJuan.Service.DataStorage.csproj               | XML        |         18 |          0 |          5 |         23 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Email\Dockerfile                                              | Docker     |         21 |          5 |          5 |         31 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Email\Interface\IEmailService.cs                              | C#         |          5 |         10 |          2 |         17 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Email\Program.cs                                              | C#         |         20 |          8 |         13 |         41 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Email\Properties\launchSettings.json                          | JSON       |         31 |          0 |          0 |         31 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Email\Services\EmailService.cs                                | C#         |         35 |         36 |         11 |         82 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Email\Services\RabbitMQConsumerService.cs                     | C#         |         45 |         23 |         12 |         80 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Email\appsettings.Development.json                            | JSON       |          8 |          0 |          1 |          9 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Email\appsettings.json                                        | JSON       |         24 |          0 |          1 |         25 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Email\iWenJuan.Service.Email.csproj                           | XML        |         20 |          0 |          5 |         25 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Controllers\AnswersController.cs                       | C#         |         31 |         17 |          7 |         55 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Controllers\ConditionsController.cs                    | C#         |         40 |          6 |         12 |         58 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Controllers\DashboardController.cs                     | C#         |         24 |          2 |          6 |         32 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Controllers\ExportController.cs                        | C#         |         43 |         20 |          6 |         69 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Controllers\OptionsController.cs                       | C#         |         40 |          6 |         11 |         57 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Controllers\QuestionsController.cs                     | C#         |         41 |          5 |         10 |         56 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Controllers\SurveysController.cs                       | C#         |         73 |         43 |         10 |        126 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Data\SurveyDbContext.cs                                | C#         |         40 |          0 |          8 |         48 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Dockerfile                                             | Docker     |         20 |          5 |          5 |         30 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Extension\SurveyModelMapper.cs                         | C#         |        106 |          0 |          5 |        111 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Interface\IAnswerService.cs                            | C#         |          7 |         10 |          3 |         20 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Interface\IDashboardService.cs                         | C#         |          6 |          0 |          2 |          8 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Interface\IExportService.cs                            | C#         |          6 |         13 |          3 |         22 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Interface\ISurveyService.cs                            | C#         |         36 |        123 |         25 |        184 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Models\Answer.cs                                       | C#         |         14 |          0 |          3 |         17 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Models\Condition.cs                                    | C#         |         18 |          0 |          4 |         22 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Models\Option.cs                                       | C#         |         12 |          0 |          3 |         15 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Models\Question.cs                                     | C#         |         18 |          0 |          6 |         24 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Models\Survey.cs                                       | C#         |         15 |          0 |          4 |         19 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Program.cs                                             | C#         |         40 |         20 |         16 |         76 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Properties\launchSettings.json                         | JSON       |         31 |          0 |          0 |         31 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Services\AnswerService.cs                              | C#         |         25 |         14 |          6 |         45 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Services\DashboardService.cs                           | C#         |         25 |          0 |          5 |         30 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Services\ExportService.cs                              | C#         |         80 |         25 |         15 |        120 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\Services\SurveyService.cs                              | C#         |        257 |          0 |         21 |        278 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\appsettings.Development.json                           | JSON       |          8 |          0 |          1 |          9 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\appsettings.json                                       | JSON       |         15 |          0 |          1 |         16 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.Survey\iWenJuan.Service.Survey.csproj                         | XML        |         20 |          0 |          5 |         25 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Controllers\CreateController.cs             | C#         |         34 |          0 |         13 |         47 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Controllers\SearchController.cs             | C#         |         38 |         15 |          9 |         62 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Extension\SearchResultExtension.cs          | C#         |         15 |          0 |          3 |         18 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Program.cs                                  | C#         |         26 |          4 |         15 |         45 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Properties\launchSettings.json              | JSON       |         23 |          0 |          1 |         24 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Utils\CopySurveyHelper.cs                   | C#         |         39 |          3 |          6 |         48 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\appsettings.Development.json                | JSON       |          8 |          0 |          1 |          9 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\appsettings.json                            | JSON       |         16 |          0 |          1 |         17 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\iWenJuan.Service.TemplateCommunity.csproj   | XML        |         16 |          0 |          5 |         21 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.ServiceDefaults\Extensions.cs                                         | C#         |         75 |         23 |         22 |        120 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.ServiceDefaults\iWenJuan.ServiceDefaults.csproj                       | XML        |         18 |          0 |          5 |         23 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\Auth\EmailVerificationMessage.cs                          | C#         |         11 |          6 |          4 |         21 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\Auth\LoginDto.cs                                          | C#         |         15 |          0 |          3 |         18 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\Auth\LoginResponseDto.cs                                  | C#         |         11 |          0 |          3 |         14 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\Auth\UserDto.cs                                           | C#         |         10 |          0 |          6 |         16 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\Auth\VerifyChangePasswordDto.cs                           | C#         |          9 |          0 |          3 |         12 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\Auth\VerifyRegisterDto.cs                                 | C#         |         14 |          0 |          3 |         17 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\Dashboard\SurveySummaryDto.cs                             | C#         |         10 |          0 |          4 |         14 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\DataProcess\CsvOperation.cs                               | C#         |         10 |         16 |          6 |         32 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\SurveyData\ExportSurveyResultDto.cs                       | C#         |         11 |          0 |          4 |         15 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\SurveyData\StoredFileInfoDto.cs                           | C#         |          9 |          0 |          2 |         11 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\Survey\AnswerDto.cs                                       | C#         |         10 |          0 |          3 |         13 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\Survey\ConditionDto.cs                                    | C#         |         18 |          0 |          3 |         21 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\Survey\OptionDto.cs                                       | C#         |         14 |          0 |          3 |         17 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\Survey\QuestionDto.cs                                     | C#         |         19 |          0 |          3 |         22 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\Survey\SurveyDto.cs                                       | C#         |         17 |          0 |          4 |         21 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Dtos\TemplateCommunity\SearchResultDto.cs                      | C#         |         12 |          0 |          2 |         14 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Enums\AggregateOperationType.cs                                | C#         |         20 |          0 |          2 |         22 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Enums\CsvOperationType.cs                                      | C#         |         17 |          0 |          3 |         20 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Enums\Effect.cs                                                | C#         |         14 |          0 |          3 |         17 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Enums\IWenJuanChartType.cs                                     | C#         |         28 |          0 |          3 |         31 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Enums\Operator.cs                                              | C#         |         24 |          0 |          4 |         28 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Enums\QuestionTypeEnum.cs                                      | C#         |         18 |          0 |          3 |         21 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Extension\DisplayAnnotationExtension.cs                        | C#         |         18 |          0 |          4 |         22 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Extension\ExpandoObjectExtension.cs                            | C#         |         21 |          0 |          3 |         24 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Extension\HttpClientExtension.cs                               | C#         |         25 |          6 |          8 |         39 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Utils\StringOrNumericComparer.cs                               | C#         |         20 |          0 |          2 |         22 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\iWenJuan.Shared.csproj                                         | XML        |          7 |          0 |          3 |         10 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan\iWenJuan.AppHost\Program.cs                                           | C#         |         45 |         23 |         14 |         82 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan\iWenJuan.AppHost\Properties\launchSettings.json                       | JSON       |         29 |          0 |          1 |         30 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan\iWenJuan.AppHost\appsettings.json                                     | JSON       |          9 |          0 |          1 |         10 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan\iWenJuan.AppHost\iWenJuan.AppHost.csproj                              | XML        |         40 |          0 |          9 |         49 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan\iWenJuan.ServiceDefaults\Extensions.cs                                | C#         |         75 |         23 |         22 |        120 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan\iWenJuan.ServiceDefaults\iWenJuan.ServiceDefaults.csproj              | XML        |         18 |          0 |          5 |         23 |
+| c:\Users\Anuxa\source\repos\iWenJuan\launchSettings.json                                                            | JSON       |         11 |          0 |          0 |         11 |
+| Total                                                                                                               |            |      7,176 |        990 |      1,371 |      9,537 |
++---------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

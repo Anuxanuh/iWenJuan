@@ -1,0 +1,49 @@
+Date : 2025-04-13 21:09:17
+Directory : c:\Users\Anuxa\source\repos\iWenJuan
+Total : 10 files,  362 codes, 0 comments, 58 blanks, all 420 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Razor    |          8 |        357 |          0 |         58 |        415 |
+| C#       |          2 |          5 |          0 |          0 |          5 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                         | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                            |         10 |        362 |          0 |         58 |        420 |
+| iWenJuan.Client.Answer                                                                                       |          6 |        346 |          0 |         60 |        406 |
+| iWenJuan.Client.Answer\Components                                                                            |          6 |        346 |          0 |         60 |        406 |
+| iWenJuan.Client.Answer\Components (Files)                                                                    |          1 |          1 |          0 |          0 |          1 |
+| iWenJuan.Client.Answer\Components\Layout                                                                     |          1 |         -6 |          0 |         -1 |         -7 |
+| iWenJuan.Client.Answer\Components\Pages                                                                      |          4 |        351 |          0 |         61 |        412 |
+| iWenJuan.Client.WorkSpace                                                                                    |          2 |         11 |          0 |         -2 |          9 |
+| iWenJuan.Client.WorkSpace\Components                                                                         |          2 |         11 |          0 |         -2 |          9 |
+| iWenJuan.Client.WorkSpace\Components\Pages                                                                   |          2 |         11 |          0 |         -2 |          9 |
+| iWenJuan.Client.WorkSpace\Components\Pages\Data                                                              |          1 |         10 |          0 |         -1 |          9 |
+| iWenJuan.Client.WorkSpace\Components\Pages\Survey                                                            |          1 |          1 |          0 |         -1 |          0 |
+| iWenJuan.Service.DataProcessing                                                                              |          1 |        -15 |          0 |         -2 |        -17 |
+| iWenJuan.Service.DataProcessing\Utils                                                                        |          1 |        -15 |          0 |         -2 |        -17 |
+| iWenJuan.Shared                                                                                              |          1 |         20 |          0 |          2 |         22 |
+| iWenJuan.Shared\Utils                                                                                        |          1 |         20 |          0 |          2 |         22 |
++--------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                     | language | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Layout\MainLayout.razor               | Razor    |         -6 |          0 |         -1 |         -7 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Pages\AnswerComponent.razor           | Razor    |        119 |          0 |         26 |        145 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Pages\Completed.razor                 | Razor    |         23 |          0 |          6 |         29 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Pages\Preview.razor                   | Razor    |         65 |          0 |         18 |         83 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\Pages\QuestionComponent.razor         | Razor    |        144 |          0 |         11 |        155 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.Answer\Components\_Imports.razor                        | Razor    |          1 |          0 |          0 |          1 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Data\DataProcesser.razor     | Razor    |         10 |          0 |         -1 |          9 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Client.WorkSpace\Components\Pages\Survey\SurveyCommunity.razor | Razor    |          1 |          0 |         -1 |          0 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.DataProcessing\Utils\StringOrNumericComparer.cs        | C#       |        -15 |          0 |         -2 |        -17 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Shared\Utils\StringOrNumericComparer.cs                        | C#       |         20 |          0 |          2 |         22 |
+| Total                                                                                                        |          |        362 |          0 |         58 |        420 |
++--------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
