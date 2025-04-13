@@ -92,18 +92,6 @@
 
 
 		</FluentCard>
-
-		<FluentDivider Style="width: 100%;" Role="DividerRole.Presentation"></FluentDivider>
-
-		<FluentLabel Typo="Typography.H4">列名列表</FluentLabel>
-		<FluentCard>
-			<FluentStack Orientation="Orientation.Vertical">
-				@foreach (var header in headers)
-				{
-					<FluentButton>@header</FluentButton>
-				}
-			</FluentStack>
-		</FluentCard>
 	</FluentStack>
 
 	<FluentDivider Role="DividerRole.Presentation" Orientation="Orientation.Vertical"></FluentDivider>
@@ -122,11 +110,16 @@
 
 	<FluentStack Orientation=Orientation.Vertical
 				 Width="20%">
-		@* <FluentLabel Typo="Typography.H4">附加</FluentLabel> *@
-
-
+		<FluentLabel Typo="Typography.H4">列名列表</FluentLabel>
+		<FluentCard>
+			<FluentStack Orientation="Orientation.Vertical">
+				@foreach (var header in headers)
+				{
+					<FluentButton>@header</FluentButton>
+				}
+			</FluentStack>
+		</FluentCard>
 	</FluentStack>
-
 </FluentStack>
 
 @code {

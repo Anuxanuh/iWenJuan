@@ -1,29 +1,13 @@
 ﻿@page "/{SurveyId}"
 @inject IDialogService DialogService
 @inject IHttpClientFactory httpClientFactory
-@inject ILogger<Preview> Logger
+@inject ILogger<AnswerComponent> Logger
 
 @code {
 	[Parameter] public string SurveyId { get; set; } = default!;
 	private HttpClient _httpClient = default!;
-	private static Dictionary<string, QuestionTypeEnum> questionTypes =
-					Enum.GetValues(typeof(QuestionTypeEnum))
-					.Cast<QuestionTypeEnum>()
-					.Select(value => new
-					{
-						Value = value,
-						DisplayName = value.GetDisplayName()
-					})
-					.Where(x => x.DisplayName != null)
-					.ToDictionary(x => x.DisplayName!, x => x.Value);
 
-	private SurveyDto survey = new SurveyDto
-		{
-			Title = "新问卷",
-			Questions = []
-		};
-
-	private List<ConditionDto> conditions = [];
+	private SurveyDto survey = new();
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -32,9 +16,44 @@
 		if (SurveyId is not null)
 		{
 			survey = (await _httpClient.GetFromJsonAsync<SurveyDto>($"api/surveys/{SurveyId}"))!;
-			conditions = survey.Questions?.SelectMany(q => q.Conditions ?? []).ToList() ?? [];
 		}
 	}
 }
 
-<PageTitle>问卷预览</PageTitle>
+<PageTitle>@(survey.Title ?? "加载中...")</PageTitle>
+
+<FluentStack Orientation="Orientation.Horizontal"
+			 HorizontalAlignment="HorizontalAlignment.SpaceBetween">
+	<FluentStack Orientation=Orientation.Vertical
+				 Width="20%">
+	</FluentStack>
+
+	<FluentDivider Role="DividerRole.Presentation" Orientation="Orientation.Vertical"></FluentDivider>
+
+	<FluentStack Orientation=Orientation.Vertical
+				 Width="40%">
+		<FluentCard>
+			<FluentLabel Typo="Typography.HeroTitle">@survey.Title</FluentLabel>
+			<FluentLabel Typo="Typography.Body">@survey.Description</FluentLabel>
+		</FluentCard>
+
+		<FluentDivider Style="width: 100%;height:5px;" Role="DividerRole.Presentation"></FluentDivider>
+
+		@if (survey.Questions != null)
+			@foreach (var question in survey.Questions)
+			{
+				<QuestionComponent @key="question" Question="question" />
+			}
+	</FluentStack>
+
+	<FluentDivider Role="DividerRole.Presentation" Orientation="Orientation.Vertical"></FluentDivider>
+
+	<FluentStack Orientation=Orientation.Vertical
+				 Width="20%">
+	</FluentStack>
+
+</FluentStack>
+
+@code {
+	private IEnumerable<AnswerDto> answers = [];
+}

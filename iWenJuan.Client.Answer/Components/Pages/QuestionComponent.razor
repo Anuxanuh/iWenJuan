@@ -1,0 +1,140 @@
+﻿@code {
+	[Parameter]
+	public QuestionDto Question { get; set; } = default!;
+
+	[Parameter]
+	public string AnswerText { get; set; } = default!;
+}
+
+<FluentCard Style="padding-top: 10px">
+	<FluentStack Orientation="Orientation.Vertical">
+		<FluentStack HorizontalAlignment="HorizontalAlignment.SpaceBetween">
+			<FluentLabel Typo="Typography.H4">@Question.QuestionType.GetDisplayName()</FluentLabel>
+			<FluentLabel Typo="Typography.H4">@(Question.QuestionId == default ? "未创建题目" : Question.QuestionId)</FluentLabel>
+		</FluentStack>
+
+		<FluentDivider Style="width: 100%;" Role="DividerRole.Presentation"></FluentDivider>
+
+		<FluentLabel Typo="Typography.Body">@Question.QuestionText</FluentLabel>
+
+		@if (Question.QuestionType == QuestionTypeEnum.SingleChoice)
+		{
+			@if (Question.Options != null)
+			{
+				@foreach (var option in Question.Options)
+				{
+					bool isChecked = AnswerText == option.OptionText;
+					<FluentCheckbox Label="@option.OptionText"
+									@bind-Value:get="isChecked"
+									@bind-Value:set="c => singleChoiceSet(option.OptionText,c)" />
+				}
+			}
+			else
+			{
+				<FluentLabel Typo="Typography.Body">单选题 Error</FluentLabel>
+
+			}
+		}
+		else if (Question.QuestionType == QuestionTypeEnum.MultipleChoice)
+		{
+			@if (Question.Options != null)
+			{
+				@foreach (var option in Question.Options)
+				{
+					bool isChecked = AnswerText.Split(',').Contains(option.OptionText);
+					<FluentCheckbox Label="@option.OptionText"
+									@bind-Value:get="isChecked"
+									@bind-Value:set="c => multipleChoiceSet(option.OptionText,c)" />
+				}		}
+			else
+			{
+				<FluentLabel Typo="Typography.Body">多选题 Error</FluentLabel>
+			}
+		}
+		else if (Question.QuestionType == QuestionTypeEnum.Nps)
+		{
+			@if (Question.Options != null && Question.Options.Count() == 1)
+			{
+				<FluentRating Max="int.Parse(Question.Options.First().OptionText)"
+							  @bind-Value="@npsValue"
+							  AllowReset="true" />
+			}
+			else
+			{
+				<FluentLabel Typo="Typography.Body">NPS Error</FluentLabel>
+			}
+		}
+		else if (Question.QuestionType == QuestionTypeEnum.SingleText)
+		{
+			<FluentTextField @bind-Value=AnswerText Style="width:100%"></FluentTextField>
+		}
+		else if (Question.QuestionType == QuestionTypeEnum.MultipleText)
+		{
+			<FluentTextArea @bind-Value=AnswerText Style="width:100%"></FluentTextArea>
+		}
+		else if (Question.QuestionType == QuestionTypeEnum.Datetime)
+		{
+			<FluentDatePicker @bind-Value="dateTime" />
+			<FluentTimePicker @bind-Value="dateTime" />
+		}
+	</FluentStack>
+</FluentCard>
+
+@code {
+	private void singleChoiceSet(string text, bool isChecked)
+	{
+		if (isChecked)
+		{
+			AnswerText = text;
+		}
+		else
+		{
+			AnswerText = string.Empty;
+		}
+	}
+
+	private void multipleChoiceSet(string text, bool isChecked)
+	{
+		if (isChecked)
+		{
+			AnswerText += text + ",";
+		}
+		else
+		{
+			AnswerText = AnswerText.Replace(text + ",", string.Empty);
+		}
+	}
+
+	private int npsValue
+	{
+		get
+		{
+			if (string.IsNullOrWhiteSpace(AnswerText))
+				AnswerText = "0";
+			return int.TryParse(AnswerText, out var tmp) ? tmp : 0;
+		}
+		set
+		{
+			AnswerText = value.ToString();
+		}
+	}
+
+	private DateTime? dateTime
+	{
+		get
+		{
+			return DateTime.Parse(AnswerText);
+		}
+		set
+		{
+			if (value == null)
+			{
+				AnswerText = string.Empty;
+			}
+			else
+			{
+				AnswerText = value.Value.ToString("yyyy/MM/dd HH:mm:ss");
+			}
+		}
+	}
+}

@@ -1,0 +1,32 @@
+Date : 2025-04-13 04:52:59
+Directory : c:\Users\Anuxa\source\repos\iWenJuan
+Total : 6 files,  -210320 codes, 0 comments, 0 blanks, all -210320 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| JSON     |          6 |   -210,320 |          0 |          0 |   -210,320 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                  | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                     |          6 |   -210,320 |          0 |          0 |   -210,320 |
+| iWenJuan.Service.TemplateCommunity                                                                    |          6 |   -210,320 |          0 |          0 |   -210,320 |
+| iWenJuan.Service.TemplateCommunity\Resources                                                          |          6 |   -210,320 |          0 |          0 |   -210,320 |
++-------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                              | language | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Resources\char_state_tab.json | JSON     |    -79,460 |          0 |          0 |    -79,460 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Resources\pos_prob_emit.json  | JSON     |    -89,711 |          0 |          0 |    -89,711 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Resources\pos_prob_start.json | JSON     |       -258 |          0 |          0 |       -258 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Resources\pos_prob_trans.json | JSON     |     -5,639 |          0 |          0 |     -5,639 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Resources\prob_emit.json      | JSON     |    -35,234 |          0 |          0 |    -35,234 |
+| c:\Users\Anuxa\source\repos\iWenJuan\iWenJuan.Service.TemplateCommunity\Resources\prob_trans.json     | JSON     |        -18 |          0 |          0 |        -18 |
+| Total                                                                                                 |          |   -210,320 |          0 |          0 |   -210,320 |
++-------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
