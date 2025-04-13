@@ -18,7 +18,7 @@
 	}
 }
 
-<FluentCard>
+<FluentCard AreaRestricted="false">
 	<FluentStack Orientation="Orientation.Vertical">
 		<FluentStack HorizontalAlignment="HorizontalAlignment.SpaceBetween">
 			<FluentLabel Typo="Typography.H4">@Question.QuestionType.GetDisplayName()</FluentLabel>
@@ -85,8 +85,10 @@
 		}
 		else if (Question.QuestionType == QuestionTypeEnum.Datetime)
 		{
-			<FluentDatePicker @bind-Value="dateTime" />
-			<FluentTimePicker @bind-Value="dateTime" />
+			<FluentStack>
+				<FluentDatePicker @bind-Value="dateTime" />
+				<FluentTimePicker @bind-Value="dateTime" />
+			</FluentStack>
 		}
 	</FluentStack>
 </FluentCard>
@@ -134,7 +136,9 @@
 	{
 		get
 		{
-			return DateTime.Parse(AnswerText);
+			if (string.IsNullOrWhiteSpace(AnswerText))
+				AnswerText = DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss");
+			return DateTime.TryParse(AnswerText, out var tmp) ? tmp : DateTime.UtcNow;
 		}
 		set
 		{

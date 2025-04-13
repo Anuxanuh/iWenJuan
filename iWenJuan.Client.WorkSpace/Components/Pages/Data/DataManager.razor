@@ -103,7 +103,7 @@
 		{
 			await _DataStorage.DeleteAsync($"api/FileStorage/file/{fileInfo.Id}");
 			await LoadData();
-			StateHasChanged();
 		}
+		StateHasChanged();
 	}
 }

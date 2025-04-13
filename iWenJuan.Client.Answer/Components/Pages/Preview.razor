@@ -1,7 +1,5 @@
 ﻿@page "/preview/{SurveyId}"
-@inject IDialogService DialogService
 @inject IHttpClientFactory httpClientFactory
-@inject ILogger<AnswerComponent> Logger
 
 @code {
 	[Parameter] public string SurveyId { get; set; } = default!;
@@ -16,6 +14,25 @@
 		if (SurveyId is not null)
 		{
 			survey = (await _httpClient.GetFromJsonAsync<SurveyDto>($"api/surveys/{SurveyId}"))!;
+			answers = survey.Questions?.ToDictionary(q => q.QuestionId, q => string.Empty) ?? new();
+			conditions = survey.Questions?.SelectMany(q => q.Conditions ?? []).ToList() ?? [];
+
+			InitShow();
+		}
+	}
+
+	private void InitShow()
+	{
+		// 显示所有的题目
+		QuestionIsShow = survey.Questions?.ToDictionary(q => q.QuestionId, q => true) ?? new();
+
+		// 隐藏要符合条件才显示的题目
+		foreach (var condition in conditions)
+		{
+			if (condition.Effect == Effect.Show && condition.NextQuestionId != null)
+			{
+				QuestionIsShow[condition.NextQuestionId.Value] = false;
+			}
 		}
 	}
 }
@@ -42,7 +59,10 @@
 		@if (survey.Questions != null)
 			@foreach (var question in survey.Questions)
 			{
-				<QuestionComponent @key="question" Question="question" />
+				@if (QuestionIsShow[question.QuestionId])
+				{
+					<QuestionComponent Question="question" OnAnswerTextChanged="@(str => HandleValueChanged(question.QuestionId, str))" />
+				}
 			}
 
 		<FluentDivider Style="width: 100%;height:5px;" Role="DividerRole.Presentation"></FluentDivider>
@@ -62,5 +82,43 @@
 	<FluentStack Orientation=Orientation.Vertical
 				 Width="20%">
 	</FluentStack>
-
 </FluentStack>
+
+@code {
+	private IEnumerable<ConditionDto> conditions = [];
+
+	private Dictionary<int, string> answers = [];
+
+	private Dictionary<int, bool> QuestionIsShow = [];
+
+	private void HandleShow()
+	{
+		foreach (var condition in conditions)
+		{
+			if (condition.NextQuestionId == null)
+				continue;
+
+			var ans = answers[condition.QuestionId];
+
+			var conditionValue = condition.Value;
+
+			QuestionIsShow[condition.NextQuestionId.Value] = condition.Operator switch
+			{
+				Operator.Equals => ans == conditionValue,
+				Operator.NotEquals => ans != conditionValue,
+				Operator.Contains => ans.Contains(conditionValue),
+				Operator.GreaterThan => StringOrNumericComparer.Compare(ans, conditionValue) > 0,
+				Operator.LessThan => StringOrNumericComparer.Compare(ans, conditionValue) < 0,
+				Operator.GreaterThanOrEquals => StringOrNumericComparer.Compare(ans, conditionValue) >= 0,
+				Operator.LessThanOrEquals => StringOrNumericComparer.Compare(ans, conditionValue) <= 0,
+				_ => false,
+			};
+		}
+	}
+
+	private void HandleValueChanged(int questionId, string newValue)
+	{
+		answers[questionId] = newValue;
+		HandleShow();
+	}
+}

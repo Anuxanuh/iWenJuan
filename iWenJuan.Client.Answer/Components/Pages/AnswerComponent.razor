@@ -64,9 +64,10 @@
 			@if (survey.Questions != null)
 				@foreach (var question in survey.Questions)
 				{
-					@if (QuestionIsShow[question.QuestionId])
+					int questionId = question.QuestionId;
+					@if (QuestionIsShow[questionId])
 					{
-						<QuestionComponent Question="question" OnAnswerTextChanged="@(str => HandleValueChanged(question.QuestionId, str))" />
+						<QuestionComponent Question="question" OnAnswerTextChanged="@(str => HandleValueChanged(questionId, str))" />
 					}
 				}
 		}
@@ -146,35 +147,37 @@
 
 	private async Task HandleSubmit()
 	{
+		var submitAnswers = QuestionIsShow.Where(q => q.Value).Select(q => q.Key).Select(q => new AnswerDto
+			{
+				QuestionId = q,
+				AnswerText = answers[q]
+			});
+
+		if (submitAnswers.Any(a => string.IsNullOrWhiteSpace(a.AnswerText)))
+		{
+			var dialog = await DialogService.ShowWarningAsync("请完整填写问卷", "提示");
+			await dialog.Result;
+			return;
+		}
+
 		// 加载动画
 		progressRingVisible = true;
 
-		try
+		var response = await _httpClient.PostAsJsonAsync($"api/Answers", submitAnswers);
+
+		// 隐藏加载动画
+		progressRingVisible = false;
+		StateHasChanged();
+
+		if (response.IsSuccessStatusCode)
 		{
-			var submitAnswers = QuestionIsShow.Where(q => q.Value).Select(q => q.Key).Select(q => new AnswerDto
-				{
-					QuestionId = q,
-					AnswerText = answers[q]
-				});
-
-			var response = await _httpClient.PostAsJsonAsync($"api/Answers", submitAnswers);
-
-			if (response.IsSuccessStatusCode)
-			{
-				var dialog = await DialogService.ShowSuccessAsync("提交成功", "成功");
-				await dialog.Result;
-				Navigation.NavigateTo("/completed");
-			}
-			else
-			{
-				await DialogService.ShowErrorAsync("提交失败", "错误");
-			}
+			var dialog = await DialogService.ShowSuccessAsync("提交成功", "成功");
+			await dialog.Result;
+			Navigation.NavigateTo("/completed");
 		}
-		finally
+		else
 		{
-			// 隐藏加载动画
-			progressRingVisible = false;
-			StateHasChanged();
+			await DialogService.ShowErrorAsync("提交失败", "错误");
 		}
 	}
 
