@@ -119,8 +119,8 @@ public class AuthController : ControllerBase
 	/// </summary>
 	/// <param name="email">账号邮箱</param>
 	/// <returns>请求结果</returns>
-	[HttpGet("change-password")]
-	public async Task<IActionResult> ChangePassword([FromQuery] string email)
+	[HttpPost("change-password")]
+	public async Task<IActionResult> ChangePassword([FromBody] string email)
 	{
 		// 查找用户是否存在
 		var userInDb = await _context.Users

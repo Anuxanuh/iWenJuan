@@ -37,19 +37,28 @@ public class SurveyService : ISurveyService
 		_logger.LogInformation("获取了问卷 {surveyId}", surveyId);
 		return survey;
 	}
+
+	/// <summary>
+	/// 通过 ID 获取问卷，并包含所有相关参数（问题、选项、条件）。
+	/// </summary>
+	/// <param name="surveyId">问卷标识</param>
+	/// <returns></returns>
 	public async Task<SurveyModel> GetSurveyWithAllParamsAsync(int surveyId)
 	{
+		// 查询问卷
 		var survey = await _context.Surveys.AsNoTrackingWithIdentityResolution()
 										   .Include(s => s.Questions)
 										   .ThenInclude(q => q.Options)
 										   .Include(s => s.Questions)
 										   .ThenInclude(q => q.Conditions)
 										   .FirstOrDefaultAsync(s => s.SurveyId == surveyId);
+		// 未找到问卷
 		if (survey == null)
 		{
 			_logger.LogWarning("获取问卷 {surveyId} 时未找到", surveyId);
 			return default!;
 		}
+		// 获取问卷
 		_logger.LogInformation("获取了问卷 {surveyId} (包含问题, 选项, 逻辑)", surveyId);
 		return survey;
 	}
