@@ -46,7 +46,7 @@ public class AuthController : ControllerBase
 	[HttpPost("register")]
 	public async Task<IActionResult> Register([FromBody] string Email)
 	{
-		_logger.LogInformation($"用户注册请求: {Email}", Email);
+		_logger.LogInformation("用户注册请求: {Email}", Email);
 
 		// 检查用户名或邮箱是否已存在
 		if (await _context.Users.AnyAsync(u => u.Email == Email))
@@ -82,7 +82,7 @@ public class AuthController : ControllerBase
 		_context.Users.Add(user);
 		await _context.SaveChangesAsync();
 
-		_logger.LogInformation($"用户{verifyRegisterDto.UserEmail}注册成功", verifyRegisterDto.UserEmail);
+		_logger.LogInformation("用户{verifyRegisterDto.UserEmail}注册成功", verifyRegisterDto.UserEmail);
 
 		return Ok("注册成功");
 	}
@@ -109,7 +109,7 @@ public class AuthController : ControllerBase
 		// 生成JWT令牌
 		var tokenString = _jwtTokenHelper.GenerateToken(userInDb);
 
-		_logger.LogInformation($"用户{loginDto.UserEmail}登录请求", loginDto.UserEmail);
+		_logger.LogInformation("用户{loginDto.UserEmail}登录请求", loginDto.UserEmail);
 
 		return Ok(new LoginResponseDto { Token = tokenString, Message = "登录成功" });
 	}
@@ -122,6 +122,8 @@ public class AuthController : ControllerBase
 	[HttpPost("change-password")]
 	public async Task<IActionResult> ChangePassword([FromBody] string email)
 	{
+		_logger.LogInformation("用户{email}请求修改密码", email);
+
 		// 查找用户是否存在
 		var userInDb = await _context.Users
 			.AsNoTrackingWithIdentityResolution()
@@ -159,6 +161,8 @@ public class AuthController : ControllerBase
 		_context.Users.Update(userInDb);
 		await _context.SaveChangesAsync();
 
+		_logger.LogInformation("用户{email}修改密码成功", userInDb.Email);
+
 		return Ok("密码修改成功");
 	}
 
@@ -170,7 +174,7 @@ public class AuthController : ControllerBase
 	[HttpPost("validate-token")]
 	public IActionResult ValidateToken([FromBody] string token)
 	{
-		_logger.LogInformation($"Token: {token}", token);
+		_logger.LogInformation("验证{token}", token);
 
 		(var message, var userId) = _jwtTokenHelper.ValidateToken(token);
 		if (message.Equals("验证成功"))

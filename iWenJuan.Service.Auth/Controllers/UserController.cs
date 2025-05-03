@@ -9,11 +9,13 @@ namespace iWenJuan.Service.Auth.Controllers;
 [ApiController]
 public class UserController : ControllerBase
 {
+	private readonly ILogger<UserController> _logger;
 	private readonly AuthDbContext _context;
 
-	public UserController(AuthDbContext context)
+	public UserController(AuthDbContext context, ILogger<UserController> logger)
 	{
 		_context = context;
+		_logger = logger;
 	}
 
 	/// <summary>
@@ -24,6 +26,8 @@ public class UserController : ControllerBase
 	[HttpGet("{userId}")]
 	public async Task<IActionResult> GetUserById(Guid userId)
 	{
+		_logger.LogInformation("获取用户信息, 用户ID: {userId}", userId);
+
 		// 查找用户是否存在
 		var userInDb = await _context.Users
 			.AsNoTrackingWithIdentityResolution()

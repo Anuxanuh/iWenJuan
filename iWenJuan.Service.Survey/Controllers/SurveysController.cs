@@ -14,12 +14,12 @@ namespace iWenJuan.Service.Survey.Controllers;
 [ApiController]
 public class SurveysController : ControllerBase
 {
-	private readonly ISurveyService surveyService;
+	private readonly ISurveyService _surveyService;
 	private readonly ILogger<SurveysController> _logger;
 
 	public SurveysController(ISurveyService surveyService, ILogger<SurveysController> logger)
 	{
-		this.surveyService = surveyService;
+		this._surveyService = surveyService;
 		_logger = logger;
 	}
 
@@ -32,7 +32,7 @@ public class SurveysController : ControllerBase
 	public async Task<IActionResult> GetAllSurveys(Guid userId)
 	{
 		// 获取所有问卷
-		var surveys = await surveyService.GetSurveysAsync(userId);
+		var surveys = await _surveyService.GetSurveysAsync(userId);
 		var responseSurveys = surveys.Select(s => new SurveyDto
 		{
 			SurveyId = s.SurveyId,
@@ -56,7 +56,7 @@ public class SurveysController : ControllerBase
 	public async Task<IActionResult> GetSurveyById(int id)
 	{
 		// 异步根据ID获取问卷
-		var survey = await surveyService.GetSurveyWithAllParamsAsync(id);
+		var survey = await _surveyService.GetSurveyWithAllParamsAsync(id);
 		// 如果问卷不存在，返回NotFound结果
 		if (survey == null)
 			return NotFound();
@@ -76,7 +76,7 @@ public class SurveysController : ControllerBase
 		// 创建问卷模型
 		var surveyModel = survey.ToModelWithFullMapper();
 		// 异步创建问卷
-		var newSurvey = await surveyService.CreateSurveyAsync(surveyModel);
+		var newSurvey = await _surveyService.CreateSurveyAsync(surveyModel);
 		// 将创建的问卷转换为DTO
 		var surveyDto = newSurvey.ToDto();
 		// 返回包含创建问卷的CreatedAtAction结果
@@ -103,7 +103,7 @@ public class SurveysController : ControllerBase
 		// 更新问卷模型
 		var surveyModel = survey.ToModelWithFullMapper();
 		// 异步更新问卷
-		var newSurvey = await surveyService.UpdateSurveyAsync(surveyModel);
+		var newSurvey = await _surveyService.UpdateSurveyAsync(surveyModel);
 		var surveyDto = newSurvey.ToDto();
 		// 返回结果
 		return CreatedAtAction(nameof(GetSurveyById), new { id = survey.SurveyId }, surveyDto);
@@ -118,7 +118,7 @@ public class SurveysController : ControllerBase
 	public async Task<IActionResult> DeleteSurvey(int id)
 	{
 		// 异步删除问卷
-		await surveyService.DeleteSurveyAsync(id);
+		await _surveyService.DeleteSurveyAsync(id);
 		// 返回结果
 		return NoContent();
 	}
