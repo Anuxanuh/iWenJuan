@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iWenJuan.Service.TemplateCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iWenJuan.Client.Answer", "iWenJuan.Client.Answer\iWenJuan.Client.Answer.csproj", "{10A517D1-6A9F-45A7-A71F-E968DDF1659C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iWenJuan.Test", "iWenJuan.Test\iWenJuan.Test.csproj", "{8CA288D7-E5C0-4337-8E85-119910599941}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{10A517D1-6A9F-45A7-A71F-E968DDF1659C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10A517D1-6A9F-45A7-A71F-E968DDF1659C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10A517D1-6A9F-45A7-A71F-E968DDF1659C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CA288D7-E5C0-4337-8E85-119910599941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CA288D7-E5C0-4337-8E85-119910599941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CA288D7-E5C0-4337-8E85-119910599941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CA288D7-E5C0-4337-8E85-119910599941}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
