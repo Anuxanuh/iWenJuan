@@ -31,22 +31,24 @@ public class SearchController : ControllerBase
 
 		// 查询问卷并按匹配的关键词数量排序
 		var searchResults = await _context.Surveys
+			.AsNoTrackingWithIdentityResolution()
 			.Where(s => keys.Any(k => s.Title.Contains(k) || (s.Description != null && s.Description.Contains(k))))
 			.OrderByDescending(s => keys.Count(k => s.Title.Contains(k) || (s.Description != null && s.Description.Contains(k))))
 			.Take(12)
 			.Select(s => s.ToSearchResultDto())
 			.ToListAsync();
 
-		/**
-		 * var searchResults = await (
-		 *		from survey in _context.Surveys
-		 *		where keys.Any(k => survey.Title.Contains(k) || 
-		 *							(survey.Description != null && survey.Description.Contains(k)))
-		 *		orderby keys.Count(k => survey.Title.Contains(k) || 
-		 *								(survey.Description != null && survey.Description.Contains(k))) descending
-		 *		select survey
-		 *	).Take(10).Select(s => s.ToSearchResultDto()).ToListAsync();
-		 */
+
+		// SQL写法
+		//var searchResults = await (
+		//	from survey in _context.Surveys
+		//	where keys.Any(k => survey.Title.Contains(k) ||
+		//		(survey.Description != null && survey.Description.Contains(k)))
+		//	orderby keys.Count(k => survey.Title.Contains(k) ||
+		//		(survey.Description != null && survey.Description.Contains(k))) descending
+		//	select survey
+		//  ).AsNoTrackingWithIdentityResolution().Take(12).Select(s => s.ToSearchResultDto()).ToListAsync();
+
 
 		// 记录日志
 		_logger.LogInformation("搜索关键词: {key}, 匹配到问卷数量: {count}", string.Join("/", keys), searchResults.Count);
