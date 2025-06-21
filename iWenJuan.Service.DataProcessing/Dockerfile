@@ -5,26 +5,28 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
+EXPOSE 8081
 
 
 # 此阶段用于生成服务项目
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["iWenJuan.Server.DataProcessing/iWenJuan.Server.DataProcessing.csproj", "iWenJuan.Server.DataProcessing/"]
-COPY ["iWenJuan.ServiceDefaults/iWenJuan.ServiceDefaults.csproj", "iWenJuan.ServiceDefaults/"]
-RUN dotnet restore "./iWenJuan.Server.DataProcessing/iWenJuan.Server.DataProcessing.csproj"
+COPY ["iWenJuan.Service.DataProcessing/iWenJuan.Service.DataProcessing.csproj", "iWenJuan.Service.DataProcessing/"]
+COPY ["iWenJuan.Shared/iWenJuan.Shared.csproj", "iWenJuan.Shared/"]
+COPY ["iWenJuan/iWenJuan.ServiceDefaults/iWenJuan.ServiceDefaults.csproj", "iWenJuan/iWenJuan.ServiceDefaults/"]
+RUN dotnet restore "./iWenJuan.Service.DataProcessing/iWenJuan.Service.DataProcessing.csproj"
 COPY . .
-WORKDIR "/src/iWenJuan.Server.DataProcessing"
-RUN dotnet build "./iWenJuan.Server.DataProcessing.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/iWenJuan.Service.DataProcessing"
+RUN dotnet build "./iWenJuan.Service.DataProcessing.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # 此阶段用于发布要复制到最终阶段的服务项目
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./iWenJuan.Server.DataProcessing.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./iWenJuan.Service.DataProcessing.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # 此阶段在生产中使用，或在常规模式下从 VS 运行时使用(在不使用调试配置时为默认值)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "iWenJuan.Server.DataProcessing.dll"]
+ENTRYPOINT ["dotnet", "iWenJuan.Service.DataProcessing.dll"]

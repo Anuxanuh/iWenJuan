@@ -1,0 +1,10 @@
+$rootPath = "C:\Users\Anuxa\source\repos\iWenJuan"
+$outputFile = "C:\Users\Anuxa\Desktop\毕设\软件著作权"
+
+$files = Get-ChildItem -Path $rootPath -Include *.cs, *.razor -Recurse
+foreach ($file in $files) {
+    Add-Content -Path $outputFile -Value "***********************************"
+    Add-Content -Path $outputFile -Value "Filename: $($file.Name)"
+    Add-Content -Path $outputFile -Value "***********************************"
+    Add-Content -Path $outputFile -Value (Get-Content $file.FullName)
+}

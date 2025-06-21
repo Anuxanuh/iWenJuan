@@ -13,6 +13,8 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["iWenJuan.Service.DataStorage/iWenJuan.Service.DataStorage.csproj", "iWenJuan.Service.DataStorage/"]
+COPY ["iWenJuan.Shared/iWenJuan.Shared.csproj", "iWenJuan.Shared/"]
+COPY ["iWenJuan/iWenJuan.ServiceDefaults/iWenJuan.ServiceDefaults.csproj", "iWenJuan/iWenJuan.ServiceDefaults/"]
 RUN dotnet restore "./iWenJuan.Service.DataStorage/iWenJuan.Service.DataStorage.csproj"
 COPY . .
 WORKDIR "/src/iWenJuan.Service.DataStorage"

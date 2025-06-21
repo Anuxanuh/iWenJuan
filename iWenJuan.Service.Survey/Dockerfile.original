@@ -12,21 +12,19 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["iWenJuan.Service.Email/iWenJuan.Service.Email.csproj", "iWenJuan.Service.Email/"]
-COPY ["iWenJuan.Shared/iWenJuan.Shared.csproj", "iWenJuan.Shared/"]
-COPY ["iWenJuan/iWenJuan.ServiceDefaults/iWenJuan.ServiceDefaults.csproj", "iWenJuan/iWenJuan.ServiceDefaults/"]
-RUN dotnet restore "./iWenJuan.Service.Email/iWenJuan.Service.Email.csproj"
+COPY ["iWenJuan.Service.Survey/iWenJuan.Service.Survey.csproj", "iWenJuan.Service.Survey/"]
+RUN dotnet restore "./iWenJuan.Service.Survey/iWenJuan.Service.Survey.csproj"
 COPY . .
-WORKDIR "/src/iWenJuan.Service.Email"
-RUN dotnet build "./iWenJuan.Service.Email.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/iWenJuan.Service.Survey"
+RUN dotnet build "./iWenJuan.Service.Survey.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # 此阶段用于发布要复制到最终阶段的服务项目
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./iWenJuan.Service.Email.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./iWenJuan.Service.Survey.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # 此阶段在生产中使用，或在常规模式下从 VS 运行时使用(在不使用调试配置时为默认值)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "iWenJuan.Service.Email.dll"]
+ENTRYPOINT ["dotnet", "iWenJuan.Service.Survey.dll"]
